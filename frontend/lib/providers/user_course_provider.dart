@@ -7,11 +7,12 @@ class UserCourseProvider {
   final dioClient = DioClient();
 
   // 유저 코스 등록
-  Future<void> addUserCourse(Course course) async {
+  Future<void> addUserCourse(
+      Map<String, Object> userCourseRegistRequestDto) async {
     try {
       final response = await dioClient.dio.post(
         '/user-course',
-        data: course.toJson(),
+        data: userCourseRegistRequestDto,
       );
       if (response.statusCode == 200) {
         log('유저 코스 추가 응답: $response');

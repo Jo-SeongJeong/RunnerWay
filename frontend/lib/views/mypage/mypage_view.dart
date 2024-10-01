@@ -179,30 +179,33 @@ class MypageView extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // 임의의 코스 데이터 생성
-                  Course testCourse = Course(
-                    recordId: 8,
-                    courseId: 1,
-                    name: "테스트 코스",
-                    address: "서울",
-                    content: "이것은 테스트 코스입니다.",
-                    level: 1,
-                    count: 0,
-                    courseLength: 5.5,
-                    lat: 37.5665,
-                    lng: 126.9780,
-                    courseImage: CourseImage(
-                      courseId: 1,
-                      url: "https://example.com/course.png",
-                      path: "/images/course.png",
-                    ),
-                  );
+                  var userCourseRegistRequestDto = {
+                    "name": "테스트 코스",
+                    "address": "서울",
+                    "content": "이것은 테스트 코스입니다.",
+                    "memberId": _authController.id.value,
+                    "level": 1,
+                    "averageSlope": 10,
+                    "averageDownhill": 5,
+                    "averageTime": "2024-10-01T07:30:00",
+                    "courseLength": 5.5,
+                    "courseType": "OFFICIAL",
+                    "averageCalorie": 500.5,
+                    "lat": 37.5665,
+                    "lng": 126.9780,
+                    "area": "서울",
+                    "courseImage": {"url": "https://example.com/course.png"},
+                    "recordId": 1001
+                  };
 
                   // 유저 코스 등록 메서드 호출
-                  _userCourseController.addUserCourse(testCourse);
+                  _userCourseController.addUserCourse(
+                      userCourseRegistRequestDto); // Course 객체 전달
                 },
                 child: Text('유저 코스 등록 테스트'),
               ),
             ),
+
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
