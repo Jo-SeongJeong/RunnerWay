@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:frontend/models/record.dart';
 import 'package:frontend/services/record_service.dart';
-import 'package:get/get.dart';
-import 'dart:developer';
 
 class RecordController extends GetxController {
   final RecordService _recordService = RecordService();

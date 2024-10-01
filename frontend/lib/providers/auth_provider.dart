@@ -81,6 +81,7 @@ class AuthProvider {
 
   // 선호 태그 등록 여부 조회
   Future<bool> checkFavoriteTag() async {
+    // TODO
     final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
     try {
       // final response = await dio.get(

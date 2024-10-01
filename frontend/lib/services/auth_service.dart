@@ -46,7 +46,7 @@ class AuthService {
   // 선호 태그 전송
   Future<void> sendFavoriteTag(Map<String, dynamic> requestBody) async {
     try {
-      // await _repository.sendFavoriteTag(requestBody);
+      // TODO
       final response =
           await _dioClient.dio.post('members/tags', data: requestBody);
     } catch (e) {

@@ -243,6 +243,7 @@ class AuthController extends GetxController {
   // 회원탈퇴
   Future<void> remove() async {
     try {
+      // TODO
       final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
       // final response = await _authService.removeMember(accessToken);
       Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
