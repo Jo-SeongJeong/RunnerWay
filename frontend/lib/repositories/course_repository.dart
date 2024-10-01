@@ -69,15 +69,13 @@ class CourseRepository {
   Future<List<LatLng>> getCoursePoints(int id) async {
     final response = await _provider.fetchCoursePoints(id);
 
-    return response
-        .map<LatLng>(
-          (point) => {
-            LatLng(
-              point['latitude'] as double, // latitude 값
-              point['longitude'] as double, // longitude 값
-            ),
-          },
-        )
-        .toList();
+    return response.map<LatLng>(
+      (point) {
+        return LatLng(
+          point['latitude'] as double, // latitude 값
+          point['longitude'] as double, // longitude 값
+        );
+      },
+    ).toList();
   }
 }

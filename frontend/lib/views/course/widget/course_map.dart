@@ -1,45 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get/get.dart';
+import '../../../controllers/course_controller.dart';
 
 class CourseMap extends StatefulWidget {
   const CourseMap({super.key});
 
   @override
-  State<CourseMap> createState() => _ResultMap();
+  State<CourseMap> createState() => _CourseMap();
 }
 
-class _ResultMap extends State<CourseMap> {
-  LatLng myCurrentLocation = const LatLng(36.35665, 127.321678);
+class _CourseMap extends State<CourseMap> {
+  LatLng myCurrentLocation = LatLng(36.35665, 127.321678);
 
   Set<Marker> markers = {};
-
-  final Set<Polyline> _polyline = {};
-
-  List<LatLng> pointOnMap = [
-    // const LatLng(36.3, 127.3),
-    const LatLng(36.3550, 127.2983),
-    const LatLng(36.355157, 127.299944),
-    const LatLng(36.353101, 127.299638),
-    const LatLng(36.360392, 127.305689),
-    const LatLng(36.359053, 127.309948),
-    const LatLng(36.359426, 127.327270),
-    const LatLng(36.357811, 127.331798),
-    const LatLng(36.356515, 127.331304),
-    const LatLng(36.353789, 127.341561),
-    const LatLng(36.357314, 127.342929),
-    const LatLng(36.357102, 127.344523),
-    const LatLng(36.358300, 127.345056),
-  ];
+  var _polyline = <Polyline>{};
 
   @override
   void initState() {
     super.initState();
 
-    // 첫 번째 위치에 빨간 마커 추가
+    // 초기 마커 설정 (시작 지점 및 종료 지점 마커 설정)
     markers.add(
       Marker(
         markerId: MarkerId("start"),
-        position: pointOnMap.first,
+        position: myCurrentLocation, // 임의로 현재 위치를 시작점으로 설정
         infoWindow: const InfoWindow(
           title: "Start Point",
           snippet: "This is the start point.",
@@ -47,45 +32,59 @@ class _ResultMap extends State<CourseMap> {
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
       ),
     );
-
-    // 마지막 위치에 마커 파란 추가
-    markers.add(
-      Marker(
-        markerId: MarkerId("end"),
-        position: pointOnMap.last,
-        infoWindow: const InfoWindow(
-          title: "End Point",
-          snippet: "This is the end point.",
-        ),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-      ),
-    );
-
-    // 경로 폴리라인 추가
-    setState(() {
-      _polyline.add(
-        Polyline(
-          polylineId: const PolylineId("route"),
-          points: pointOnMap,
-          color: Colors.blue,
-        ),
-      );
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        polylines: _polyline,
-        myLocationButtonEnabled: false,
-        markers: markers,
-        // 확대 축소 버튼 삭제
-        zoomControlsEnabled: false,
-        initialCameraPosition: CameraPosition(
-          target: myCurrentLocation,
-          zoom: 13,
-        ),
+    final courseController =
+        Get.find<CourseController>(); // CourseController 인스턴스 가져오기
+
+    return Container(
+      child: Obx(
+        () {
+          // coursePoints가 변경될 때마다 화면을 업데이트
+          if (courseController.coursePoints.isNotEmpty) {
+            // 마지막 위치에 파란 마커 추가
+            markers.add(
+              Marker(
+                markerId: MarkerId("end"),
+                position: courseController.coursePoints.last,
+                infoWindow: const InfoWindow(
+                  title: "End Point",
+                  snippet: "This is the end point.",
+                ),
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueBlue),
+              ),
+            );
+
+            // 경로 폴리라인 업데이트
+            _polyline = {
+              Polyline(
+                polylineId: const PolylineId("route"),
+                points: courseController.coursePoints,
+                color: Colors.blue,
+                width: 5, // 폴리라인 두께
+              ),
+            };
+          }
+
+          return Container(
+            height: 250,
+            child:
+                // Make the map take the available space
+                GoogleMap(
+              polylines: _polyline,
+              myLocationButtonEnabled: true,
+              markers: markers,
+              zoomControlsEnabled: false,
+              initialCameraPosition: CameraPosition(
+                target: myCurrentLocation,
+                zoom: 13,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

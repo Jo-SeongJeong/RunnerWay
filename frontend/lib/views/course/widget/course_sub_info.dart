@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/widgets/course/level_badge.dart';
 
 import '../../../models/course_image.dart';
+import 'course_map.dart';
 
 class CourseSubInfo extends StatelessWidget {
   final int level;
@@ -35,10 +36,7 @@ class CourseSubInfo extends StatelessWidget {
         ),
 
         // TODO : 코스 보여주기
-        Container(
-          color: Colors.black,
-          height: 210,
-        ),
+        CourseMap(),
 
         // 기타 상세 코스 정보
         Padding(
@@ -149,14 +147,7 @@ class CourseSubInfo extends StatelessWidget {
                 ],
               ),
 
-              // TODO : 코스 이미지
-              // courseImage != null && courseImage!.url.isNotEmpty
-              //     ? Image.network(
-              //         courseImage!.url, // URL을 사용해 이미지를 불러옴
-              //         height: 130,
-              //         width: 130,
-              //         fit: BoxFit.cover, // 이미지를 박스에 맞추기
-              //       ) :
+              //  코스 이미지
               ClipRRect(
                 borderRadius: BorderRadius.circular(28),
                 child: courseImage?.url != null && courseImage!.url.isNotEmpty

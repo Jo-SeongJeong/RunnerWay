@@ -72,6 +72,7 @@ class CourseController extends GetxController {
   Future<void> _fetchCoursePoints(int id) async {
     try {
       final fetchedCoursePoints = await _courseService.getCoursePoints(id);
+      log('fetchedCoursePoints : $fetchedCoursePoints');
 
       // 경로 데이터 업데이트
       coursePoints.value = fetchedCoursePoints;
