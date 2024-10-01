@@ -80,7 +80,7 @@ class CourseCard extends StatelessWidget {
       ),
     );
 
-    Overlay.of(context)?.insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
   }
 
   void _removeOverlay() {
@@ -125,9 +125,9 @@ class CourseCard extends StatelessWidget {
               //   fit: BoxFit.cover,
               // ),
               child: course.courseImage?.url != null &&
-                      course.courseImage!.url!.isNotEmpty
+                      course.courseImage!.url.isNotEmpty
                   ? Image.network(
-                      course.courseImage!.url!,
+                      course.courseImage!.url,
                       errorBuilder: (context, error, stackTree) {
                         // 이미지 로드 중 에러 발생 시 기본 이미지 표시
                         return Image.asset(

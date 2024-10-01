@@ -159,9 +159,9 @@ class CourseSubInfo extends StatelessWidget {
               //       ) :
               ClipRRect(
                 borderRadius: BorderRadius.circular(28),
-                child: courseImage?.url != null && courseImage!.url!.isNotEmpty
+                child: courseImage?.url != null && courseImage!.url.isNotEmpty
                     ? Image.network(
-                        courseImage!.url!,
+                        courseImage!.url,
                         errorBuilder: (context, error, stackTree) {
                           // 이미지 로드 중 에러 발생 시 기본 이미지 표시
                           return Image.asset(
