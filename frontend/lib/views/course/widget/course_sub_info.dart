@@ -159,12 +159,25 @@ class CourseSubInfo extends StatelessWidget {
               //       ) :
               ClipRRect(
                 borderRadius: BorderRadius.circular(28),
-                child: Image.asset(
-                  'assets/images/auth/default_profile.png', // 이미지가 없을 때 기본 이미지 사용
-                  height: 130,
-                  width: 130,
-                  fit: BoxFit.cover, // 이미지를 박스에 맞추기
-                ),
+                child: courseImage?.url != null && courseImage!.url!.isNotEmpty
+                    ? Image.network(
+                        courseImage!.url!,
+                        errorBuilder: (context, error, stackTree) {
+                          // 이미지 로드 중 에러 발생 시 기본 이미지 표시
+                          return Image.asset(
+                            'assets/images/main/course_default.png',
+                            width: 130,
+                            height: 130,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      )
+                    : Image.asset(
+                        'assets/images/main/course_default.png',
+                        width: 90,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      ),
               ),
             ],
           ),
