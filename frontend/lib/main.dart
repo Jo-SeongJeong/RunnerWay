@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
     Get.put(UnderBarController());
     final AuthController authController = Get.put(AuthController());
     final NetworkController networkController = Get.put(NetworkController());
+    final LocationController locationController = Get.put(LocationController());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       networkController.checkInitialConnectivity(context);

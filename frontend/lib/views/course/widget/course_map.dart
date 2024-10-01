@@ -62,10 +62,30 @@ class _CourseMap extends State<CourseMap> {
         () {
           // 경로 데이터가 없거나 비어 있을 경우 처리
           if (courseController.coursePoints.isEmpty) {
-            return Center(
-              child: Text(
-                '코스 데이터를 불러올 수 없습니다.',
-                style: TextStyle(fontSize: 16, color: Colors.red),
+            return Container(
+              color: Colors.black12.withOpacity(0.03),
+              padding: EdgeInsets.symmetric(
+                vertical: 80,
+              ),
+              child: Center(
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/icons/error.png',
+                      width: 40,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      '코스 경로 데이터가 없어요',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xffF44237),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }

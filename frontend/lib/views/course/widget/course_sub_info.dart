@@ -35,7 +35,7 @@ class CourseSubInfo extends StatelessWidget {
           ),
         ),
 
-        // TODO : 코스 보여주기
+        // 코스 보여주기
         CourseMap(),
 
         // 기타 상세 코스 정보
