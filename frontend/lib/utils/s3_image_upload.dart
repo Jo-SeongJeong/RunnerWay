@@ -4,12 +4,13 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'dart:developer' as developer;
+import 'package:frontend/utils/env.dart';
 
 class S3ImageUpload {
-  final String bucketName = '';
-  final String region = '';
-  final String accessKey = '';
-  final String secretKey = '';
+  final String bucketName = Env.s3Name;
+  final String region = Env.s3Region;
+  final String accessKey = Env.s3AccessKeyId;
+  final String secretKey = Env.s3SecretAccessKey;
 
   S3ImageUpload();
 
