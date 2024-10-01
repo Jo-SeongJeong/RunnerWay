@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart'; // DateFormat을 위한 패키지 임포트
 
 class BirthModal extends StatelessWidget {
-  final TextEditingController birthController;
   final bool enabled;
+  final Function(String) onChanged;
 
-  const BirthModal(
-      {Key? key, required this.birthController, this.enabled = true})
+  const BirthModal({Key? key, this.enabled = true, required this.onChanged})
       : super(key: key);
 
   void _selectDate(BuildContext context) async {
@@ -74,15 +73,15 @@ class BirthModal extends StatelessWidget {
     );
 
     if (pickedDate != null) {
-      birthController.text =
+      String formattedDate =
           DateFormat('yyyy-MM-dd').format(pickedDate); // 날짜 형식 설정
+      onChanged(formattedDate);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: birthController,
       decoration: InputDecoration(
         hintText: '  YYYY-MM-DD',
         hintStyle: TextStyle(

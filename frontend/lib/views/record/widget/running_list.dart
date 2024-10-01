@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:frontend/widgets/line.dart';
-import 'package:frontend/models/course.dart';
-import 'package:frontend/widgets/course/level_badge.dart';
 
 class RunningCard extends StatelessWidget {
-  // final Course course;
-  // RunningCard({required this.course});
+  final String courseName;
+  final double runningDistance;
+  final String score;
+
+  const RunningCard(
+      {super.key,
+      required this.courseName,
+      required this.runningDistance,
+      required this.score});
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +38,8 @@ class RunningCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          // course.name,
-                          '유성천 옆 산책로',
+                          courseName,
+                          // '유성천 옆 산책로',
                           style: TextStyle(color: Colors.black, fontSize: 18),
                         ),
                         SizedBox(width: 10),
@@ -45,7 +50,19 @@ class RunningCard extends StatelessWidget {
                             SizedBox(width: 10),
                             // if (course.courseType == 'user')
                             Row(
-                              children: [],
+                              children: [
+                                Text(
+                                  '$score / ',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 14),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  '$runningDistance km',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 14),
+                                )
+                              ],
                             ),
                           ],
                         ),

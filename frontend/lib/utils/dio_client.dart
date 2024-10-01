@@ -44,16 +44,16 @@ class DioClient {
     // token이 발행이 안 되어 있다면 토큰 로직이 완성이 안돼서 token이 필요한 경우 임의로 주입
     // 나중에 주석부분 주석 해제 후 그 위 if문 삭제
     final accessToken = await _getAccessToken();
-    if (!_isAuthorizationExcluded(options.path)) {
-      // if (!_isAuthorizationExcluded(options.path) && accessToken != null) {
+    // if (!_isAuthorizationExcluded(options.path)) {
+    if (!_isAuthorizationExcluded(options.path) && accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';
       // 여기 아래 코드는 추후 삭제 요망
-      if (accessToken != null) {
-        options.headers['Authorization'] = 'Bearer $accessToken';
-      } else {
-        options.headers['Authorization'] =
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
-      }
+      // if (accessToken != null) {
+      //   options.headers['Authorization'] = 'Bearer $accessToken';
+      // } else {
+      //   options.headers['Authorization'] =
+      //       'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
+      // }
       // 여까지
     } else if (!_isAuthorizationExcluded(options.path) && accessToken == null) {
       log('초비상!! 토큰 있는 상태로 요청 보내야 하는데 토큰 없음');

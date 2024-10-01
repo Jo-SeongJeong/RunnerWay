@@ -1,29 +1,35 @@
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/auth/signup_view.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:get/get.dart';
 import '../models/auth.dart';
 
 class AuthController extends GetxController {
+  var id = ''.obs;
   var email = ''.obs;
   var isLoggedIn = false.obs;
-
-  TextEditingController nicknameController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController heightController = TextEditingController();
-  TextEditingController weightController = TextEditingController();
+  var nickname = ''.obs;
+  var birthDate = ''.obs;
+  var height = ''.obs;
+  var weight = ''.obs;
   final _storage = FlutterSecureStorage(); // 토큰 저장
+  // 혹시 몰라 넣은 토큰
+  var newToken =
+      'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
+
   final AuthService _authService = AuthService();
   // 선택된 성별 및 버튼 활성화 상태
   var selectedGender = ''.obs;
   var isButtonActive = false.obs;
   RxBool isEditable = false.obs;
-  // 닉네임 변경 감지 함수
-  void onNicknameChanged(String nickname) {
-    isButtonActive.value = nicknameController.text.trim().length > 1;
+
+  // 닉네임 변경
+  void onNicknameChanged(String value) {
+    nickname.value = value;
+    isButtonActive.value = nickname.value.trim().length > 1;
   }
 
   // 카카오톡 로그인
@@ -48,13 +54,37 @@ class AuthController extends GetxController {
       }
       // 사용자 정보 요청
       await requestUserInfo();
-
-      // 로그인 성공 상태
+      loadDecodedData();
       isLoggedIn.value = true;
     } catch (error) {
       log('카카오톡 로그인 실패: $error');
       Get.snackbar('오류', '카카오톡 로그인에 실패했습니다.');
     }
+  }
+
+  // 디코드
+  Future<void> loadDecodedData() async {
+    // 'ACCESS_TOKEN' 읽기 시 비동기 처리를 위한 await 추가
+    String? storedToken = await _storage.read(key: 'ACCESS_TOKEN');
+
+    if (storedToken != null) {
+      newToken = storedToken;
+    }
+
+    final token = newToken.substring(7);
+
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+
+    log('Decoded JWT: $decodedToken');
+
+    await _storage.write(key: 'ID', value: decodedToken['id'].toString());
+    await _storage.write(key: 'EMAIL', value: decodedToken['email']);
+    await _storage.write(key: 'NICKNAME', value: decodedToken['nickname']);
+
+    id.value = await _storage.read(key: 'ID') ?? 'No ID found';
+    email.value = await _storage.read(key: 'EMAIL') ?? 'No Email found';
+    nickname.value =
+        await _storage.read(key: 'NICKNAME') ?? 'No Nickname found';
   }
 
   // 카카오 사용자 정보 가져오기
@@ -184,18 +214,17 @@ class AuthController extends GetxController {
       log('${userInfoMap}');
       Auth userInfo = Auth.fromJson(userInfoMap);
 
-      // 받아온 데이터를 직접 TextEditingController에 설정
-      nicknameController.text = 'ㅇㅇㅇㅇ';
-      // nicknameController.text = userInfo.nickname ?? '';
-      dateController.text = userInfo.birth?.toString() ?? '';
-      heightController.text = userInfo.height?.toString() ?? '';
-      weightController.text = userInfo.weight?.toString() ?? '';
+      // nickname.value = 'ㅇㅇㅇㅇ';
+      nickname.value =
+          await _storage.read(key: 'NICKNAME') ?? userInfo.nickname;
+      birthDate.value = userInfo.birth?.toString() ?? '';
+      height.value = userInfo.height?.toString() ?? '';
+      weight.value = userInfo.weight?.toString() ?? '';
       selectedGender.value = userInfo.gender == 1 ? 'man' : 'woman';
 
       log('회원 정보 불러오기 성공: $userInfoMap');
     } catch (e) {
       log('회원 정보 불러오기controller: $e');
-      Get.snackbar('오류', '회원 정보를 가져오는 데 실패했습니다.');
     }
   }
 
@@ -208,6 +237,18 @@ class AuthController extends GetxController {
     } catch (e) {
       log('로그아웃 실패 controller: ${e}');
       Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
+    }
+  }
+
+  // 회원탈퇴
+  Future<void> remove() async {
+    try {
+      final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+      // final response = await _authService.removeMember(accessToken);
+      Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
+    } catch (e) {
+      log('회원탈퇴 실패 controller: ${e}');
+      Get.snackbar('회원탈퇴 실패 ', '회원탈퇴 중 문제가 발생했습니다.');
     }
   }
 }
