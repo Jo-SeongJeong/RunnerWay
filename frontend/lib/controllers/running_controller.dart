@@ -54,6 +54,7 @@ class RunningController extends GetxController {
 
   Future<void> startRun(
       {bool isOfficial = false, bool isCompetition = false}) async {
+    dev.log('startrun');
     isOfficialRun = isOfficial;
     isCompetitionMode = isCompetition;
     if (isOfficialRun) {
