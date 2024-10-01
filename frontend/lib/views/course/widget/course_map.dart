@@ -61,8 +61,7 @@ class _CourseMap extends State<CourseMap> {
       child: Obx(
         () {
           // 경로 데이터가 없거나 비어 있을 경우 처리
-          if (courseController.coursePoints == null ||
-              courseController.coursePoints.isEmpty) {
+          if (courseController.coursePoints.isEmpty) {
             return Center(
               child: Text(
                 '코스 데이터를 불러올 수 없습니다.',

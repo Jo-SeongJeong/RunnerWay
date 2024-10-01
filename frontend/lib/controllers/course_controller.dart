@@ -58,9 +58,7 @@ class CourseController extends GetxController {
       course.value = fetchedOfficialCourseDetail;
 
       // 코스 상세 정보가 존재하면 AWS S3에서 경로 데이터를 받아온다
-      if (fetchedOfficialCourseDetail != null) {
-        await _fetchCoursePoints(fetchedOfficialCourseDetail.courseId);
-      }
+      await _fetchCoursePoints(fetchedOfficialCourseDetail.courseId);
     } catch (e) {
       log('코스 상세 조회 중 문제 발생 : $e');
     } finally {
@@ -94,9 +92,7 @@ class CourseController extends GetxController {
       course.value = fetchedUserCourseDetail;
 
       // 코스 상세 정보가 존재하면 AWS S3에서 경로 데이터를 받아온다
-      if (fetchedUserCourseDetail != null) {
-        await _fetchCoursePoints(fetchedUserCourseDetail.courseId);
-      }
+      await _fetchCoursePoints(fetchedUserCourseDetail.courseId);
     } catch (e) {
       log('코스 상세 조회 중 문제 발생 : $e');
     } finally {
