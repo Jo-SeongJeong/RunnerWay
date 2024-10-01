@@ -22,10 +22,8 @@ class Auth {
   factory Auth.fromJson(Map<String, dynamic> json) {
     return Auth(
       // TODO
-      email: 'tmdxkr5@hanmail.net',
-      nickname: 'ㅇㅇㅇㅇ',
-      // email: json['email'],
-      // nickname: json['nickname'],
+      email: json['email'] ?? '',
+      nickname: json['nickname'] ?? '',
       birth: json['birth'] != null ? DateTime.parse(json['birth']) : null,
       gender: json['gender'],
       height: json['height'],

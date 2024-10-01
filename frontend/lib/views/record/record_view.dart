@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/record_controller.dart';
 import 'package:frontend/views/base_view.dart';
+import 'package:get/get.dart';
 import 'package:frontend/widgets/button/back_button.dart';
 import 'package:intl/intl.dart';
 import 'package:frontend/views/record/widget/running_list.dart';
@@ -15,6 +17,7 @@ class RecordView extends StatefulWidget {
 
 class _RecordViewState extends State<RecordView> {
   DateTime? selectedDate;
+  final RecordController _recordController = Get.put(RecordController());
 
   @override
   Widget build(BuildContext context) {
@@ -170,9 +173,23 @@ class _RecordViewState extends State<RecordView> {
                 ),
                 SizedBox(height: 10),
                 // 러닝 카드 들어갈 곳
-
-                // SizedBox(height: 18),
-                RunningCard(),
+                Obx(() {
+                  if (_recordController.isLoading.value) {
+                    return CircularProgressIndicator();
+                  }
+                  if (_recordController.records.isEmpty) {
+                    return Text("기록 없어");
+                  }
+                  return Column(
+                    children: _recordController.records
+                        .map((record) => RunningCard(
+                              courseName: record.courseName,
+                              runningDistance: record.runningDistance,
+                              score: record.score,
+                            ))
+                        .toList(),
+                  );
+                }),
               ],
             ],
           ),
