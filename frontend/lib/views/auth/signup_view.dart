@@ -127,6 +127,7 @@ class SignUpView extends StatelessWidget {
                 onChanged: (selectedDate) {
                   _authController.birthDate.value = selectedDate;
                 },
+                hintText: '  YYYY-MM-DD',
               ),
               // Obx(() => Text('생년월일 : ${_authController.birthDate.value}')),
               // 키 몸무게 input
@@ -135,14 +136,16 @@ class SignUpView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(right: screenWidth / 6),
                     child: SignupInput(
-                      inputType: 'weight',
+                      inputType: 'height',
+                      hintText: '키',
                       onChanged: (value) {
-                        _authController.weight.value = value;
+                        _authController.height.value = value;
                       },
                     ),
                   ),
                   SignupInput(
                     inputType: 'weight',
+                    hintText: '몸무게',
                     onChanged: (value) {
                       _authController.weight.value = value;
                     },
