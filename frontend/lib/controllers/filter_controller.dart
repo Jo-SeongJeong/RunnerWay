@@ -1,9 +1,13 @@
 import 'dart:developer';
+import 'package:frontend/controllers/location_controller.dart';
 import 'package:get/get.dart';
 
 class FilterController extends GetxController {
   // 정렬 기준
   var sortCondition = '추천순'.obs;
+
+  // LocationController
+  final LocationController locationController = Get.find<LocationController>();
 
   // 필터 상태 : 난이도와 거리 필터
   var selectedDifficulty = <int>[1, 2, 3].obs;
@@ -54,6 +58,7 @@ class FilterController extends GetxController {
   }
 
   void updateFilterCondition() {
+    locationController.getCurrentLocation();
     _applyFiltersToTarget();
   }
 

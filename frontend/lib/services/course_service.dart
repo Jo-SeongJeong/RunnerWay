@@ -37,6 +37,13 @@ class CourseService {
     return course;
   }
 
+  // 유저 코스 상세 조회
+  Future<Course> getUserCourseDetail(int id) async {
+    final course = await _repository.getUserCourseDetail(id);
+
+    return course;
+  }
+
   // 러너 코스 전체 조회
   Future<List<Course>> getRunnerCourse(Position currentPosition) async {
     final courses = await _repository.getRunnerCourse(
@@ -87,6 +94,4 @@ class CourseService {
 
     return courses;
   }
-
-  // 러닝 기록 목록 조회
 }

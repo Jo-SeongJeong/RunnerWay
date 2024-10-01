@@ -31,7 +31,8 @@ class CourseController extends GetxController {
           // 공식 코스 상세 정보 가져오기
           _fetchOfficialCourseDetail(id);
         } else if (type == 'user') {
-          // TODO: 유저 코스 상세 정보 가져오기
+          // 유저 코스 상세 정보 가져오기
+          _fetchUserCourseDetail(id);
         }
 
         // 코스 랭킹 가져오기
@@ -42,6 +43,7 @@ class CourseController extends GetxController {
     }
   }
 
+  // 공식 코스 상세 정보 가져오기
   Future<void> _fetchOfficialCourseDetail(int id) async {
     // 로딩 상태 true
     isDetailLoading(true);
@@ -52,6 +54,24 @@ class CourseController extends GetxController {
 
       // 코스 상세 정보 업데이트
       course.value = fetchedOfficialCourseDetail;
+    } catch (e) {
+      log('코스 상세 조회 중 문제 발생 : $e');
+    } finally {
+      isDetailLoading(false);
+    }
+  }
+
+  // 유저 코스 상세 정보 가져오기
+  Future<void> _fetchUserCourseDetail(int id) async {
+    // 로딩 상태 true
+    isDetailLoading(true);
+
+    try {
+      final fetchedUserCourseDetail =
+          await _courseService.getUserCourseDetail(id);
+
+      // 코스 상세 정보 업데이트
+      course.value = fetchedUserCourseDetail;
     } catch (e) {
       log('코스 상세 조회 중 문제 발생 : $e');
     } finally {

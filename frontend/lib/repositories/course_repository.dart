@@ -22,6 +22,13 @@ class CourseRepository {
     return Course.fromJson(response);
   }
 
+  // 유저 코스 상세 조회
+  Future<Course> getUserCourseDetail(int id) async {
+    final response = await _provider.fetchUserCourseDetail(id);
+
+    return Course.fromJson(response);
+  }
+
   // 코스 랭킹 정보 조회
   Future<List<Ranking>> getCourseRanking(int id) async {
     final response = await _provider.fetchCourseRanking(id);
