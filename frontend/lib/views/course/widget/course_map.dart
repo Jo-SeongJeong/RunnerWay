@@ -11,26 +11,44 @@ class CourseMap extends StatefulWidget {
 }
 
 class _CourseMap extends State<CourseMap> {
-  LatLng myCurrentLocation = LatLng(36.35665, 127.321678);
-
   Set<Marker> markers = {};
   var _polyline = <Polyline>{};
+  GoogleMapController? _mapController;
 
   @override
   void initState() {
     super.initState();
+  }
 
-    // 초기 마커 설정 (시작 지점 및 종료 지점 마커 설정)
-    markers.add(
-      Marker(
-        markerId: MarkerId("start"),
-        position: myCurrentLocation, // 임의로 현재 위치를 시작점으로 설정
-        infoWindow: const InfoWindow(
-          title: "Start Point",
-          snippet: "This is the start point.",
-        ),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-      ),
+  void _setMapFitToBounds(List<LatLng> points) {
+    // 모든 경로 좌표를 포함하는 LatLngBounds 생성
+    LatLngBounds bounds;
+    if (points.length == 1) {
+      bounds = LatLngBounds(southwest: points.first, northeast: points.first);
+    } else {
+      bounds = _createBoundsFromLatLngList(points);
+    }
+
+    // LatLngBounds에 맞게 카메라를 이동
+    _mapController?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
+  }
+
+  LatLngBounds _createBoundsFromLatLngList(List<LatLng> points) {
+    double minLat = points.first.latitude;
+    double maxLat = points.first.latitude;
+    double minLng = points.first.longitude;
+    double maxLng = points.first.longitude;
+
+    for (var point in points) {
+      if (point.latitude < minLat) minLat = point.latitude;
+      if (point.latitude > maxLat) maxLat = point.latitude;
+      if (point.longitude < minLng) minLng = point.longitude;
+      if (point.longitude > maxLng) maxLng = point.longitude;
+    }
+
+    return LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
     );
   }
 
@@ -42,13 +60,40 @@ class _CourseMap extends State<CourseMap> {
     return Container(
       child: Obx(
         () {
-          // coursePoints가 변경될 때마다 화면을 업데이트
+          // 경로 데이터가 없거나 비어 있을 경우 처리
+          if (courseController.coursePoints == null ||
+              courseController.coursePoints.isEmpty) {
+            return Center(
+              child: Text(
+                '코스 데이터를 불러올 수 없습니다.',
+                style: TextStyle(fontSize: 16, color: Colors.red),
+              ),
+            );
+          }
+
           if (courseController.coursePoints.isNotEmpty) {
-            // 마지막 위치에 파란 마커 추가
+            // 경로의 시작점과 끝점 설정
+            LatLng startPoint = courseController.coursePoints.first;
+            LatLng endPoint = courseController.coursePoints.last;
+
+            // 마커 추가
+            markers.add(
+              Marker(
+                markerId: MarkerId("start"),
+                position: startPoint,
+                infoWindow: const InfoWindow(
+                  title: "Start Point",
+                  snippet: "This is the start point.",
+                ),
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueRed),
+              ),
+            );
+
             markers.add(
               Marker(
                 markerId: MarkerId("end"),
-                position: courseController.coursePoints.last,
+                position: endPoint,
                 infoWindow: const InfoWindow(
                   title: "End Point",
                   snippet: "This is the end point.",
@@ -58,7 +103,7 @@ class _CourseMap extends State<CourseMap> {
               ),
             );
 
-            // 경로 폴리라인 업데이트
+            // 경로 폴리라인 설정
             _polyline = {
               Polyline(
                 polylineId: const PolylineId("route"),
@@ -67,20 +112,28 @@ class _CourseMap extends State<CourseMap> {
                 width: 5, // 폴리라인 두께
               ),
             };
+
+            // 지도가 준비된 후 경로 전체를 보여주는 함수 호출
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _setMapFitToBounds(courseController.coursePoints);
+            });
           }
 
           return Container(
-            height: 250,
-            child:
-                // Make the map take the available space
-                GoogleMap(
+            height: 300,
+            child: GoogleMap(
+              onMapCreated: (GoogleMapController controller) {
+                _mapController = controller;
+                if (courseController.coursePoints.isNotEmpty) {
+                  _setMapFitToBounds(courseController.coursePoints);
+                }
+              },
               polylines: _polyline,
               myLocationButtonEnabled: true,
               markers: markers,
               zoomControlsEnabled: false,
               initialCameraPosition: CameraPosition(
-                target: myCurrentLocation,
-                zoom: 13,
+                target: courseController.coursePoints.first,
               ),
             ),
           );
