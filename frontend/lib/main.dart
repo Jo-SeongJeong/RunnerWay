@@ -10,7 +10,6 @@ import 'package:frontend/utils/env.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
   // runApp() 호출 전 Flutter SDK 초기화
   KakaoSdk.init(
@@ -57,7 +56,6 @@ class NoBounceScrollBehavior extends ScrollBehavior {
     return const ClampingScrollPhysics(); // 바운스 효과를 제거
   }
 
-  @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child; // 기본 Chrome 유지

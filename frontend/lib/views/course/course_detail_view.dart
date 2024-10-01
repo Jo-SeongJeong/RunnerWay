@@ -3,6 +3,7 @@ import 'package:frontend/controllers/course_controller.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/views/course/widget/course_main_info.dart';
 import 'package:frontend/views/course/widget/course_sub_info.dart';
+import 'package:frontend/widgets/empty.dart';
 import 'package:frontend/widgets/line.dart';
 import 'package:frontend/widgets/ranking_card.dart';
 import 'package:get/get.dart';
@@ -53,6 +54,8 @@ class CourseDetailView extends StatelessWidget {
                         content: course.content ?? '설명이 없는 코스입니다.',
                         address: course.address,
                         count: course.count,
+                        type: course.courseType!,
+                        nickName: course.memberNickname,
                       ),
 
                       // 구분선
@@ -90,19 +93,10 @@ class CourseDetailView extends StatelessWidget {
                                 );
                               },
                             )
-                          : Center(
-                              // padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text('등록된 랭킹이 없습니다.'),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            )),
+                          : Container(
+                              padding: EdgeInsets.fromLTRB(0, 50, 0, 30),
+                              child: Empty(mainContent: '등록된 랭킹이 없어요'),
+                            ),
 
                       // 코스 상세 정보 위젯
                       CourseSubInfo(
@@ -116,7 +110,11 @@ class CourseDetailView extends StatelessWidget {
                     ],
                   );
                 } else {
-                  return Center(child: Text('코스 정보를 불러올 수 없습니다.'));
+                  // 예외 상황 처리
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 30),
+                    child: Empty(mainContent: '코스 정보를 불러올 수 없어요'),
+                  );
                 }
               },
             ),

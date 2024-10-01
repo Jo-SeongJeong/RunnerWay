@@ -36,7 +36,9 @@ class MainController extends GetxController {
   // 코스를 불러오는 함수
   Future<void> fetchOfficialCourses() async {
     isLoading(true);
+
     try {
+      log('${locationController.currentPosition.value}');
       final fetchedCourses = await _courseService
           .getCoursesWithDistance(locationController.currentPosition.value!);
 
