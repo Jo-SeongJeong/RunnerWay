@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/controllers/runner_pick_controller.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/widgets/button/back_button.dart';
+import 'package:frontend/widgets/empty.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/course/course_card.dart';
@@ -81,7 +82,10 @@ class RunnerPickView extends StatelessWidget {
               // 로딩이 완료되었으나 데이터가 없을 때
               if (runnerPickController.mostPickCourses.isEmpty &&
                   !runnerPickController.isMostPickLoading.value) {
-                return Text("가장 인기 많은 코스를 불러올 수 없습니다.");
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40),
+                  child: Empty(mainContent: '인기 코스가 없어요'),
+                );
               }
 
               // 코스가 있을 때 ListView.builder로 출력
@@ -113,24 +117,22 @@ class RunnerPickView extends StatelessWidget {
                 return Center(child: CircularProgressIndicator());
               }
 
-              // 결과가 없을 때
-              if (runnerPickController.recentPickCourses.isEmpty) {
-                return Text("최근 인기 많은 코스를 불러올 수 없습니다.");
+              // 로딩이 완료되었으나 데이터가 없을 때
+              if (runnerPickController.mostPickCourses.isEmpty &&
+                  !runnerPickController.isMostPickLoading.value) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40),
+                  child: Empty(mainContent: '최근 인기 코스가 없어요'),
+                );
               }
 
               // 코스가 있을 때 ListView.builder로 출력
               return ListView.builder(
                 shrinkWrap: true, // SingleChildScrollView 안에서 스크롤 설정
                 physics: NeverScrollableScrollPhysics(), // 충돌 방지
-                itemCount: runnerPickController.recentPickCourses.length + 1,
+                itemCount: runnerPickController.mostPickCourses.length,
                 itemBuilder: (context, index) {
-                  if (index == runnerPickController.recentPickCourses.length) {
-                    // SizedBox 추가 (끝에 공간 추가)
-                    return SizedBox(
-                      height: 100,
-                    );
-                  }
-                  final course = runnerPickController.recentPickCourses[index];
+                  final course = runnerPickController.mostPickCourses[index];
                   return CourseCard(course: course); // CourseCard를 보여줌
                 },
               );

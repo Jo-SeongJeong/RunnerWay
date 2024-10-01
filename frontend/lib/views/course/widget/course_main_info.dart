@@ -7,12 +7,16 @@ class CourseMainInfo extends StatelessWidget {
   final String content;
   final String address;
   final int count;
+  final String type;
+  final String? nickName;
 
   const CourseMainInfo({
     required this.name,
     required this.content,
     required this.count,
     required this.address,
+    required this.type,
+    this.nickName,
   });
 
   @override
@@ -65,13 +69,37 @@ class CourseMainInfo extends StatelessWidget {
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              //참여자수
-              Text(
-                '${count}명 참여 중',
-                style: TextStyle(
-                  color: Color(0xff1EA6FC),
-                ),
+              Row(
+                children: [
+                  // 유저 코스인 경우 러너명 적어주기
+                  if (type == 'user')
+                    Row(
+                      children: [
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Color(0xff1C1516).withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text('$nickName 님의 코스'),
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                      ],
+                    ),
+
+                  //참여자수
+                  Text(
+                    '${count}명 참여 중',
+                    style: TextStyle(
+                      color: Color(0xff1EA6FC),
+                    ),
+                  ),
+                ],
               ),
 
               // 러닝 버튼

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:frontend/models/ranking.dart';
 import 'package:frontend/services/course_service.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../models/course.dart';
 
@@ -11,6 +12,7 @@ class CourseController extends GetxController {
   var isRankingLoading = true.obs;
   var course = Rxn<Course>();
   var ranking = <Ranking>[].obs;
+  var coursePoints = <LatLng>[].obs;
 
   final CourseService _courseService = CourseService();
 
@@ -31,7 +33,8 @@ class CourseController extends GetxController {
           // 공식 코스 상세 정보 가져오기
           _fetchOfficialCourseDetail(id);
         } else if (type == 'user') {
-          // TODO: 유저 코스 상세 정보 가져오기
+          // 유저 코스 상세 정보 가져오기
+          _fetchUserCourseDetail(id);
         }
 
         // 코스 랭킹 가져오기
@@ -42,6 +45,7 @@ class CourseController extends GetxController {
     }
   }
 
+  // 공식 코스 상세 정보 가져오기
   Future<void> _fetchOfficialCourseDetail(int id) async {
     // 로딩 상태 true
     isDetailLoading(true);
@@ -52,6 +56,9 @@ class CourseController extends GetxController {
 
       // 코스 상세 정보 업데이트
       course.value = fetchedOfficialCourseDetail;
+
+      // 코스 상세 정보가 존재하면 AWS S3에서 경로 데이터를 받아온다
+      await _fetchCoursePoints(fetchedOfficialCourseDetail.courseId);
     } catch (e) {
       log('코스 상세 조회 중 문제 발생 : $e');
     } finally {
@@ -59,6 +66,41 @@ class CourseController extends GetxController {
     }
   }
 
+  // AWS S3에서 경로 데이터를 가져오기
+  Future<void> _fetchCoursePoints(int id) async {
+    try {
+      final fetchedCoursePoints = await _courseService.getCoursePoints(id);
+      log('fetchedCoursePoints : $fetchedCoursePoints');
+
+      // 경로 데이터 업데이트
+      coursePoints.value = fetchedCoursePoints;
+    } catch (e) {
+      log('AWS S3에서 경로 데이터를 가져오는 중 오류 발생: $e');
+    }
+  }
+
+  // 유저 코스 상세 정보 가져오기
+  Future<void> _fetchUserCourseDetail(int id) async {
+    // 로딩 상태 true
+    isDetailLoading(true);
+
+    try {
+      final fetchedUserCourseDetail =
+          await _courseService.getUserCourseDetail(id);
+
+      // 코스 상세 정보 업데이트
+      course.value = fetchedUserCourseDetail;
+
+      // 코스 상세 정보가 존재하면 AWS S3에서 경로 데이터를 받아온다
+      await _fetchCoursePoints(fetchedUserCourseDetail.courseId);
+    } catch (e) {
+      log('코스 상세 조회 중 문제 발생 : $e');
+    } finally {
+      isDetailLoading(false);
+    }
+  }
+
+  // 코스 랭킹 가져오기
   Future<void> _fetchCourseRanking(int id) async {
     isRankingLoading(true);
 

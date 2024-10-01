@@ -60,8 +60,11 @@ class LocationController extends GetxController {
 
       // 현재 위치 가져오기
       Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.high,
+        forceAndroidLocationManager: true,
+      );
 
+      log('현재 위치 : $position');
       // 현재 위치 업데이트
       currentPosition.value = position;
       hasPositioned.value = true;

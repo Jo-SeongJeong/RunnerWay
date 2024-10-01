@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:frontend/models/course.dart';
 import 'package:frontend/models/ranking.dart';
 import 'package:frontend/providers/course_provider.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CourseRepository {
   final CourseProvider _provider = CourseProvider();
@@ -19,6 +20,13 @@ class CourseRepository {
     final response = await _provider.fetchOfficialCourseDetail(id);
 
     // response가 JSON 문자열일 경우 파싱
+    return Course.fromJson(response);
+  }
+
+  // 유저 코스 상세 조회
+  Future<Course> getUserCourseDetail(int id) async {
+    final response = await _provider.fetchUserCourseDetail(id);
+
     return Course.fromJson(response);
   }
 
@@ -55,5 +63,19 @@ class CourseRepository {
     final response = await _provider.fetchRecentPickCourse(latitude, longitude);
 
     return response.map((course) => Course.fromJson(course)).toList();
+  }
+
+  // 경로 데이터 조회
+  Future<List<LatLng>> getCoursePoints(int id) async {
+    final response = await _provider.fetchCoursePoints(id);
+
+    return response.map<LatLng>(
+      (point) {
+        return LatLng(
+          point['latitude'] as double, // latitude 값
+          point['longitude'] as double, // longitude 값
+        );
+      },
+    ).toList();
   }
 }

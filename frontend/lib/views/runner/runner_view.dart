@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/controllers/filter_controller.dart';
 import 'package:frontend/controllers/runner_controller.dart';
 import 'package:frontend/views/base_view.dart';
+import 'package:frontend/widgets/empty.dart';
 import 'package:frontend/widgets/filter_condition.dart';
 import 'package:frontend/widgets/search/search_read_only.dart';
 import 'package:get/get.dart';
@@ -81,9 +82,7 @@ class RunnerView extends StatelessWidget {
 
                   if (!runnerController.isLoading.value &&
                       runnerController.runnerCourses.isEmpty) {
-                    return Center(
-                      child: Text('추천 코스가 없습니다.'),
-                    );
+                    return Empty(mainContent: '러너 코스가 없어요');
                   }
 
                   return ListView.builder(

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:frontend/repositories/course_repository.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/course.dart';
 import '../models/ranking.dart';
 
@@ -37,10 +38,19 @@ class CourseService {
     return course;
   }
 
+  // 유저 코스 상세 조회
+  Future<Course> getUserCourseDetail(int id) async {
+    final course = await _repository.getUserCourseDetail(id);
+
+    return course;
+  }
+
   // 러너 코스 전체 조회
   Future<List<Course>> getRunnerCourse(Position currentPosition) async {
     final courses = await _repository.getRunnerCourse(
-        currentPosition.latitude, currentPosition.longitude);
+      currentPosition.latitude,
+      currentPosition.longitude,
+    );
     log('러너 코스 조회 service: $courses');
 
     return courses.map(
@@ -68,14 +78,20 @@ class CourseService {
 
   // 두 지점 간의 거리 계산 (단위: 미터)
   double _calculateDistance(
-      double startLat, double startLng, double endLat, double endLng) {
+    double startLat,
+    double startLng,
+    double endLat,
+    double endLng,
+  ) {
     return Geolocator.distanceBetween(startLat, startLng, endLat, endLng);
   }
 
   // 전체 인기 유저 코스 조회
   Future<List<Course>> getMostPickCourse(Position currentPosition) async {
     final courses = await _repository.getMostPickCourse(
-        currentPosition.latitude, currentPosition.longitude);
+      currentPosition.latitude,
+      currentPosition.longitude,
+    );
 
     return courses;
   }
@@ -83,10 +99,17 @@ class CourseService {
   // 최근 인기 유저 코스 조회
   Future<List<Course>> getRecentPickCourse(Position currentPosition) async {
     final courses = await _repository.getRecentPickCours(
-        currentPosition.latitude, currentPosition.longitude);
+      currentPosition.latitude,
+      currentPosition.longitude,
+    );
 
     return courses;
   }
 
-  // 러닝 기록 목록 조회
+  // 코스 경로 데이터 조회
+  Future<List<LatLng>> getCoursePoints(int id) async {
+    final points = await _repository.getCoursePoints(id);
+
+    return points;
+  }
 }

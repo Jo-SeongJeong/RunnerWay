@@ -4,20 +4,16 @@ import 'package:frontend/controllers/location_controller.dart';
 import 'package:get/get.dart';
 import 'routes/app_routes.dart';
 import 'controllers/under_bar_controller.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'controllers/network_controller.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:frontend/utils/env.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
-  // 웹 환경에서 카카오 로그인을 정상적으로 완료하려면 runApp() 호출 전 아래 메서드 호출 필요
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
   // runApp() 호출 전 Flutter SDK 초기화
   KakaoSdk.init(
-    nativeAppKey: dotenv.get("KAKAO_NATIVE_APP_KEY"),
-    // nativeAppKey: 'KAKAO_NATIVE_APP_KEY',
+    nativeAppKey: Env.kakaoNativeAppKey,
   );
   runApp(const MyApp());
 }
@@ -60,7 +56,6 @@ class NoBounceScrollBehavior extends ScrollBehavior {
     return const ClampingScrollPhysics(); // 바운스 효과를 제거
   }
 
-  @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child; // 기본 Chrome 유지

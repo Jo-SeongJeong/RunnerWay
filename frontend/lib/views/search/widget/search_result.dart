@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/search_controller.dart';
+import 'package:frontend/widgets/empty.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/course/course_card.dart';
@@ -24,21 +25,14 @@ class SearchResult extends StatelessWidget {
         }
 
         if (result.isEmpty) {
-          return Container(
-            height: 500,
+          return Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/empty.png',
-                  height: 150,
-                  width: 150,
+                Empty(mainContent: '검색 결과가 없어요'),
+                SizedBox(
+                  height: 110,
                 ),
-                Text(
-                  '검색 결과가 없습니다',
-                  style: TextStyle(fontSize: 16),
-                )
               ],
             ),
           );

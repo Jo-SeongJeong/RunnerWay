@@ -56,6 +56,8 @@ class SearchProvider {
           'totalPages': response.data['totalPages'],
           'totalElements': response.data['totalElements'],
         };
+      } else if (response.statusCode == 204) {
+        return {};
       } else {
         throw Exception('검색 결과 조회 실패');
       }
