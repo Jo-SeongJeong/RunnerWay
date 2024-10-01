@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/base_view.dart';
+import 'package:frontend/widgets/button/back_button.dart';
 import 'package:intl/intl.dart';
 import 'package:frontend/views/record/widget/running_list.dart';
 import '../../widgets/line.dart';
@@ -19,23 +20,33 @@ class _RecordViewState extends State<RecordView> {
   Widget build(BuildContext context) {
     return BaseView(
         child: Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          '런 기록',
-          style: TextStyle(fontSize: 20, color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
-        toolbarHeight: 56,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Row(
+                children: [
+                  CustomBackButton(),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '러닝 기록',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black),
+                        // textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 48,
+                  ),
+                ],
+              ),
               SizedBox(height: 10),
               Text(
                 '30.2',
