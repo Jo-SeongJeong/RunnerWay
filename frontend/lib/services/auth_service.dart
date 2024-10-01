@@ -59,8 +59,8 @@ class AuthService {
     try {
       // return await _repository.checkFavoriteTag();
       final response = await _dioClient.dio.get('members/tags');
-      if (response.data != null && response.data['isRegistered'] is bool) {
-        return response.data['isRegistered']; // bool 값을 반환
+      if (response.data != null && response.data['isRegist'] is bool) {
+        return response.data['isRegist']; // bool 값을 반환
       } else {
         throw Exception('서버에서 예상치 못한 응답을 받았습니다.');
       }

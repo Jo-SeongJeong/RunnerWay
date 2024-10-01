@@ -77,6 +77,8 @@ class ModifyInfoView extends StatelessWidget {
                       Expanded(
                         child: TextField(
                           enabled: _authController.isEditable.value,
+                          controller: TextEditingController(
+                              text: _authController.nickname.value),
                           // 닉네임 글자 수 제한
                           onChanged: (text) {
                             if (text.characters.length > 8) {
@@ -138,7 +140,8 @@ class ModifyInfoView extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: screenWidth / 6),
                       child: SignupInput(
-                        inputType: 'weight',
+                        inputType: 'height',
+                        enabled: _authController.isEditable.value,
                         onChanged: (value) {
                           _authController.weight.value = value;
                         },
@@ -146,23 +149,24 @@ class ModifyInfoView extends StatelessWidget {
                     ),
                     SignupInput(
                       inputType: 'weight',
+                      enabled: _authController.isEditable.value,
                       onChanged: (value) {
                         _authController.weight.value = value;
                       },
                     ),
-                    Obx(() => Text('키: ${_authController.height.value} cm')),
-                    Obx(() => Text('몸무게: ${_authController.weight.value} kg')),
+                    // Obx(() => Text('키: ${_authController.height.value} cm')),
+                    // Obx(() => Text('몸무게: ${_authController.weight.value} kg')),
                   ],
                 ),
                 SizedBox(height: 25),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     _authController.isEditable.value =
-                //         !_authController.isEditable.value;
-                //   },
-                //   child: Obx(() =>
-                //       Text(_authController.isEditable.value ? '저장' : '수정')),
-                // ),
+                ElevatedButton(
+                  onPressed: () {
+                    _authController.isEditable.value =
+                        !_authController.isEditable.value;
+                  },
+                  child: Obx(() =>
+                      Text(_authController.isEditable.value ? '저장' : '수정')),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
