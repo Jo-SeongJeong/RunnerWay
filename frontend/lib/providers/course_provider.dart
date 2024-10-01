@@ -180,4 +180,16 @@ class CourseProvider {
       throw Exception('최근 인기 유저 코스 조회 : ${e.message}');
     }
   }
+
+  // 코스 경로 데이터 S3에서 가져오기
+  Future<List<dynamic>> fetchCoursePoints(int id) async {
+    try {
+      // final response = await dio.get('path', )
+
+      return [];
+    } on DioException catch (e) {
+      log('코스 경로 데이터 조회 중 오류 발생 : ${e.message}');
+      throw Exception('코스 경로 데이터 조회 중 오류 발생 : ${e.message}');
+    }
+  }
 }

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:frontend/models/ranking.dart';
 import 'package:frontend/services/course_service.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../models/course.dart';
 
@@ -11,6 +12,7 @@ class CourseController extends GetxController {
   var isRankingLoading = true.obs;
   var course = Rxn<Course>();
   var ranking = <Ranking>[].obs;
+  var coursePoints = <LatLng>[].obs;
 
   final CourseService _courseService = CourseService();
 
@@ -54,10 +56,27 @@ class CourseController extends GetxController {
 
       // 코스 상세 정보 업데이트
       course.value = fetchedOfficialCourseDetail;
+
+      // 코스 상세 정보가 존재하면 AWS S3에서 경로 데이터를 받아온다
+      if (fetchedOfficialCourseDetail != null) {
+        await _fetchCoursePoints(fetchedOfficialCourseDetail.courseId);
+      }
     } catch (e) {
       log('코스 상세 조회 중 문제 발생 : $e');
     } finally {
       isDetailLoading(false);
+    }
+  }
+
+  // AWS S3에서 경로 데이터를 가져오기
+  Future<void> _fetchCoursePoints(int id) async {
+    try {
+      final fetchedCoursePoints = await _courseService.getCoursePoints(id);
+
+      // 경로 데이터 업데이트
+      coursePoints.value = fetchedCoursePoints;
+    } catch (e) {
+      log('AWS S3에서 경로 데이터를 가져오는 중 오류 발생: $e');
     }
   }
 
@@ -72,6 +91,11 @@ class CourseController extends GetxController {
 
       // 코스 상세 정보 업데이트
       course.value = fetchedUserCourseDetail;
+
+      // 코스 상세 정보가 존재하면 AWS S3에서 경로 데이터를 받아온다
+      if (fetchedUserCourseDetail != null) {
+        await _fetchCoursePoints(fetchedUserCourseDetail.courseId);
+      }
     } catch (e) {
       log('코스 상세 조회 중 문제 발생 : $e');
     } finally {
@@ -79,6 +103,7 @@ class CourseController extends GetxController {
     }
   }
 
+  // 코스 랭킹 가져오기
   Future<void> _fetchCourseRanking(int id) async {
     isRankingLoading(true);
 
