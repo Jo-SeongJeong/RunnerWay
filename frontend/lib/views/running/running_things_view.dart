@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/network_controller.dart';
 import 'package:frontend/views/etc/jwt_decode_view.dart';
+import 'package:frontend/views/running/competition_course_running_view.dart';
+import 'package:frontend/views/running/free_course_running_view.dart';
+import 'package:frontend/views/running/official_course_running_view.dart';
 import 'package:frontend/widgets/map/running_map.dart';
 import '../../widgets/map/location.dart'; // location.dart 파일을 import
 import '../../widgets/map/geolocation.dart'; // geolocation.dart 파일을 import
@@ -12,8 +15,8 @@ import 'review_detail_view.dart'; // result_map.dart 파일을 import
 import 'review_write_view.dart'; // result_map.dart 파일을 import
 import 'package:get/get.dart'; // result_map.dart 파일을 import
 
-class RunningView extends StatelessWidget {
-  const RunningView({super.key});
+class RunningThingsView extends StatelessWidget {
+  const RunningThingsView({super.key});
 
   // location.dart 파일의 GeolocatorWidget 페이지로 이동하는 메소드
   void _navigateToLocation() {
@@ -113,6 +116,21 @@ class RunningView extends StatelessWidget {
               onPressed: () => Get.to(() => JwtDecodeView()),
               // Navigates to the RunningDetail page
               child: const Text('Go to JWTDecode'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.to(() => FreeCourseRunningView()),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to Free Course Running'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.to(() => OfficialCourseRunningView()),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to Official Course Running'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.to(() => CompetitionCourseRunningView()),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to Competition Course Running'),
             ),
           ],
         ),
