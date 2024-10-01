@@ -1,6 +1,10 @@
 import 'package:frontend/views/auth/splash_view.dart';
 import 'package:frontend/views/course/course_detail_view.dart';
 import 'package:frontend/views/runnerPick/runner_pick_view.dart';
+import 'package:frontend/views/running/free_course_running_view.dart';
+import 'package:frontend/views/running/review_write_view.dart';
+import 'package:frontend/views/running/running_things_view.dart';
+import 'package:frontend/views/running/running_view.dart';
 import 'package:frontend/views/search/search_view.dart';
 import 'package:frontend/views/mypage/modify_info_view.dart';
 import 'package:frontend/views/record/record_view.dart';
@@ -68,6 +72,22 @@ class AppRoutes {
     GetPage(
         name: '/login',
         page: () => LoginView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/runningthings',
+        page: () => RunningThingsView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/freecourserunning',
+        page: () => FreeCourseRunningView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/writereview',
+        page: () => ReviewWriteView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/running/:type/:courseid/:opponentid',
+        page: () => RunningView(),
         transition: Transition.noTransition),
   ];
 }

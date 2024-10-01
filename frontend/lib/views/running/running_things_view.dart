@@ -118,7 +118,7 @@ class RunningThingsView extends StatelessWidget {
               child: const Text('Go to JWTDecode'),
             ),
             ElevatedButton(
-              onPressed: () => Get.to(() => FreeCourseRunningView()),
+              onPressed: () => Get.toNamed('/freecourserunning'),
               // Navigates to the RunningDetail page
               child: const Text('Go to Free Course Running'),
             ),
@@ -131,6 +131,26 @@ class RunningThingsView extends StatelessWidget {
               onPressed: () => Get.to(() => CompetitionCourseRunningView()),
               // Navigates to the RunningDetail page
               child: const Text('Go to Competition Course Running'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/running/free/0/0'),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to view의 free course'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/running/official/1/0'),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to view의 official course'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/running/official/2/2'),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to view의 user course 대결'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/running/myself/2/2'),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to view의 내 코스에서 나와 대결'),
             ),
           ],
         ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../common/my_flutter_app.dart';
 import '../controllers/under_bar_controller.dart';
-import '../views/running/running_things_view.dart';
 
 class UnderBar extends StatelessWidget {
   @override
@@ -236,9 +235,8 @@ class ModalContent extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Get.back(); // 모달 닫기
-                  Get.to(
-                    RunningThingsView(), // RunningScreen 페이지로 이동
-                  );
+                  Get.toNamed('/runningthings' // RunningScreen 페이지로 이동
+                      );
                 },
                 child: Column(
                   children: const [

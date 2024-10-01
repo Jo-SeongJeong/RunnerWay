@@ -45,8 +45,7 @@ class RunningReviewController extends GetxController {
 
       if (uploadedImageUrl != null) {
         details['image'] = uploadedImageUrl; // 업로드된 이미지 URL 저장
-        Get.snackbar(
-            'Success', 'Image uploaded successfully: $uploadedImageUrl');
+        log('Success Image uploaded successfully: $uploadedImageUrl');
         log('Image URL: $uploadedImageUrl'); // 로그에 이미지 URL 출력
       }
     }

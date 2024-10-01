@@ -18,21 +18,23 @@ class RunningController extends GetxController {
   var isLoading = true.obs;
   final value = RunningMapModel().obs;
   GoogleMapController? _mapController;
-  final Set<Polyline> _polylines = {};
-  List<LatLng> _realTimePath = [];
 
-  bool isOfficialRun = false;
-  bool isCompetitionMode = false;
+  var isOfficialRun = false.obs;
+  var isCompetitionMode = false.obs;
   List<RunningRecord> competitionRecords = [];
   int competitionRecordIndex = 0;
   Timer? competitionTimer;
 
   RunningRecord? _lastCompetitionRecord;
-  int _lastCompetitionIndex = 0;
 
   RunningRecord? _currentRecord;
   RunningRecord? _nextRecord;
   int _currentRecordIndex = 0;
+
+  String? type;
+  String? courseid;
+  String? opponentid;
+  final typeKorean = ''.obs;
 
   RunningController() {
     _runningService = RunningService();
@@ -42,29 +44,77 @@ class RunningController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    // route에서 파라미터 가져오기
+    type = Get.parameters['type'];
+    courseid = Get.parameters['courseid'];
+    opponentid = Get.parameters['opponentid'];
+
     initialize();
   }
 
   Future<void> initialize() async {
     dev.log('초기화 시작');
+    if (opponentid != '0') {
+      isCompetitionMode.value = true;
+      dev.log('대결 상대: $opponentid');
+    }
+
+    if (type == 'free') {
+      dev.log('Free running mode initialized.');
+    } else if (type == 'official') {
+      isOfficialRun.value = true;
+      dev.log('Official running mode initialized with courseid: $courseid');
+    } else if (type == 'user') {
+      dev.log('User running mode initialized with courseid: $courseid');
+    }
+
+    dev.log('type: ${type}, courseid: ${courseid}, opponentid: ${opponentid}');
+
     isLoading(true);
     await _setInitialLocation();
+    getRunTypeText();
     isLoading(false);
   }
 
+  // TODO
   Future<void> startRun(
       {bool isOfficial = false, bool isCompetition = false}) async {
-    isOfficialRun = isOfficial;
-    isCompetitionMode = isCompetition;
-    if (isOfficialRun) {
+    isOfficialRun.value = isOfficial;
+    isCompetitionMode.value = isCompetition;
+    if (isOfficialRun.value) {
       await loadSavedPath();
     }
-    if (isCompetitionMode) {
+    if (isCompetitionMode.value) {
       await loadCompetitionRecords();
       startCompetitionMode();
     }
     _startLocationUpdates();
     _startTimer();
+  }
+
+  Future<void> startRun2() async {
+    if (isOfficialRun.value) {
+      await loadSavedPath();
+    }
+    if (isCompetitionMode.value) {
+      await loadCompetitionRecords();
+      startCompetitionMode();
+    }
+    _startLocationUpdates();
+    _startTimer();
+  }
+
+  void getRunTypeText() {
+    if (type == 'free') {
+      typeKorean.value = '자유';
+    } else if (type == 'official') {
+      typeKorean.value = '공식';
+    } else if (type == 'user') {
+      typeKorean.value = '유저';
+    } else {
+      typeKorean.value = '자유';
+    }
   }
 
   Future<void> _setInitialLocation() async {
@@ -154,9 +204,9 @@ class RunningController extends GetxController {
   }
 
   Future<void> loadSavedPath() async {
-    if (isOfficialRun) {
-      Polyline savedPathPolyline =
-          await _runningService.createSavedPathPolyline('tmp_1727419952201');
+    if (isOfficialRun.value) {
+      Polyline savedPathPolyline = await _runningService
+          .createSavedPathPolyline('walking_log_noeun_yuseong_3_seconds');
       value.update((val) {
         val?.polyline.add(savedPathPolyline);
       });
@@ -164,8 +214,8 @@ class RunningController extends GetxController {
   }
 
   Future<void> loadCompetitionRecords() async {
-    competitionRecords =
-        await _fileService.readSavedRunningRecords('tmp_1727419952201');
+    competitionRecords = await _fileService
+        .readSavedRunningRecords('walking_log_noeun_yuseong_3_seconds');
     competitionRecordIndex = 0;
   }
 
@@ -269,9 +319,7 @@ class RunningController extends GetxController {
       final tempRecordId = 'tmp_${DateTime.now().millisecondsSinceEpoch}';
       await _fileService.renameFile2(tempRecordId);
 
-      print('Running session ended. Data saved as: $tempRecordId.json');
-
-      // Get.toNamed('/running-result', arguments: tempRecordId);
+      dev.log('Running session ended. Data saved as: $tempRecordId.json');
     } catch (e) {
       print('Error ending running session: $e');
       Get.snackbar(
