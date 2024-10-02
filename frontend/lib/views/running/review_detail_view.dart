@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/button/wide_button.dart';
+import 'package:get/get.dart';
 import '../../widgets/map/result_map.dart';
 import '../../widgets/review_record_item.dart';
 import '../../widgets/review_info_item.dart';
+import 'package:frontend/controllers/user_course_controller.dart';
 
 class ReviewDetailView extends StatelessWidget {
   ReviewDetailView({super.key});
@@ -20,6 +23,9 @@ class ReviewDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserCourseController userCourseController =
+        Get.find<UserCourseController>();
+
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -109,6 +115,13 @@ class ReviewDetailView extends StatelessWidget {
               ),
             ),
           ),
+          Obx(() => userCourseController.isDuplicate.isFalse
+              ? WideButton(
+                  text: '유저 코스 등록',
+                  isActive: true,
+                  onTap: () => print("유저 코스 등록하기 클릭"),
+                )
+              : SizedBox.shrink()),
         ],
       ),
     );

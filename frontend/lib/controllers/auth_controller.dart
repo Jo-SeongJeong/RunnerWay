@@ -15,7 +15,7 @@ class AuthController extends GetxController {
   var birthDate = ''.obs;
   var height = ''.obs;
   var weight = ''.obs;
-  final _storage = FlutterSecureStorage(); // 토큰 저장
+  final _storage = FlutterSecureStorage();
   // 혹시 몰라 넣은 토큰
   var newToken =
       'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
@@ -80,6 +80,7 @@ class AuthController extends GetxController {
     await _storage.write(key: 'ID', value: decodedToken['id'].toString());
     await _storage.write(key: 'EMAIL', value: decodedToken['email']);
     await _storage.write(key: 'NICKNAME', value: decodedToken['nickname']);
+    await _storage.write(key: 'ACCESS_TOKEN', value: '${newToken}');
 
     id.value = await _storage.read(key: 'ID') ?? 'No ID found';
     email.value = await _storage.read(key: 'EMAIL') ?? 'No Email found';

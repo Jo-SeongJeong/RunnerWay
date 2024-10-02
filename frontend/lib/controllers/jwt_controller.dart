@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -21,6 +20,7 @@ class JwtController extends GetxController {
     if (storedToken != null) {
       newToken = storedToken;
     }
+    await _storage.write(key: 'ACCESS_TOKEN', value: '${newToken}');
 
     final token = newToken.substring(7);
 
