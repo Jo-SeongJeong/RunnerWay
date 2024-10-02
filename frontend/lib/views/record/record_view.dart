@@ -50,23 +50,38 @@ class _RecordViewState extends State<RecordView> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              Text(
-                '30.2',
-                style: TextStyle(
-                    color: Color(0xFF1C1516),
-                    fontSize: 26,
-                    fontWeight: FontWeight.w700),
-              ),
-              SizedBox(height: 3),
-              Text(
-                '이번 달 러닝 km',
-                style: TextStyle(
-                    color: Color(0xFFA0A0A0),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500),
+              SizedBox(height: 15),
+
+              Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Image.asset(
+                    'assets/icons/black_run_shoe.png',
+                    width: 50,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('러닝 키로수'),
+                      Text(
+                        '30.2km',
+                        style: TextStyle(
+                            color: Color(0xFF1C1516),
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                ],
               ),
               SizedBox(height: 15),
+
               Row(
                 children: [
                   Expanded(
@@ -174,14 +189,14 @@ class _RecordViewState extends State<RecordView> {
                 SizedBox(height: 10),
                 // 러닝 카드 들어갈 곳
                 Obx(() {
-                  if (_recordController.isLoading.value) {
+                  if (_recordController.isDayRecordLoading.value) {
                     return CircularProgressIndicator();
                   }
-                  if (_recordController.records.isEmpty) {
+                  if (_recordController.dayRecords.isEmpty) {
                     return Text("기록 없어");
                   }
                   return Column(
-                    children: _recordController.records
+                    children: _recordController.dayRecords
                         .map((record) => RunningCard(
                               courseName: record.courseName,
                               runningDistance: record.runningDistance,
