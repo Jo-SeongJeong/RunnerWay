@@ -47,6 +47,7 @@ class DioClient {
     // if (!_isAuthorizationExcluded(options.path)) {
     if (!_isAuthorizationExcluded(options.path) && accessToken != null) {
       options.headers['Authorization'] = 'Bearer ${accessToken}';
+      log('${accessToken}');
       // 여기 아래 코드는 추후 삭제 요망
       // if (accessToken != null) {
       //   options.headers['Authorization'] = 'Bearer $accessToken';
