@@ -7,7 +7,7 @@ class JwtController extends GetxController {
   final _storage = FlutterSecureStorage();
 
   var newToken =
-      'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
+      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
 
   var id = ''.obs;
   var email = ''.obs;
@@ -22,7 +22,8 @@ class JwtController extends GetxController {
     }
     await _storage.write(key: 'ACCESS_TOKEN', value: '${newToken}');
 
-    final token = newToken.substring(7);
+    final token = newToken;
+    // final token = newToken.substring(7);
 
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
 
