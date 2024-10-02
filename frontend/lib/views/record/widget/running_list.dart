@@ -64,7 +64,7 @@ class RunningCard extends StatelessWidget {
                                       color: Color(0xFFA0A0A0), fontSize: 14),
                                 ),
                                 Text(
-                                  '${averageFace.truncate()}\' ${((averageFace ?? 0) * 100 % 100).toInt()}\"',
+                                  '${averageFace.truncate()}\' ${((averageFace) * 100 % 100).toInt()}\"',
                                   style: TextStyle(
                                     color: Color(0xFFA0A0A0),
                                     fontSize: 14,

@@ -215,8 +215,13 @@ class RecordView extends StatelessWidget {
                           if (_recordController.isDayRecordLoading.value)
                             CircularProgressIndicator()
                           else if (_recordController.dayRecords.isEmpty)
-                            // TODO : 기록 empty state 처리
-                            Empty(mainContent: '기록이 없습니다')
+                            // 기록 empty state 처리
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 10,
+                              ),
+                              child: Empty(mainContent: '기록이 없습니다'),
+                            )
                           else
                             Column(
                               children: [
