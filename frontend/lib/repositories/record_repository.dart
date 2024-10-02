@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:frontend/models/record.dart';
 import 'package:frontend/models/record_analyze.dart';
 import 'package:frontend/providers/record_provider.dart';
