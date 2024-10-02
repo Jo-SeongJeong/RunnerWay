@@ -8,208 +8,215 @@ import 'package:frontend/views/record/widget/running_list.dart';
 import '../../widgets/line.dart';
 import 'widget/calendar.dart';
 
-class RecordView extends StatefulWidget {
+class RecordView extends StatelessWidget {
   const RecordView({super.key});
 
-  @override
-  _RecordViewState createState() => _RecordViewState();
-}
-
-class _RecordViewState extends State<RecordView> {
-  DateTime? selectedDate;
-  final RecordController _recordController = Get.put(RecordController());
-
+  // DateTime? selectedDate;
+  // final RecordController _recordController = Get.put(RecordController());
   @override
   Widget build(BuildContext context) {
+    // GetX로 컨트롤러 등록
+    final RecordController _recordController = Get.put(RecordController());
+
     return BaseView(
-        child: Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  CustomBackButton(),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '러닝 기록',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black),
-                        // textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 48,
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-
-              Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Image.asset(
-                    'assets/icons/black_run_shoe.png',
-                    width: 50,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('러닝 키로수'),
-                      Text(
-                        '30.2km',
-                        style: TextStyle(
-                            color: Color(0xFF1C1516),
-                            fontSize: 30,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                ],
-              ),
-              SizedBox(height: 15),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '08’47”',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          '평균 페이스',
-                          style: TextStyle(
-                              color: Color(0xFFA0A0A0),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '12:06:56',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          '러닝 시간',
-                          style: TextStyle(
-                              color: Color(0xFFA0A0A0),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '2358',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          '칼로리',
-                          style: TextStyle(
-                              color: Color(0xFFA0A0A0),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Line(),
-              SizedBox(height: 10),
-              Calendar(
-                onDateSelected: (date) {
-                  setState(() {
-                    selectedDate = date;
-                  });
-                },
-              ),
-              Line(),
-              // 클릭 날짜
-              if (selectedDate != null) ...[
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
                 Row(
                   children: [
-                    // SizedBox(width: 18),
-                    // 날짜 불러오기
-                    Text(
-                      'TUE',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF1EA6FC)),
+                    CustomBackButton(),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '러닝 기록',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black),
+                          // textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      DateFormat('dd').format(selectedDate!),
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF1EA6FC)),
+                    SizedBox(
+                      width: 48,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image.asset(
+                      'assets/icons/black_run_shoe.png',
+                      width: 50,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('러닝 키로수'),
+                        Text(
+                          '30.2km',
+                          style: TextStyle(
+                              color: Color(0xFF1C1516),
+                              fontSize: 30,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                  ],
+                ),
+                SizedBox(height: 15),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '08’47”',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(height: 3),
+                          Text(
+                            '평균 페이스',
+                            style: TextStyle(
+                                color: Color(0xFFA0A0A0),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '12:06:56',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(height: 3),
+                          Text(
+                            '러닝 시간',
+                            style: TextStyle(
+                                color: Color(0xFFA0A0A0),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '2358',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(height: 3),
+                          Text(
+                            '칼로리',
+                            style: TextStyle(
+                                color: Color(0xFFA0A0A0),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(height: 10),
-                // 러닝 카드 들어갈 곳
+                Line(),
+                SizedBox(height: 10),
+                // 날짜 선택 Calendar (GetX로 상태 관리)
+                Obx(
+                  () => Calendar(
+                    // selectedDate:
+                    //     _recordController.selectedDate.value ?? DateTime.now(),
+                    // focusedDate:
+                    //     _recordController.focusedDate.value ?? DateTime.now(),
+                    onDateSelected: (date) {
+                      _recordController.setSelectedDate(date);
+                    },
+                  ),
+                ),
+                Line(),
+                // 클릭 날짜
+                // 클릭된 날짜에 따른 결과
                 Obx(() {
-                  if (_recordController.isDayRecordLoading.value) {
-                    return CircularProgressIndicator();
+                  final selectedDate = _recordController.selectedDate.value;
+                  if (selectedDate != null) {
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              DateFormat('EEE').format(selectedDate),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF1EA6FC)),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              DateFormat('dd').format(selectedDate),
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF1EA6FC)),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        // 기록에 따른 RunningCard 표시
+                        if (_recordController.isDayRecordLoading.value)
+                          CircularProgressIndicator()
+                        else if (_recordController.dayRecords.isEmpty)
+                          Text("기록 없어")
+                        else
+                          Column(
+                            children: _recordController.dayRecords
+                                .map((record) => RunningCard(
+                                      courseName: record.courseName,
+                                      runningDistance: record.runningDistance,
+                                      score: record.score,
+                                    ))
+                                .toList(),
+                          ),
+                      ],
+                    );
                   }
-                  if (_recordController.dayRecords.isEmpty) {
-                    return Text("기록 없어");
-                  }
-                  return Column(
-                    children: _recordController.dayRecords
-                        .map((record) => RunningCard(
-                              courseName: record.courseName,
-                              runningDistance: record.runningDistance,
-                              score: record.score,
-                            ))
-                        .toList(),
-                  );
+                  return Container();
                 }),
               ],
-            ],
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 }

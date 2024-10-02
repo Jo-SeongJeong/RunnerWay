@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-void map() => runApp(const MyMap());
+// void map() => runApp(const MyMap());
 
 class MyMap extends StatefulWidget {
   const MyMap({super.key});

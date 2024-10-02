@@ -14,6 +14,27 @@ class RecordController extends GetxController {
   var isMonthRecordLoading = false.obs;
   var errorMessage = ''.obs;
 
+  var selectedDate = Rxn<DateTime>(); // 선택된 날짜
+  var focusedDate = Rxn<DateTime>(); // 포커스된 날짜
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    // 기본적으로 오늘 날짜로 기록 로드
+    setSelectedDate(DateTime.now());
+  }
+
+  // 날짜 설정 및 기록 조회
+  void setSelectedDate(DateTime date) {
+    selectedDate.value = date;
+  }
+
+  // 날짜 포커스 설정 메서드
+  void setFocusedDate(DateTime date) {
+    focusedDate.value = date;
+  }
+
   // TODO : 월별 러닝 기록 분석 조회
   Future<void> fetchMonthRecord(int year, int month) async {
     isMonthRecordLoading(true);
