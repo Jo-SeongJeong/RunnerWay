@@ -190,6 +190,9 @@ class RecordView extends StatelessWidget {
                         children: [
                           Row(
                             children: [
+                              SizedBox(
+                                width: 10,
+                              ),
                               Text(
                                 DateFormat('EEE').format(selectedDate),
                                 style: TextStyle(
@@ -220,6 +223,7 @@ class RecordView extends StatelessWidget {
                                 ..._recordController.dayRecords
                                     .map(
                                       (record) => RunningCard(
+                                        courseId: record.courseId,
                                         courseName: record.courseName,
                                         runningDistance: record.runningDistance,
                                         score: record.score,
