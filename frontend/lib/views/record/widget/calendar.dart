@@ -10,13 +10,41 @@ class Calendar extends StatelessWidget {
     super.key,
   });
 
+  // 디바운스를 적용하기 위한 변수
+  final RxBool _canChangeMonth = true.obs;
+  final int debounceDuration = 500;
+
   @override
   Widget build(BuildContext context) {
     final RecordController recordController = Get.find<RecordController>();
 
+    // 월 변경 함수 (디바운스 적용)
+    void changeMonth(int offset) {
+      if (_canChangeMonth.value) {
+        DateTime currentMonth =
+            recordController.focusedDate.value ?? DateTime.now();
+        DateTime newMonth =
+            DateTime(currentMonth.year, currentMonth.month + offset);
+
+        recordController.setFocusedDate(newMonth);
+
+        // 월이 유효한지 확인 (예: 2024년 1월 1일 이후로만 허용)
+        if (newMonth.isAfter(DateTime(2024, 1, 1)) &&
+            newMonth.isBefore(DateTime(2025, 1, 31))) {
+          recordController.setFocusedDate(newMonth);
+
+          // 디바운스 적용: 일정 시간 동안 버튼 비활성화
+          _canChangeMonth.value = false;
+          Future.delayed(Duration(milliseconds: debounceDuration), () {
+            _canChangeMonth.value = true;
+          });
+        }
+      }
+    }
+
     // selectedDate는 오늘 날짜로 초기화하고, focusedMonth는 선택된 날짜의 달로 초기화
-    DateTime selectedDate =
-        recordController.selectedDate.value ?? DateTime.now();
+    // DateTime selectedDate =
+    //     recordController.selectedDate.value ?? DateTime.now();
     DateTime focusedMonth =
         recordController.focusedDate.value ?? DateTime.now();
 
@@ -24,37 +52,35 @@ class Calendar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         // 월 이동 버튼과 현재 보여주는 월 표시
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: IconButton(
-                icon: Icon(Icons.chevron_left_rounded),
-                onPressed: () {
-                  recordController.setFocusedDate(
-                      DateTime(focusedMonth.year, focusedMonth.month - 1));
-                },
+        Obx(() {
+          DateTime focusedMonth =
+              recordController.focusedDate.value ?? DateTime.now();
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: IconButton(
+                  icon: Icon(Icons.chevron_left_rounded),
+                  onPressed: () => changeMonth(-1),
+                ),
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Text(
-                DateFormat('yyyy.MM').format(focusedMonth),
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 22),
-                textAlign: TextAlign.center,
+              Expanded(
+                flex: 2,
+                child: Text(
+                  DateFormat('yyyy.MM').format(focusedMonth),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 22),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
-            Expanded(
-              child: IconButton(
-                icon: Icon(Icons.chevron_right_rounded),
-                onPressed: () {
-                  recordController.setFocusedDate(
-                      DateTime(focusedMonth.year, focusedMonth.month + 1));
-                },
+              Expanded(
+                child: IconButton(
+                  icon: Icon(Icons.chevron_right_rounded),
+                  onPressed: () => changeMonth(1),
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        }),
 
         // 달력 표시
         Obx(() {
@@ -68,8 +94,8 @@ class Calendar extends StatelessWidget {
             selectedDayPredicate: (date) =>
                 isSameDay(recordController.selectedDate.value, date),
             focusedDay: recordController.focusedDate.value ?? DateTime.now(),
-            firstDay: DateTime(2024, 1, 1),
-            lastDay: DateTime(2025, 1, 31),
+            firstDay: DateTime(1999, 1, 1),
+            lastDay: DateTime(2100, 1, 31),
             calendarStyle: CalendarStyle(
               outsideDaysVisible: false,
               todayTextStyle: TextStyle(

@@ -23,7 +23,8 @@ class RecordController extends GetxController {
 
     // 기본적으로 오늘 날짜로 기록 로드
     setSelectedDate(DateTime.now());
-    fetchMonthRecord(selectedDate.value!.year, selectedDate.value!.month);
+    setFocusedDate(DateTime.now());
+    fetchMonthRecord(focusedDate.value!.year, focusedDate.value!.month);
   }
 
   // 날짜 설정 및 기록 조회
@@ -34,6 +35,7 @@ class RecordController extends GetxController {
   // 날짜 포커스 설정 메서드
   void setFocusedDate(DateTime date) {
     focusedDate.value = date;
+    fetchMonthRecord(focusedDate.value!.year, focusedDate.value!.month);
   }
 
   // 월별 러닝 기록 분석 조회
