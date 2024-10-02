@@ -229,15 +229,36 @@ class AuthController extends GetxController {
     }
   }
 
+  // // 로그아웃
+  // Future<void> logout() async {
+  //   try {
+  //     await _storage.delete(key: 'ACCESS_TOKEN');
+  //     isLoggedIn.value = false;
+  //     Get.toNamed('/login');
+  //   } catch (e) {
+  //     log('로그아웃 실패 controller: ${e}');
+  //     Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
+  //   }
+  // }
   // 로그아웃
   Future<void> logout() async {
     try {
+      // 토큰 삭제 시도
       await _storage.delete(key: 'ACCESS_TOKEN');
-      isLoggedIn.value = false;
-      Get.toNamed('/login');
+      // 삭제 후 토큰을 다시 읽어봄
+      String? deletedToken = await _storage.read(key: 'ACCESS_TOKEN');
+
+      if (deletedToken == null) {
+        log('토큰 삭제 성공');
+        isLoggedIn.value = false;
+        Get.offAllNamed('/login'); // 모든 뷰를 스택에서 제거하고 로그인 페이지로 이동
+        Get.snackbar('로그아웃 성공', '성공적으로 로그아웃 되었습니다.');
+      } else {
+        throw Exception('토큰이 여전히 존재합니다.');
+      }
     } catch (e) {
       log('로그아웃 실패 controller: ${e}');
-      Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
+      Get.snackbar('로그아웃 실패', '로그아웃 중 문제가 발생했습니다.');
     }
   }
 

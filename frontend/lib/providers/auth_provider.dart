@@ -140,15 +140,6 @@ class AuthProvider {
     try {
       final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
       log('개인정보조회 provider: ${accessToken}');
-      // final response = await dio.get(
-      //   'https://j11b304.p.ssafy.io/api/members',
-      //   options: Options(
-      //     headers: {
-      //       'Authorization': 'Bearer $accessToken',
-      //       'Content-Type': 'application/json',
-      //     },
-      //   ),
-      // );
       final response = await _dioClient.dio.get('/members');
       if (response.statusCode == 200) {
         log('$response');

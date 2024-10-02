@@ -11,7 +11,7 @@ final MaterialColor themeMaterialColor =
         const Color.fromRGBO(48, 49, 60, 1));
 
 void geolocation() {
-  runApp(const GeolocatorWidget());
+  // runApp(const GeolocatorWidget());
 }
 
 /// Example [Widget] showing the functionalities of the geolocator plugin

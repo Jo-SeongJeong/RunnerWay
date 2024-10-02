@@ -29,9 +29,9 @@ class RunningThingsView extends StatelessWidget {
   }
 
   // map.dart 파일의 MyMap 페이지로 이동하는 메소드
-  void _navigateToMap() {
-    Get.to(() => const MyMap());
-  }
+  // void _navigateToMap() {
+  //   Get.to(() => const MyMap());
+  // }
 
   // line.dart 파일의 MyLine 페이지로 이동하는 메소드
   void _navigateToLine() {
@@ -79,10 +79,10 @@ class RunningThingsView extends StatelessWidget {
               onPressed: () => _navigateToGeoLocation(), // 위치 페이지로 이동
               child: const Text('Go to GeoLocation'),
             ),
-            ElevatedButton(
-              onPressed: () => _navigateToMap(), // 맵 페이지로 이동
-              child: const Text('Go to Map'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () => _navigateToMap(), // 맵 페이지로 이동
+            //   child: const Text('Go to Map'),
+            // ),
             ElevatedButton(
               onPressed: () => _navigateToLine(), // 라인 페이지로 이동
               child: const Text('Go to Line'),

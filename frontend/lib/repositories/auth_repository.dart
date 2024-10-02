@@ -58,10 +58,11 @@ class AuthRepository {
 // 사용자 정보 불러오기
   Future<Map<String, dynamic>> getUserInfo() async {
     try {
-      log('repo사용자정보: ${_provider.getUserInfo()}');
-      return await _provider.getUserInfo();
+      final response = _provider.getUserInfo();
+      log('repo사용자정보: ${response}');
+      return await response;
     } catch (e) {
-      rethrow; // 오류를 상위 계층으로 전파
+      rethrow;
     }
   }
 }

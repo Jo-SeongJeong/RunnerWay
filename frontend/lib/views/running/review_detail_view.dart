@@ -115,13 +115,14 @@ class ReviewDetailView extends StatelessWidget {
               ),
             ),
           ),
-          Obx(() => userCourseController.isDuplicate.isFalse
-              ? WideButton(
-                  text: '유저 코스 등록',
-                  isActive: true,
-                  onTap: () => print("유저 코스 등록하기 클릭"),
-                )
-              : SizedBox.shrink()),
+          // 코스아이디가 0이 아니라면 버튼 없애기
+          // Obx(() => userCourseController.isDuplicate.isFalse
+          //     ? WideButton(
+          //         text: '유저 코스 등록',
+          //         isActive: true,
+          //         onTap: () => print("유저 코스 등록하기 클릭"),
+          //       )
+          //     : SizedBox.shrink()),
         ],
       ),
     );

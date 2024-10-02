@@ -6,7 +6,6 @@ import 'dart:developer';
 class UserCourseController extends GetxController {
   final UserCourseService _userCourseService = UserCourseService();
   final AuthController _authController = Get.find<AuthController>();
-  var isDuplicate = false.obs;
 
   var isLoading = false.obs;
   var errorMessage = ''.obs;
@@ -14,12 +13,11 @@ class UserCourseController extends GetxController {
   // 유저 코스 등록
   Future<void> addUserCourse(
       Map<String, Object> userCourseRegistRequestDto) async {
-    // isDuplicate.value = await _userCourseService
-    //     .checkAndAddUserCourse(userCourseRegistRequestDto);
     isLoading(true);
     try {
+      // 임의의 Course 데이터 생성
       var userCourseRegistRequestDto = {
-        "recordId": 89,
+        "recordId": 94,
         "name": "싸피코스",
         "address": "유성구",
         "content": "좋아용",
@@ -37,8 +35,6 @@ class UserCourseController extends GetxController {
 
       // 유저 코스 등록 메서드 호출
       await _userCourseService.addUserCourse(userCourseRegistRequestDto);
-
-      log('유저코스추가 성공 controller: ${userCourseRegistRequestDto["name"]}');
       Get.snackbar('성공', '유저 코스 추가가 완료되었습니다.');
     } catch (e) {
       errorMessage('유저 코스 추가 중 오류 발생 controller: $e');

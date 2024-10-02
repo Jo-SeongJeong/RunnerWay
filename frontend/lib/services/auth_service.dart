@@ -74,8 +74,8 @@ class AuthService {
     try {
       log('service사용자정보: ${_repository.getUserInfo()}');
       // return await _repository.getUserInfo();
-      final response = await _dioClient.dio.get('members');
-      return response.data;
+      final response = await _repository.getUserInfo();
+      return response;
     } catch (e) {
       throw Exception('사용자 정보 불러오는 중 발생: $e');
     }

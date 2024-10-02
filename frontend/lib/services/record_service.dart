@@ -12,4 +12,13 @@ class RecordService {
       throw Exception('러닝 기록 조회 중 오류 발생 service: $e');
     }
   }
+
+  Future<void> fetchRecordDetail(int recordId) async {
+    try {
+      final response = await _repository.fetchRecordDetail(recordId);
+      return response;
+    } catch (e) {
+      throw Exception('러닝 기록 상세 조회 중 오류 service: $e');
+    }
+  }
 }

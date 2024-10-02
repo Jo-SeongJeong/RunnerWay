@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:frontend/models/running_review_model.dart';
 import 'package:frontend/utils/dio_client.dart';
 
 class RecordProvider {
@@ -19,6 +20,22 @@ class RecordProvider {
     } on DioException catch (e) {
       log('러닝 기록 목록 조회 provider: ${e.message}');
       throw Exception('러닝 기록 목록 조회 : ${e.message}');
+    }
+  }
+
+  // 러닝 기록 상세 조회
+  Future<dynamic> fetchRecordDetail(int recordId) async {
+    log('러닝 기록 상세: $recordId');
+    try {
+      final response = await dioClient.dio.get('/record/detail/$recordId',
+          queryParameters: {'recordId': recordId});
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('러닝 기록 상세 조회 중 문제 provider : ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      throw Exception('러닝 기록 상세 조회 실패: provider: ${e.message}');
     }
   }
 }

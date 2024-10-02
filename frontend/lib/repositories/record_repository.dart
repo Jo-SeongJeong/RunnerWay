@@ -11,4 +11,10 @@ class RecordRepository {
     final response = await _provider.fetchRecordCourse(year, month, day);
     return response.map<Record>((record) => Record.fromJson(record)).toList();
   }
+
+  // 러닝 기록 상세 조회
+  Future<dynamic> fetchRecordDetail(int recordId) async {
+    final response = await _provider.fetchRecordDetail(recordId);
+    return response;
+  }
 }
