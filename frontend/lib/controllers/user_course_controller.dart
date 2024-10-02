@@ -1,10 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/controllers/auth_controller.dart';
 import 'package:get/get.dart';
-import 'package:frontend/models/course.dart';
 import 'package:frontend/services/user_course_service.dart';
 import 'dart:developer';
-import '../models/course_image.dart';
 
 class UserCourseController extends GetxController {
   final UserCourseService _userCourseService = UserCourseService();
@@ -35,36 +33,32 @@ class UserCourseController extends GetxController {
       Map<String, Object> userCourseRegistRequestDto) async {
     isLoading(true);
     try {
-      String? token = await _storage.read(key: 'ACCESS_TOKEN');
-
-      if (token == null || token.isEmpty) {
-        log('토큰이 없습니다. 인증이 필요합니다.');
-        throw Exception('토큰이 없습니다.');
-      }
+      // String? token = await _storage.read(key: 'ACCESS_TOKEN');
+      //
+      // if (token == null || token.isEmpty) {
+      //   log('토큰이 없습니다. 인증이 필요합니다.');
+      //   throw Exception('토큰이 없습니다.');
+      // }
       // 임의의 Course 데이터 생성
       var userCourseRegistRequestDto = {
-        "name": "테스트 코스",
-        "address": "서울",
-        "content": "테스트 코스 설명입니다.",
-        "memberId": _authController.id.value, // AuthController에서 사용자 ID 가져오기
-        "level": 1,
-        "averageSlope": 10,
-        "averageDownhill": 5,
-        "averageTime": "2024-10-01T07:30:00", // LocalDateTime 형식으로 수정
+        "recordId": 87,
+        "name": "싸피코스",
+        "address": "유성구",
+        "content": "좋아용",
+        "memberId": 1,
+        "averageTime": "2024-10-01T00:50:00",
         "courseLength": 5.5,
-        "courseType": "OFFICIAL", // Enum 타입 (백엔드와 맞추기)
-        "averageCalorie": 500.5,
-        "lat": 37.5665,
-        "lng": 126.9780,
-        "area": "서울",
-        "courseImage": {
-          "url": "https://example.com/course.png" // 이미지 URL
-        },
-        "recordId": 1001
+        "courseType": "user",
+        "averageCalorie": 200.2,
+        "lat": 36.35498566873416,
+        "lng": 127.3008971772697,
+        "url":
+            "https://runnerway.s3.ap-northeast-2.amazonaws.com/test/test2.json",
+        "courseImage": {"url": "test.url", "path": "test.path"}
       };
 
       // 유저 코스 등록 메서드 호출
-      await _userCourseService.addUserCourse(userCourseRegistRequestDto, token);
+      await _userCourseService.addUserCourse(userCourseRegistRequestDto);
 
       log('유저코스추가 성공 controller: ${userCourseRegistRequestDto["name"]}');
       Get.snackbar('성공', '유저 코스 추가가 완료되었습니다.');
