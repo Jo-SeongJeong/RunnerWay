@@ -25,11 +25,15 @@ class RecordController extends GetxController {
     setSelectedDate(DateTime.now());
     setFocusedDate(DateTime.now());
     fetchMonthRecord(focusedDate.value!.year, focusedDate.value!.month);
+    fetchRecordList(selectedDate.value!.year, selectedDate.value!.month,
+        selectedDate.value!.day);
   }
 
   // 날짜 설정 및 기록 조회
   void setSelectedDate(DateTime date) {
     selectedDate.value = date;
+    fetchRecordList(selectedDate.value!.year, selectedDate.value!.month,
+        selectedDate.value!.day);
   }
 
   // 날짜 포커스 설정 메서드
@@ -55,7 +59,7 @@ class RecordController extends GetxController {
     }
   }
 
-  // TODO : 일별 러닝 목록 조회
+  // 일별 러닝 목록 조회
   Future<void> fetchRecordList(int year, int month, int day) async {
     isDayRecordLoading(true);
     try {

@@ -6,8 +6,8 @@ import '../../widgets/review_record_item.dart';
 import '../../widgets/review_info_item.dart';
 import 'package:frontend/controllers/user_course_controller.dart';
 
-class ReviewDetailView extends StatelessWidget {
-  ReviewDetailView({super.key});
+class RecordDetailView extends StatelessWidget {
+  RecordDetailView({super.key});
 
   // 제목, 주소, 시간, 내용 등을 하나의 Map으로 관리
   final Map<String, dynamic> details = {
