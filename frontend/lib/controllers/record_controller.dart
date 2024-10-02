@@ -23,6 +23,7 @@ class RecordController extends GetxController {
 
     // 기본적으로 오늘 날짜로 기록 로드
     setSelectedDate(DateTime.now());
+    fetchMonthRecord(selectedDate.value!.year, selectedDate.value!.month);
   }
 
   // 날짜 설정 및 기록 조회
@@ -39,8 +40,12 @@ class RecordController extends GetxController {
   Future<void> fetchMonthRecord(int year, int month) async {
     isMonthRecordLoading(true);
     try {
-      // final fetchedMonthRecord =
-      //     await _recordService.fetchMonthRecord(year, month);
+      final fetchedMonthRecord =
+          await _recordService.fetchMonthAnalyze(year, month);
+      log('fetched month record : $fetchedMonthRecord');
+
+      monthRecords.value = fetchedMonthRecord;
+      log('${monthRecords.value.toString()}');
     } catch (e) {
       log('월별 러닝 기록 조회 중 오류 발생 : $e');
     } finally {

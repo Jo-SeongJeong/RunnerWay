@@ -1,12 +1,12 @@
 class RecordAnalyze {
   final double totalDistance;
-  final double averagePace;
+  final double averageFace;
   final String totalScore;
-  final int totalCalorie;
+  final double totalCalorie;
 
   RecordAnalyze({
     required this.totalDistance,
-    required this.averagePace,
+    required this.averageFace,
     required this.totalScore,
     required this.totalCalorie,
   });
@@ -15,9 +15,9 @@ class RecordAnalyze {
   factory RecordAnalyze.fromJson(Map<String, dynamic> json) {
     return RecordAnalyze(
       totalDistance: (json['totalDistance'] as num).toDouble(),
-      averagePace: (json['averagePace'] as num).toDouble(),
+      averageFace: (json['averageFace'] as num).toDouble(),
       totalScore: json['totalScore'],
-      totalCalorie: json['totalCalorie'],
+      totalCalorie: (json['totalCalorie'] as num).toDouble(),
     );
   }
 
@@ -25,7 +25,7 @@ class RecordAnalyze {
   Map<String, dynamic> toJson() {
     return {
       'totalDistance': totalDistance,
-      'averagePace': averagePace,
+      'averageFace': averageFace,
       'totalScore': totalScore,
       'totalCalorie': totalCalorie,
     };

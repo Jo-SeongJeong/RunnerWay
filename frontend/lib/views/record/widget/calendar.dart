@@ -5,11 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calendar extends StatelessWidget {
-  final Function(DateTime) onDateSelected;
-
   // 처음에 selectedDate는 오늘 날짜로 설정
   Calendar({
-    required this.onDateSelected,
+    super.key,
   });
 
   @override
@@ -17,8 +15,10 @@ class Calendar extends StatelessWidget {
     final RecordController recordController = Get.find<RecordController>();
 
     // selectedDate는 오늘 날짜로 초기화하고, focusedMonth는 선택된 날짜의 달로 초기화
-    DateTime selectedDate = recordController.selectedDate.value!;
-    DateTime focusedMonth = recordController.focusedDate.value!;
+    DateTime selectedDate =
+        recordController.selectedDate.value ?? DateTime.now();
+    DateTime focusedMonth =
+        recordController.focusedDate.value ?? DateTime.now();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -67,7 +67,7 @@ class Calendar extends StatelessWidget {
             },
             selectedDayPredicate: (date) =>
                 isSameDay(recordController.selectedDate.value, date),
-            focusedDay: recordController.focusedDate.value!,
+            focusedDay: recordController.focusedDate.value ?? DateTime.now(),
             firstDay: DateTime(2024, 1, 1),
             lastDay: DateTime(2025, 1, 31),
             calendarStyle: CalendarStyle(
