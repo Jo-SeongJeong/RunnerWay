@@ -13,6 +13,8 @@ class RecordProvider {
       if (response.statusCode == 200) {
         log('Response data: ${response.data}');
         return response.data;
+      } else if (response.statusCode == 204) {
+        return [];
       } else {
         throw Exception('러닝 기록 목록 조회 중 문제 발생');
       }
