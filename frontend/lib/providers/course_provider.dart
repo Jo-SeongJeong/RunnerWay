@@ -189,7 +189,7 @@ class CourseProvider {
       log('${Env.s3Name}');
       log('${id}');
       final response = await dio.get(
-        'https://${Env.s3Name}.s3.${Env.s3Region}.amazonaws.com/upload/course/${id}',
+        'https://${Env.s3Name}.s3.${Env.s3Region}.amazonaws.com/upload/course/${id}.json',
       );
 
       log('$response');
