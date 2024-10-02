@@ -217,7 +217,7 @@ class RunningView extends StatelessWidget {
   Widget _buildEndRunningButton(RunningController controller) {
     return ElevatedButton(
       onPressed: () async {
-        await controller.endRunning2();
+        // await controller.endRunningByButton();
         await _showCustomModal(Get.context!);
         // await Future.delayed(Duration(seconds: 1));
       },
@@ -235,18 +235,20 @@ class RunningView extends StatelessWidget {
     );
   }
 
+  // TODO
+  // 확인 취소 모달로 변경
+  // 확인 눌렀을 시 아래 모달 띄우는 것으로 변경 요망
   Future<void> _showCustomModal(BuildContext context) async {
     final RunningController controller = Get.find<RunningController>();
 
     String title = '';
     String content = '';
-
     if (controller.isCompetitionMode.value) {
       title = '${controller.typeKorean.value} 대결 러닝';
-      content = '${controller.typeKorean.value} 대결 러닝을 완료하셨습니다';
+      content = '${controller.typeKorean.value} 대결 러닝을 중지하셨습니다';
     } else {
       title = '${controller.typeKorean.value} 러닝';
-      content = '${controller.typeKorean.value} 러닝을 완료하셨습니다';
+      content = '${controller.typeKorean.value} 러닝을 중지하셨습니다';
     }
 
     showDialog(
@@ -257,6 +259,7 @@ class RunningView extends StatelessWidget {
           content: content,
           onConfirm: () {
             Navigator.of(context).pop(); // 모달 닫기
+            controller.endRunningByButton();
             Get.toNamed('/writereview');
           },
         );

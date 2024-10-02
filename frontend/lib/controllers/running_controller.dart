@@ -335,6 +335,27 @@ class RunningController extends GetxController {
     }
   }
 
+  Future<void> endRunningByButton() async {
+    _positionSubscription?.cancel();
+    _timer?.cancel();
+    competitionTimer?.cancel();
+    try {
+      // TODO
+      // 자유코스로 변경 및 코스, 상대방 초기화
+      typeKorean.value = '자유';
+      courseid = '0';
+      opponentid = '0';
+    } catch (e) {
+      print('Error ending running session: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to save running record',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 3),
+      );
+    }
+  }
+
   Duration get currentCompetitionTime {
     return _lastCompetitionRecord?.elapsedTime ?? Duration.zero;
   }
