@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/record_controller.dart';
 import 'package:frontend/views/base_view.dart';
+import 'package:frontend/widgets/empty.dart';
 import 'package:get/get.dart';
 import 'package:frontend/widgets/button/back_button.dart';
 import 'package:intl/intl.dart';
@@ -211,16 +212,24 @@ class RecordView extends StatelessWidget {
                           if (_recordController.isDayRecordLoading.value)
                             CircularProgressIndicator()
                           else if (_recordController.dayRecords.isEmpty)
-                            Text("기록 없어")
+                            // TODO : 기록 empty state 처리
+                            Empty(mainContent: '기록이 없습니다')
                           else
                             Column(
-                              children: _recordController.dayRecords
-                                  .map((record) => RunningCard(
+                              children: [
+                                ..._recordController.dayRecords
+                                    .map(
+                                      (record) => RunningCard(
                                         courseName: record.courseName,
                                         runningDistance: record.runningDistance,
                                         score: record.score,
-                                      ))
-                                  .toList(),
+                                        averageFace: record.averageFace,
+                                      ),
+                                    )
+                                    .toList(),
+                                // 여기서 SizedBox를 추가합니다.
+                                SizedBox(height: 80),
+                              ],
                             ),
                         ],
                       );
