@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 
 class SignupInput extends StatelessWidget {
   final String inputType;
-  final TextEditingController controller;
   final bool enabled;
+  final Function(String) onChanged;
+  final String hintText;
 
   const SignupInput(
       {Key? key,
       required this.inputType,
-      required this.controller,
-      this.enabled = true})
+      required this.onChanged,
+      this.enabled = true,
+      required this.hintText})
       : super(key: key);
 
   @override
@@ -48,7 +50,7 @@ class SignupInput extends StatelessWidget {
             children: [
               Expanded(
                 child: TextField(
-                  controller: controller,
+                  onChanged: onChanged,
                   keyboardType: TextInputType.number,
                   enabled: enabled,
                   decoration: InputDecoration(
@@ -62,7 +64,7 @@ class SignupInput extends StatelessWidget {
                       borderSide: BorderSide(color: Colors.blueAccent),
                     ),
                     filled: true,
-                    hintText: text,
+                    hintText: hintText,
                     hintStyle: TextStyle(
                       color: Color(0xFF72777A),
                     ),

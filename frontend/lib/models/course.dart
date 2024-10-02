@@ -20,6 +20,7 @@ class Course {
   final int? memberId;
   final String? memberNickname;
   final DateTime? registDate;
+  final int? recordId;
 
   Course({
     required this.courseId,
@@ -41,6 +42,7 @@ class Course {
     this.memberId,
     this.memberNickname,
     this.registDate,
+    this.recordId,
   });
 
   // JSON 데이터를 파싱하여 Course 객체 생성
@@ -123,6 +125,31 @@ class Course {
       memberNickname: memberNickname ?? this.memberNickname,
       registDate: registDate ?? this.registDate,
     );
+  }
+
+  // toJson 메서드 추가
+  Map<String, dynamic> toJson() {
+    return {
+      'courseId': courseId,
+      'name': name,
+      'address': address,
+      'content': content,
+      'level': level,
+      'count': count,
+      'courseLength': courseLength,
+      'lat': lat,
+      'lng': lng,
+      'courseImage': courseImage?.toJson(), // courseImage가 있다면 toJson 사용
+      'distance': distance,
+      'averageSlope': averageSlope,
+      'averageTime': averageTime,
+      'averageCalorie': averageCalorie,
+      'courseType': courseType,
+      'averageDownhill': averageDownhill,
+      'memberId': memberId,
+      'memberNickname': memberNickname,
+      'registDate': registDate?.toIso8601String(), // DateTime을 ISO 8601 형식으로 변환
+    };
   }
 
   // toString 메서드 오버라이드

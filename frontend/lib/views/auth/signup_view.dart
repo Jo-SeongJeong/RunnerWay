@@ -13,7 +13,7 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController _authController = Get.find<AuthController>();
+    final AuthController _authController = Get.put(AuthController());
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -75,19 +75,16 @@ class SignUpView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: _authController.nicknameController,
                       // 닉네임 글자 수 제한
                       onChanged: (text) {
                         if (text.characters.length > 8) {
-                          _authController.nicknameController.text =
-                              text.characters.take(8).toString(); // 8자로 자르기
-                          // 커서 뒤로 이동
-                          _authController.nicknameController.selection =
-                              TextSelection.fromPosition(TextPosition(
-                                  offset: _authController
-                                      .nicknameController.text.length));
+                          _authController.nickname.value =
+                              text.characters.take(8).toString();
+                        } else {
+                          _authController.nickname.value = text;
                         }
-                        _authController.onNicknameChanged(text);
+                        _authController
+                            .onNicknameChanged(_authController.nickname.value);
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -126,19 +123,35 @@ class SignUpView extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 7),
-              BirthModal(birthController: _authController.dateController),
+              BirthModal(
+                onChanged: (selectedDate) {
+                  _authController.birthDate.value = selectedDate;
+                },
+                hintText: '  YYYY-MM-DD',
+              ),
+              // Obx(() => Text('생년월일 : ${_authController.birthDate.value}')),
               // 키 몸무게 input
               Row(
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: screenWidth / 6),
                     child: SignupInput(
-                        inputType: 'height',
-                        controller: _authController.heightController),
+                      inputType: 'height',
+                      hintText: '키',
+                      onChanged: (value) {
+                        _authController.height.value = value;
+                      },
+                    ),
                   ),
                   SignupInput(
-                      inputType: 'weight',
-                      controller: _authController.weightController),
+                    inputType: 'weight',
+                    hintText: '몸무게',
+                    onChanged: (value) {
+                      _authController.weight.value = value;
+                    },
+                  ),
+                  // Obx(() => Text('키: ${_authController.height.value} cm')),
+                  // Obx(() => Text('몸무게: ${_authController.weight.value} kg')),
                 ],
               ),
               SizedBox(height: 25),
@@ -242,24 +255,22 @@ class SignUpView extends StatelessWidget {
           onTap: _authController.isButtonActive.value
               ? () async {
                   bool isNicknameCheck = await _authController
-                      .checkNickname(_authController.nicknameController.text);
+                      .checkNickname(_authController.nickname.value);
                   if (isNicknameCheck) {
                     Get.snackbar('오류', '이미 사용중인 닉네임입니다');
                   } else {
-                    int? height = _authController
-                            .heightController.text.isNotEmpty
-                        ? int.tryParse(_authController.heightController.text)
+                    int? height = _authController.height.value.isNotEmpty
+                        ? int.tryParse(_authController.height.value)
                         : null;
-                    int? weight = _authController
-                            .weightController.text.isNotEmpty
-                        ? int.tryParse(_authController.weightController.text)
+                    int? weight = _authController.weight.value.isNotEmpty
+                        ? int.tryParse(_authController.weight.value)
                         : null;
                     await _authController.signup(
                       Auth(
                         email: this.email,
-                        nickname: _authController.nicknameController.text,
-                        birth: DateTime.tryParse(
-                            _authController.dateController.text),
+                        nickname: _authController.nickname.value,
+                        birth:
+                            DateTime.tryParse(_authController.birthDate.value),
                         height: height,
                         weight: weight,
                         gender: _authController.selectedGender.value == 'man'
