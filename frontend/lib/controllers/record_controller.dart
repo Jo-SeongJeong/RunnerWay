@@ -36,7 +36,7 @@ class RecordController extends GetxController {
     focusedDate.value = date;
   }
 
-  // TODO : 월별 러닝 기록 분석 조회
+  // 월별 러닝 기록 분석 조회
   Future<void> fetchMonthRecord(int year, int month) async {
     isMonthRecordLoading(true);
     try {

@@ -15,8 +15,8 @@ class Calendar extends StatelessWidget {
     final RecordController recordController = Get.find<RecordController>();
 
     // selectedDate는 오늘 날짜로 초기화하고, focusedMonth는 선택된 날짜의 달로 초기화
-    // DateTime selectedDate =
-    //     recordController.selectedDate.value ?? DateTime.now();
+    DateTime selectedDate =
+        recordController.selectedDate.value ?? DateTime.now();
     DateTime focusedMonth =
         recordController.focusedDate.value ?? DateTime.now();
 

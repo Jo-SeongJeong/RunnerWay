@@ -16,6 +16,8 @@ class RecordView extends StatelessWidget {
     // GetX로 컨트롤러 등록
     final RecordController _recordController = Get.put(RecordController());
 
+    var isMonthLoading = _recordController.isMonthRecordLoading;
+
     return PopScope(
       onPopInvokedWithResult: (popType, result) async {
         // 뷰가 사라질 때 컨트롤러 삭제
@@ -52,113 +54,121 @@ class RecordView extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
 
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Image.asset(
-                        'assets/icons/black_run_shoe.png',
-                        width: 50,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '러닝 키로수',
-                            style: TextStyle(
-                              color: Color(0xFFA0A0A0),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
+                  Obx(() {
+                    return Row(
+                      children: [
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Image.asset(
+                          'assets/icons/black_run_shoe.png',
+                          width: 50,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '러닝 키로수',
+                              style: TextStyle(
+                                color: Color(0xFFA0A0A0),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          Text(
-                            '${_recordController.monthRecords.value?.totalDistance} km',
-                            style: TextStyle(
-                                color: Color(0xFF1C1516),
-                                fontSize: 30,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                    ],
-                  ),
+                            Text(
+                              isMonthLoading.value
+                                  ? '-'
+                                  : '${_recordController.monthRecords.value?.totalDistance} km',
+                              style: TextStyle(
+                                  color: Color(0xFF1C1516),
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                      ],
+                    );
+                  }),
+
                   SizedBox(height: 20),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${_recordController.monthRecords.value?.averageFace.toStringAsFixed(2)}',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(height: 3),
-                            Text(
-                              '평균 페이스',
-                              style: TextStyle(
-                                  color: Color(0xFFA0A0A0),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
+                  Obx(() {
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${_recordController.monthRecords.value?.averageFace.truncate()}\' ${((_recordController.monthRecords.value?.averageFace ?? 0) * 100 % 100).toInt()}\"',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(height: 3),
+                              Text(
+                                '평균 페이스',
+                                style: TextStyle(
+                                    color: Color(0xFFA0A0A0),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${_recordController.monthRecords.value?.totalScore}',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(height: 3),
-                            Text(
-                              '러닝 시간',
-                              style: TextStyle(
-                                  color: Color(0xFFA0A0A0),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${_recordController.monthRecords.value?.totalScore}',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(height: 3),
+                              Text(
+                                '러닝 시간',
+                                style: TextStyle(
+                                    color: Color(0xFFA0A0A0),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${_recordController.monthRecords.value?.totalCalorie.toInt()}',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(height: 3),
-                            Text(
-                              '칼로리',
-                              style: TextStyle(
-                                  color: Color(0xFFA0A0A0),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${_recordController.monthRecords.value?.totalCalorie.toInt()}',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(height: 3),
+                              Text(
+                                '칼로리',
+                                style: TextStyle(
+                                    color: Color(0xFFA0A0A0),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    );
+                  }),
+
                   SizedBox(height: 10),
                   Line(),
                   SizedBox(height: 10),
