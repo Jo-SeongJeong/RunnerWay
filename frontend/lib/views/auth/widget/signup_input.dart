@@ -4,12 +4,14 @@ class SignupInput extends StatelessWidget {
   final String inputType;
   final bool enabled;
   final Function(String) onChanged;
+  final String hintText;
 
   const SignupInput(
       {Key? key,
       required this.inputType,
       required this.onChanged,
-      this.enabled = true})
+      this.enabled = true,
+      required this.hintText})
       : super(key: key);
 
   @override
@@ -62,7 +64,7 @@ class SignupInput extends StatelessWidget {
                       borderSide: BorderSide(color: Colors.blueAccent),
                     ),
                     filled: true,
-                    hintText: text,
+                    hintText: hintText,
                     hintStyle: TextStyle(
                       color: Color(0xFF72777A),
                     ),

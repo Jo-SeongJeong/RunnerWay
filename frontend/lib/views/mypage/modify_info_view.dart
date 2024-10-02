@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/auth_controller.dart';
-import 'package:frontend/views/auth/login_view.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/views/auth/signup_view.dart';
 import 'package:get/get.dart';
 import '../../widgets/line.dart';
 import '../../widgets/modal/birth_modal.dart';
 import '../auth/widget/signup_input.dart';
+import 'package:intl/intl.dart';
 
 class ModifyInfoView extends StatelessWidget {
   const ModifyInfoView({Key? key}) : super(key: key);
@@ -16,6 +16,12 @@ class ModifyInfoView extends StatelessWidget {
     final AuthController _authController = Get.put(AuthController());
     final double screenWidth = MediaQuery.of(context).size.width;
     _authController.fetchUserInfo();
+
+    String formatDate(String date) {
+      if (date.isEmpty) return '  YYYY-MM-DD';
+      DateTime dateTime = DateTime.parse(date);
+      return DateFormat('yyyy-MM-dd').format(dateTime);
+    }
 
     return BaseView(
       child: Scaffold(
@@ -76,7 +82,6 @@ class ModifyInfoView extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextField(
-                          enabled: _authController.isEditable.value,
                           controller: TextEditingController(
                               text: _authController.nickname.value),
                           // 닉네임 글자 수 제한
@@ -132,41 +137,59 @@ class ModifyInfoView extends StatelessWidget {
                   onChanged: (selectedDate) {
                     _authController.birthDate.value = selectedDate;
                   },
+                  hintText: _authController.birthDate.value != null &&
+                          _authController.birthDate.value.isNotEmpty
+                      ? formatDate(_authController.birthDate.value)
+                      : '  YYYY-MM-DD',
                 ),
-                Obx(() => Text('생년월일 : ${_authController.birthDate.value}')),
                 // 키 몸무게 input
                 Row(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: screenWidth / 6),
-                      child: SignupInput(
-                        inputType: 'height',
-                        enabled: _authController.isEditable.value,
-                        onChanged: (value) {
-                          _authController.weight.value = value;
-                        },
+                    // "키" 입력 필드
+                    Expanded(
+                      child: Obx(
+                        () => SignupInput(
+                          inputType: 'height',
+                          hintText: _authController.height.value != null &&
+                                  _authController.height.value.isNotEmpty
+                              ? '${_authController.height.value}'
+                              : '키',
+                          onChanged: (value) {
+                            _authController.height.value = value;
+                          },
+                        ),
                       ),
                     ),
-                    SignupInput(
-                      inputType: 'weight',
-                      enabled: _authController.isEditable.value,
-                      onChanged: (value) {
-                        _authController.weight.value = value;
-                      },
+                    SizedBox(width: 20),
+
+                    Expanded(
+                      child: Obx(
+                        () => SignupInput(
+                          inputType: 'weight',
+                          hintText: _authController.weight.value != null &&
+                                  _authController.weight.value.isNotEmpty
+                              ? '${_authController.weight.value}'
+                              : '몸무게',
+                          onChanged: (value) {
+                            _authController.weight.value = value;
+                          },
+                        ),
+                      ),
                     ),
-                    // Obx(() => Text('키: ${_authController.height.value} cm')),
-                    // Obx(() => Text('몸무게: ${_authController.weight.value} kg')),
                   ],
                 ),
+
+                SizedBox(height: 7),
+
                 SizedBox(height: 25),
-                ElevatedButton(
-                  onPressed: () {
-                    _authController.isEditable.value =
-                        !_authController.isEditable.value;
-                  },
-                  child: Obx(() =>
-                      Text(_authController.isEditable.value ? '저장' : '수정')),
-                ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     _authController.isEditable.value =
+                //         !_authController.isEditable.value;
+                //   },
+                //   child: Obx(() =>
+                //       Text(_authController.isEditable.value ? '저장' : '수정')),
+                // ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -178,15 +201,6 @@ class ModifyInfoView extends StatelessWidget {
                     );
                   },
                   child: const Text('Go to Signup Page'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginView()),
-                    );
-                  },
-                  child: const Text('Go to Login Page'),
                 ),
               ],
             ),

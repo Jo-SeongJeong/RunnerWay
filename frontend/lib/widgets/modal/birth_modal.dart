@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart'; // DateFormat을 위한 패키지 임포트
+import 'package:intl/intl.dart';
 
 class BirthModal extends StatelessWidget {
   final bool enabled;
   final Function(String) onChanged;
+  final String hintText;
 
-  const BirthModal({Key? key, this.enabled = true, required this.onChanged})
+  const BirthModal(
+      {Key? key,
+      this.enabled = true,
+      required this.onChanged,
+      required this.hintText})
       : super(key: key);
 
   void _selectDate(BuildContext context) async {
@@ -83,7 +88,7 @@ class BirthModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       decoration: InputDecoration(
-        hintText: '  YYYY-MM-DD',
+        hintText: hintText,
         hintStyle: TextStyle(
           color: Color(0xFF72777A),
         ),
