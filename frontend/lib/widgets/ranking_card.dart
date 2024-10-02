@@ -8,15 +8,20 @@ class RankingCard extends StatelessWidget {
   final String? imageUrl;
   final int rank;
   final bool isActive;
+  final int rankId;
+  final int courseId;
+  final String type;
 
-  const RankingCard({
-    super.key,
-    required this.name,
-    required this.time,
-    required this.imageUrl,
-    required this.rank,
-    required this.isActive,
-  });
+  const RankingCard(
+      {super.key,
+      required this.name,
+      required this.time,
+      required this.imageUrl,
+      required this.rank,
+      required this.isActive,
+      required this.rankId,
+      required this.courseId,
+      required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +110,7 @@ class RankingCard extends StatelessWidget {
           if (isActive)
             ElevatedButton(
               onPressed: () {
-                Get.to(() => RunningMap());
+                Get.toNamed('/running/${type}/${courseId}/${rankId}');
               },
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),

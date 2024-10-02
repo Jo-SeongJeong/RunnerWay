@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 class RunningReviewModel {
   final int courseId;
-  final String score;
+  final int score;
   final double runningDistance;
   final double calorie;
   final double averagePace;
@@ -62,5 +62,29 @@ class RunningReviewModel {
   @override
   String toString() {
     return 'RunningReviewModel(courseId: $courseId, score: $score, runningDistance: $runningDistance, calorie: $calorie, averagePace: $averagePace, comment: $comment, startDate: $startDate, finishDate: $finishDate, personalImage: $personalImage)';
+  }
+
+  RunningReviewModel copyWith({
+    int? courseId,
+    int? score,
+    double? runningDistance,
+    double? calorie,
+    double? averagePace,
+    String? comment,
+    DateTime? startDate,
+    DateTime? finishDate,
+    PersonalImage? personalImage,
+  }) {
+    return RunningReviewModel(
+      courseId: courseId ?? this.courseId,
+      score: score ?? this.score,
+      runningDistance: runningDistance ?? this.runningDistance,
+      calorie: calorie ?? this.calorie,
+      averagePace: averagePace ?? this.averagePace,
+      comment: comment ?? this.comment,
+      startDate: startDate ?? this.startDate,
+      finishDate: finishDate ?? this.finishDate,
+      personalImage: personalImage ?? this.personalImage,
+    );
   }
 }

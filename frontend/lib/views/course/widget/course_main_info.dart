@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../widgets/button/course_running_button.dart';
 
@@ -9,6 +10,7 @@ class CourseMainInfo extends StatelessWidget {
   final int count;
   final String type;
   final String? nickName;
+  final int courseId;
 
   const CourseMainInfo({
     required this.name,
@@ -17,6 +19,7 @@ class CourseMainInfo extends StatelessWidget {
     required this.address,
     required this.type,
     this.nickName,
+    required this.courseId,
   });
 
   @override
@@ -104,7 +107,9 @@ class CourseMainInfo extends StatelessWidget {
 
               // 러닝 버튼
               JoinRunningButton(
-                onItemTapped: (p0) {},
+                onItemTapped: (p0) {
+                  Get.toNamed('/running/${type}/${courseId}/0');
+                },
               ),
             ],
           )

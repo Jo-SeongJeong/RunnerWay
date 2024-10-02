@@ -166,7 +166,7 @@ class FileService {
   Future<void> renameFile2(String newFileName) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final File tmpFile = File('${directory.path}/currentRun.json');
+      final File tmpFile = File('${directory.path}/tmp.json');
       if (await tmpFile.exists()) {
         final String newPath = '${directory.path}/$newFileName.json';
         await tmpFile.rename(newPath);

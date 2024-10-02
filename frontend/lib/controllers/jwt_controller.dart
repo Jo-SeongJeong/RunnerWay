@@ -20,6 +20,7 @@ class JwtController extends GetxController {
 
     if (storedToken != null) {
       newToken = storedToken;
+      await _storage.write(key: 'ACCESS_TOKEN', value: '${newToken}');
     }
     await _storage.write(key: 'ACCESS_TOKEN', value: '${newToken}');
 

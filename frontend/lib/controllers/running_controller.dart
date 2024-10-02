@@ -14,7 +14,7 @@ class RunningController extends GetxController {
   late final FileService _fileService;
   StreamSubscription<Position>? _positionSubscription;
   Timer? _timer;
-  DateTime? _startTime;
+  DateTime? startTime;
   var isLoading = true.obs;
   final value = RunningMapModel().obs;
   GoogleMapController? _mapController;
@@ -55,6 +55,7 @@ class RunningController extends GetxController {
 
   Future<void> initialize() async {
     dev.log('초기화 시작');
+    await _fileService.resetJson();
     if (opponentid != '0') {
       isCompetitionMode.value = true;
       dev.log('대결 상대: $opponentid');
@@ -148,7 +149,7 @@ class RunningController extends GetxController {
   }
 
   void _startTimer() {
-    _startTime = DateTime.now();
+    startTime = DateTime.now();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _updateElapsedTime();
     });
@@ -175,9 +176,9 @@ class RunningController extends GetxController {
   }
 
   void _updateElapsedTime() {
-    if (_startTime != null) {
+    if (startTime != null) {
       value.update((val) {
-        val?.elapsedTime = _runningService.calculateElapsedTime(_startTime!);
+        val?.elapsedTime = _runningService.calculateElapsedTime(startTime!);
       });
     }
   }
@@ -283,14 +284,14 @@ class RunningController extends GetxController {
   }
 
   void _saveRunningRecord(LatLng location) {
-    if (_startTime == null) return; // 시작 시간이 없으면 저장하지 않음
+    if (startTime == null) return; // 시작 시간이 없으면 저장하지 않음
 
     RunningRecord record = RunningRecord(
       latitude: location.latitude,
       longitude: location.longitude,
-      elapsedTime: DateTime.now().difference(_startTime!),
+      elapsedTime: DateTime.now().difference(startTime!),
     );
-    _fileService.appendRunningRecord(record, 'currentRun');
+    _fileService.appendRunningRecord(record, 'tmp');
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -316,6 +317,8 @@ class RunningController extends GetxController {
     competitionTimer?.cancel();
 
     try {
+      // TODO
+      // recordid로 변경 해야함
       final tempRecordId = 'tmp_${DateTime.now().millisecondsSinceEpoch}';
       await _fileService.renameFile2(tempRecordId);
 

@@ -252,15 +252,7 @@ class RunningView extends StatelessWidget {
           content: content,
           onConfirm: () {
             Navigator.of(context).pop(); // 모달 닫기
-            Get.toNamed(
-                '/writereview'
-                // TODO
-                // 아래 안 필요할 수 있음
-                ,
-                arguments: {
-                  'totalDistance': controller.value.value.totalDistance,
-                  'totalTime': controller.value.value.elapsedTime
-                });
+            Get.toNamed('/writereview');
           },
         );
       },

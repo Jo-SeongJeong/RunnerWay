@@ -46,9 +46,9 @@ class RunningThingsView extends StatelessWidget {
     Get.to(() => const RunningMap());
   }
 
-  void _navigateToRankingListView() {
-    Get.to(() => RankingListView());
-  }
+  // void _navigateToRankingListView() {
+  //   Get.to(() => RankingListView());
+  // }
 
   void _navigateToReviewDetailView() {
     Get.to(() => ReviewDetailView());
@@ -97,11 +97,11 @@ class RunningThingsView extends StatelessWidget {
               // Navigates to the Polyline page
               child: const Text('Go to RunningMap'),
             ),
-            ElevatedButton(
-              onPressed: () => _navigateToRankingListView(),
-              // Navigates to the RankingList page
-              child: const Text('Go to RankingList'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () => _navigateToRankingListView(),
+            //   // Navigates to the RankingList page
+            //   child: const Text('Go to RankingList'),
+            // ),
             ElevatedButton(
               onPressed: () => _navigateToReviewDetailView(),
               // Navigates to the RunningDetail page
