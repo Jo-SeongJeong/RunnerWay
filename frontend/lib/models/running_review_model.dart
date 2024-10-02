@@ -25,8 +25,19 @@ class RunningReviewModel {
   });
 
   String formatDate(DateTime date) {
+    final DateTime dateWithoutMilliseconds = date.copyWith(
+      millisecond: 0,
+      microsecond: 0,
+    );
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
-    return formatter.format(date);
+    return formatter.format(dateWithoutMilliseconds);
+  }
+
+  String formatScore(int scoreInSeconds) {
+    int hours = scoreInSeconds ~/ 3600;
+    int minutes = (scoreInSeconds % 3600) ~/ 60;
+    int seconds = scoreInSeconds % 60;
+    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   factory RunningReviewModel.fromJson(Map<String, dynamic> json) {
@@ -48,14 +59,16 @@ class RunningReviewModel {
   Map<String, dynamic> toJson() {
     return {
       'courseId': courseId,
-      'score': score,
+      'score': formatScore(score),
       'runningDistance': runningDistance,
       'calorie': calorie,
       'averagePace': averagePace,
       'comment': comment,
       'startDate': formatDate(startDate),
       'finishDate': formatDate(finishDate),
-      'personalImage': personalImage?.toJson(),
+      'personalImage': personalImage != null
+          ? {'url': personalImage?.url ?? '', 'path': personalImage?.path ?? ''}
+          : null,
     };
   }
 

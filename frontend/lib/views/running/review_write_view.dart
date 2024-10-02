@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/views/course/widget/course_map.dart';
 import 'package:get/get.dart';
 import '../../widgets/button/register_button.dart';
 import '../../widgets/map/result_map.dart';
@@ -18,7 +19,7 @@ class ReviewWriteView extends StatelessWidget {
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: const Text(
-          '기록 작성',
+          '러닝 기록 작성',
           style: TextStyle(fontSize: 20, color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -108,12 +109,9 @@ class ReviewWriteView extends StatelessWidget {
                                         .reviewModel.value!.runningDistance,
                                     label: '운동 거리'),
                                 ReviewRecordItem(
-                                    value: controller.runningController.value
-                                        .value.elapsedTime.inSeconds,
-                                    label: '운동 시간'),
-                                ReviewRecordItem(
                                     value: controller.reviewModel.value!.score,
-                                    label: '러닝 경사도'),
+                                    label: '운동 시간'),
+                                ReviewRecordItem(value: 0, label: '러닝 경사도'),
                                 ReviewRecordItem(
                                     value:
                                         controller.reviewModel.value!.calorie,
@@ -128,7 +126,7 @@ class ReviewWriteView extends StatelessWidget {
                         absorbing: true,
                         child: SizedBox(
                           height: 300,
-                          child: const ResultMap(),
+                          child: const CourseMap(),
                         ),
                       ),
                     ],

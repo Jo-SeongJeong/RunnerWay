@@ -20,47 +20,52 @@ class RunningView extends StatelessWidget {
         );
       } else {
         return Scaffold(
-          body: Column(
+          body: Stack(
             children: [
-              SizedBox(
-                height: 500,
-                child: GoogleMap(
-                  polylines: controller.value.value.polyline,
-                  myLocationEnabled: true,
-                  onMapCreated: (GoogleMapController mapController) {
-                    controller.onMapCreated(mapController);
-                    controller.startRun2();
-                  },
-                  initialCameraPosition: CameraPosition(
-                    target: controller.value.value.mapCenter ?? LatLng(0, 0),
-                    zoom: 17,
-                  ),
-                  markers: controller.value.value.markers,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: _buildRunStatus(controller), // 대결 상태 표시
+              Column(
+                children: [
+                  SizedBox(
+                    height: 500,
+                    child: GoogleMap(
+                      polylines: controller.value.value.polyline,
+                      myLocationEnabled: true,
+                      onMapCreated: (GoogleMapController mapController) {
+                        controller.onMapCreated(mapController);
+                      },
+                      initialCameraPosition: CameraPosition(
+                        target:
+                            controller.value.value.mapCenter ?? LatLng(0, 0),
+                        zoom: 17,
                       ),
+                      markers: controller.value.value.markers,
                     ),
-                    const SizedBox(height: 10),
-                    Obx(() => _buildSingleTimer(controller)),
-                    const SizedBox(height: 10),
-                    _buildDistanceAndPace(controller),
-                    const SizedBox(height: 10),
-                    _buildLegend(controller),
-                    const SizedBox(height: 20),
-                    _buildEndRunningButton(controller),
-                  ],
-                ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: _buildRunStatus(controller), // 대결 상태 표시
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Obx(() => _buildSingleTimer(controller)),
+                        const SizedBox(height: 10),
+                        _buildDistanceAndPace(controller),
+                        const SizedBox(height: 10),
+                        _buildLegend(controller),
+                        const SizedBox(height: 20),
+                        _buildEndRunningButton(controller),
+                      ],
+                    ),
+                  ),
+                ],
               ),
+              OverlayWidget(controller: controller),
             ],
           ),
         );
@@ -257,5 +262,54 @@ class RunningView extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class OverlayWidget extends StatefulWidget {
+  final RunningController controller;
+
+  const OverlayWidget({required this.controller, Key? key}) : super(key: key);
+
+  @override
+  State<OverlayWidget> createState() => _OverlayWidgetState();
+}
+
+class _OverlayWidgetState extends State<OverlayWidget> {
+  int _countdown = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    _startCountdown();
+  }
+
+  void _startCountdown() async {
+    for (int i = 3; i >= 0; i--) {
+      setState(() {
+        _countdown = i;
+      });
+      await Future.delayed(Duration(seconds: 1));
+    }
+    // 카운트다운이 끝나면 러닝을 시작
+    widget.controller.startRun2();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_countdown > 0) {
+      return Container(
+        color: Colors.black54, // 배경을 반투명하게
+        alignment: Alignment.center,
+        child: Text(
+          '$_countdown',
+          style: TextStyle(
+            fontSize: 80,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      );
+    }
+    return Container(); // 카운트다운이 끝나면 빈 컨테이너 반환
   }
 }

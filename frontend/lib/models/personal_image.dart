@@ -16,8 +16,8 @@ class PersonalImage {
 
   Map<String, dynamic> toJson() {
     return {
-      'url': url,
-      'path': path,
+      'url': url ?? '',
+      'path': path ?? '',
     };
   }
 

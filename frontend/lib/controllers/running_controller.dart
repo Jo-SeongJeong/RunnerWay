@@ -158,8 +158,9 @@ class RunningController extends GetxController {
   void _updateLocation(LatLng newLocation, double speed) {
     value.update((val) {
       if (val != null && val.pointOnMap.isNotEmpty) {
-        double distance =
-            _runningService.calculateDistance(val.pointOnMap.last, newLocation);
+        double distance = (_runningService.calculateDistance(
+                val.pointOnMap.last, newLocation)) /
+            1000;
         val.totalDistance += distance;
       }
 

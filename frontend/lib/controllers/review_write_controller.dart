@@ -46,13 +46,15 @@ class RunningReviewController extends GetxController {
       courseId: courseController.course.value?.courseId ?? 0,
       score: runningController.value.value.elapsedTime.inSeconds,
       runningDistance: runningController.value.value.totalDistance,
-      calorie: 1,
+      calorie: calculateCalorie(),
       averagePace: averagePace,
       comment: '', // 초기값 설정
-      startDate: runningController.startTime ?? DateTime.now(),
-      finishDate: runningController.startTime ??
-          DateTime.now().add(runningController.value.value.elapsedTime),
-      personalImage: null,
+      startDate: (runningController.startTime ?? DateTime.now())
+          .copyWith(millisecond: 0, microsecond: 0),
+      finishDate: (runningController.startTime ??
+              DateTime.now().add(runningController.value.value.elapsedTime))
+          .copyWith(millisecond: 0, microsecond: 0),
+      personalImage: PersonalImage(url: '', path: ''),
     );
 
     name.value = runningController.typeKorean.toString() == '자유'
@@ -104,8 +106,13 @@ class RunningReviewController extends GetxController {
   Future<void> onRegisterTapped() async {
     try {
       if (reviewModel.value != null) {
+        // TODO
+        // 사진 넣어야 함
         // 리뷰 제출
-        await _service.submitReview(reviewModel.value!);
+        final response = await _service.submitReview(reviewModel.value!);
+        // TODO
+        // 리뷰 등록 후 달력으로 이동
+
         Get.snackbar('Success', 'Review submitted successfully');
         Get.back();
       }
@@ -121,5 +128,9 @@ class RunningReviewController extends GetxController {
     int minutes = (totalSeconds % 3600) ~/ 60;
     int seconds = totalSeconds % 60;
     return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  double calculateCalorie() {
+    return 2 * runningController.value.value.elapsedTime.inMinutes.toDouble();
   }
 }
