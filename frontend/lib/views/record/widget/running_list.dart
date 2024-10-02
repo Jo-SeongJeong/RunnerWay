@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/course/level_badge.dart';
 import 'package:get/get.dart';
-import 'package:frontend/widgets/line.dart';
 
 class RunningCard extends StatelessWidget {
   final int courseId;
@@ -22,11 +20,10 @@ class RunningCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // TODO 러닝 상세 기록 페이지 이동
-        Get.toNamed('');
+        // 러닝 상세 기록 페이지 이동
+        Get.toNamed('/record/detail/${courseId}');
       },
       child: Card(
-        // margin: EdgeInsets.only(bottom: 18),
         color: Colors.white,
         elevation: 0,
         child: Row(
@@ -69,7 +66,9 @@ class RunningCard extends StatelessWidget {
                                 Text(
                                   '${averageFace.truncate()}\' ${((averageFace ?? 0) * 100 % 100).toInt()}\"',
                                   style: TextStyle(
-                                      color: Color(0xFFA0A0A0), fontSize: 14),
+                                    color: Color(0xFFA0A0A0),
+                                    fontSize: 14,
+                                  ),
                                 )
                               ],
                             ),

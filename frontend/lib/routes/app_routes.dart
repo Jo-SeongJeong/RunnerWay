@@ -1,6 +1,7 @@
 import 'package:frontend/views/auth/splash_view.dart';
 import 'package:frontend/views/course/course_detail_view.dart';
 import 'package:frontend/views/runnerPick/runner_pick_view.dart';
+import 'package:frontend/views/running/record_detail_view.dart';
 import 'package:frontend/views/search/search_view.dart';
 import 'package:frontend/views/mypage/modify_info_view.dart';
 import 'package:frontend/views/record/record_view.dart';
@@ -46,6 +47,10 @@ class AppRoutes {
     GetPage(
         name: '/record',
         page: () => RecordView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/record/detail/:id',
+        page: () => RecordDetailView(),
         transition: Transition.noTransition),
     GetPage(
         name: '/mypage',
