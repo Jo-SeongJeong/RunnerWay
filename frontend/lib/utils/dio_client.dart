@@ -23,38 +23,11 @@ class DioClient {
       ),
     );
 
-    // _dio.interceptors.add(
-    //   InterceptorsWrapper(
-    //     onRequest: _handleRequest,
-    //     onResponse: _handleResponse,
-    //     onError: _handleError,
-    //   ),
-    // );
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest:
-            (RequestOptions options, RequestInterceptorHandler handler) async {
-          // 저장된 토큰을 읽어옴
-          String? token = await _storage.read(key: 'ACCESS_TOKEN');
-          if (token != null && token.isNotEmpty) {
-            // 토큰을 Authorization 헤더에 추가
-            options.headers['Authorization'] = 'Bearer $token';
-            log('Authorization 헤더에 토큰 추가: $token'); // 로그로 토큰 확인
-          } else {
-            log('토큰이 없습니다. 인증이 필요합니다.');
-          }
-
-          log('Request Headers: ${options.headers}'); // 최종 헤더 로그
-          handler.next(options); // 요청을 다음 단계로 넘김
-        },
-        onResponse: (Response response, ResponseInterceptorHandler handler) {
-          log('Response[${response.statusCode}] => DATA: ${response.data}');
-          handler.next(response);
-        },
-        onError: (DioException e, ErrorInterceptorHandler handler) {
-          log('Error[${e.response?.statusCode}] => MESSAGE: ${e.message}');
-          handler.next(e);
-        },
+        onRequest: _handleRequest,
+        onResponse: _handleResponse,
+        onError: _handleError,
       ),
     );
   }
@@ -73,7 +46,7 @@ class DioClient {
     final accessToken = await _getAccessToken();
     // if (!_isAuthorizationExcluded(options.path)) {
     if (!_isAuthorizationExcluded(options.path) && accessToken != null) {
-      options.headers['Authorization'] = 'Bearer $accessToken';
+      options.headers['Authorization'] = 'Bearer ${accessToken}';
       // 여기 아래 코드는 추후 삭제 요망
       // if (accessToken != null) {
       //   options.headers['Authorization'] = 'Bearer $accessToken';
