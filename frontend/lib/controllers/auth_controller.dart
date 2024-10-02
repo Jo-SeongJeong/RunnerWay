@@ -18,7 +18,7 @@ class AuthController extends GetxController {
   final _storage = FlutterSecureStorage(); // 토큰 저장
   // 혹시 몰라 넣은 토큰
   var newToken =
-      'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
+      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
 
   final AuthService _authService = AuthService();
   // 선택된 성별 및 버튼 활성화 상태
@@ -243,7 +243,8 @@ class AuthController extends GetxController {
   // 회원탈퇴
   Future<void> remove() async {
     try {
-      final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+      // TODO
+      // final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
       // final response = await _authService.removeMember(accessToken);
       Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
     } catch (e) {
