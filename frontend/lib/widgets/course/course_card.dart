@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/course_controller.dart';
 import 'package:frontend/models/course.dart';
 import 'package:frontend/widgets/course/level_badge.dart';
 import 'package:get/get.dart';
+
+import '../../views/course/widget/course_map.dart';
 
 class CourseCard extends StatelessWidget {
   final Course course;
@@ -13,8 +16,8 @@ class CourseCard extends StatelessWidget {
   void _showOverlay(BuildContext context, Offset position, double screenWidth,
       double screenHeight) {
     // 팝업 크기 설정
-    double popupWidth = screenWidth * 1 / 2;
-    double popupHeight = 210; // 예시로 설정한 높이
+    double popupWidth = screenWidth * 3 / 4;
+    double popupHeight = 300; // 예시로 설정한 높이
 
     // 화면 경계를 넘지 않도록 조정
     double leftPosition = position.dx;
@@ -62,13 +65,16 @@ class CourseCard extends StatelessWidget {
                 SizedBox(
                   height: 15,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    color: Colors.black12,
-                  ),
-                  height: 120,
-                  width: screenWidth * 2 / 4,
+                // Container(
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(18),
+                //     color: Colors.black12,
+                //   ),
+                //   height: 120,
+                //   width: screenWidth * 2 / 4,
+                // ),
+                CourseMap(
+                  height: 200,
                 ),
                 SizedBox(
                   height: 6,
@@ -93,6 +99,8 @@ class CourseCard extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
+    final CourseController courseController = Get.put(CourseController());
+
     return GestureDetector(
       onTap: () {
         // 코스 카드 클릭 시 상세 페이지로 이동
@@ -100,6 +108,7 @@ class CourseCard extends StatelessWidget {
       },
       onLongPressStart: (LongPressStartDetails details) {
         // 길게 누르기 시작할 때 클릭 위치에 오버레이로 팝업 띄우기
+        courseController.fetchCoursePoints(course.courseId);
         _showOverlay(
             context, details.globalPosition, screenWidth, screenHeight);
       },

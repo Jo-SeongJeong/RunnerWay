@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import '../../../controllers/course_controller.dart';
 
 class CourseMap extends StatefulWidget {
-  const CourseMap({super.key});
+  final double height; // 높이 값을 double 타입으로 명시
+
+  const CourseMap({super.key, required this.height});
 
   @override
   State<CourseMap> createState() => _CourseMap();
@@ -54,13 +56,12 @@ class _CourseMap extends State<CourseMap> {
 
   @override
   Widget build(BuildContext context) {
-    final courseController =
-        Get.find<CourseController>(); // CourseController 인스턴스 가져오기
+    final courseController = Get.find<CourseController>();
 
     return Container(
+      height: widget.height, // 높이를 widget.height로 설정
       child: Obx(
         () {
-          // 경로 데이터가 없거나 비어 있을 경우 처리
           if (courseController.coursePoints.isEmpty) {
             return Container(
               color: Colors.black12.withOpacity(0.03),
@@ -91,11 +92,9 @@ class _CourseMap extends State<CourseMap> {
           }
 
           if (courseController.coursePoints.isNotEmpty) {
-            // 경로의 시작점과 끝점 설정
             LatLng startPoint = courseController.coursePoints.first;
             LatLng endPoint = courseController.coursePoints.last;
 
-            // 마커 추가
             markers.add(
               Marker(
                 markerId: MarkerId("start"),
@@ -122,38 +121,33 @@ class _CourseMap extends State<CourseMap> {
               ),
             );
 
-            // 경로 폴리라인 설정
             _polyline = {
               Polyline(
                 polylineId: const PolylineId("route"),
                 points: courseController.coursePoints,
                 color: Colors.blue,
-                width: 5, // 폴리라인 두께
+                width: 5,
               ),
             };
 
-            // 지도가 준비된 후 경로 전체를 보여주는 함수 호출
             WidgetsBinding.instance.addPostFrameCallback((_) {
               _setMapFitToBounds(courseController.coursePoints);
             });
           }
 
-          return Container(
-            height: 300,
-            child: GoogleMap(
-              onMapCreated: (GoogleMapController controller) {
-                _mapController = controller;
-                if (courseController.coursePoints.isNotEmpty) {
-                  _setMapFitToBounds(courseController.coursePoints);
-                }
-              },
-              polylines: _polyline,
-              myLocationButtonEnabled: true,
-              markers: markers,
-              zoomControlsEnabled: false,
-              initialCameraPosition: CameraPosition(
-                target: courseController.coursePoints.first,
-              ),
+          return GoogleMap(
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+              if (courseController.coursePoints.isNotEmpty) {
+                _setMapFitToBounds(courseController.coursePoints);
+              }
+            },
+            polylines: _polyline,
+            myLocationButtonEnabled: true,
+            markers: markers,
+            zoomControlsEnabled: false,
+            initialCameraPosition: CameraPosition(
+              target: courseController.coursePoints.first,
             ),
           );
         },
