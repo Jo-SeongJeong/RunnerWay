@@ -22,6 +22,6 @@ class RecordRepository {
   // 러닝 기록 상세 조회
   Future<dynamic> fetchRecordDetail(int recordId) async {
     final response = await _provider.fetchRecordDetail(recordId);
-    return response;
+    return Record.fromJson(response);
   }
 }

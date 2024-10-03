@@ -47,8 +47,7 @@ class RecordProvider {
   Future<dynamic> fetchRecordDetail(int recordId) async {
     log('러닝 기록 상세: $recordId');
     try {
-      final response = await dioClient.dio.get('/record/detail/$recordId',
-          queryParameters: {'recordId': recordId});
+      final response = await dioClient.dio.get('/record/detail/$recordId');
       if (response.statusCode == 200) {
         return response.data;
       } else {

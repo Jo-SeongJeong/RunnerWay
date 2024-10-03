@@ -13,6 +13,10 @@ class RecordController extends GetxController {
   var isDayRecordLoading = false.obs;
   var isMonthRecordLoading = false.obs;
   var errorMessage = ''.obs;
+  var selectedRecordId = 0.obs;
+  var recordList = <Record>[].obs;
+  var recordDetail = Rxn<Record>();
+  var isLoading = false.obs;
 
   var selectedDate = Rxn<DateTime>(); // 선택된 날짜
   var focusedDate = Rxn<DateTime>(); // 포커스된 날짜
@@ -42,6 +46,12 @@ class RecordController extends GetxController {
     fetchMonthRecord(focusedDate.value!.year, focusedDate.value!.month);
   }
 
+  // 기록 목록에서 기록 선택 시 실행
+  void selectRecord(int recordId) {
+    selectedRecordId.value = recordId;
+    fetchRecordDetail(recordId); // 상세 정보 조회
+  }
+
   // 월별 러닝 기록 분석 조회
   Future<void> fetchMonthRecord(int year, int month) async {
     isMonthRecordLoading(true);
@@ -65,6 +75,7 @@ class RecordController extends GetxController {
     try {
       final fetchedRecords =
           await _recordService.fetchRecordList(year, month, day);
+      recordList.assignAll(fetchedRecords);
       if (fetchedRecords.isEmpty) {
       } else {}
       dayRecords.value = fetchedRecords;
@@ -77,10 +88,14 @@ class RecordController extends GetxController {
 
   // 러닝 기록 상세 조회
   Future<void> fetchRecordDetail(int recordId) async {
+    isLoading(true);
     try {
       var detail = await _recordService.fetchRecordDetail(recordId);
+      recordDetail.value = detail;
     } catch (e) {
       log('상세정보조회실패: $e');
+    } finally {
+      isLoading(false);
     }
   }
 }

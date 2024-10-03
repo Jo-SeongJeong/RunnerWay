@@ -50,9 +50,9 @@ class RunningThingsView extends StatelessWidget {
     Get.to(() => RankingListView());
   }
 
-  void _navigateToReviewDetailView() {
-    Get.to(() => RecordDetailView());
-  }
+  // void _navigateToReviewDetailView() {
+  //   Get.to(() => RecordDetailView());
+  // }
 
   void _navigateToReviewWriteView() {
     Get.to(() => ReviewWriteView());
@@ -102,11 +102,11 @@ class RunningThingsView extends StatelessWidget {
               // Navigates to the RankingList page
               child: const Text('Go to RankingList'),
             ),
-            ElevatedButton(
-              onPressed: () => _navigateToReviewDetailView(),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to ReviewDetail'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () => _navigateToReviewDetailView(),
+            //   // Navigates to the RunningDetail page
+            //   child: const Text('Go to ReviewDetail'),
+            // ),
             ElevatedButton(
               onPressed: () => _navigateToReviewWriteView(),
               // Navigates to the RunningDetail page

@@ -27,7 +27,7 @@ class RecordService {
   }
 
   // 러닝기록 상세 조회
-  Future<void> fetchRecordDetail(int recordId) async {
+  Future<Record> fetchRecordDetail(int recordId) async {
     try {
       final response = await _repository.fetchRecordDetail(recordId);
       return response;
