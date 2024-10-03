@@ -1,6 +1,7 @@
 import 'package:frontend/views/auth/splash_view.dart';
 import 'package:frontend/views/course/course_detail_view.dart';
 import 'package:frontend/views/runnerPick/runner_pick_view.dart';
+import 'package:frontend/views/running/record_detail_view.dart';
 import 'package:frontend/views/running/free_course_running_view.dart';
 import 'package:frontend/views/running/review_write_view.dart';
 import 'package:frontend/views/running/running_things_view.dart';
@@ -50,6 +51,10 @@ class AppRoutes {
     GetPage(
         name: '/record',
         page: () => RecordView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/record/detail/:id',
+        page: () => RecordDetailView(),
         transition: Transition.noTransition),
     GetPage(
         name: '/mypage',

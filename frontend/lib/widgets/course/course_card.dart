@@ -117,13 +117,6 @@ class CourseCard extends StatelessWidget {
             // 코스 이미지
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              // TODO: 이미지 테스트
-              // child: Image.asset(
-              //   'assets/images/temp/course4.png',
-              //   width: 90,
-              //   height: 90,
-              //   fit: BoxFit.cover,
-              // ),
               child: course.courseImage?.url != null &&
                       course.courseImage!.url.isNotEmpty
                   ? Image.network(

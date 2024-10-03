@@ -11,7 +11,7 @@ import '../../widgets/map/map.dart'; // map.dart 파일을 import
 import '../../widgets/map/line.dart'; // line.dart 파일을 import
 import '../../widgets/map/result_map.dart'; // result_map.dart 파일을 import
 import 'ranking_list_view.dart'; // result_map.dart 파일을 import
-import 'review_detail_view.dart'; // result_map.dart 파일을 import
+import 'record_detail_view.dart'; // result_map.dart 파일을 import
 import 'review_write_view.dart'; // result_map.dart 파일을 import
 import 'package:get/get.dart'; // result_map.dart 파일을 import
 
@@ -51,7 +51,7 @@ class RunningThingsView extends StatelessWidget {
   // }
 
   void _navigateToReviewDetailView() {
-    Get.to(() => ReviewDetailView());
+    Get.to(() => RecordDetailView());
   }
 
   void _navigateToReviewWriteView() {

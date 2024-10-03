@@ -1,117 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:frontend/widgets/line.dart';
 
 class RunningCard extends StatelessWidget {
+  final int courseId;
   final String courseName;
   final double runningDistance;
   final String score;
+  final double averageFace;
 
   const RunningCard(
       {super.key,
+      required this.courseId,
       required this.courseName,
       required this.runningDistance,
-      required this.score});
+      required this.score,
+      required this.averageFace});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // TODO 러닝 상세 기록 페이지 이동
-        Get.toNamed('');
+        // 러닝 상세 기록 페이지 이동
+        Get.toNamed('/record/detail/${courseId}');
       },
       child: Card(
-        margin: EdgeInsets.only(bottom: 18),
         color: Colors.white,
         elevation: 0,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          courseName,
-                          // '유성천 옆 산책로',
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                        ),
-                        SizedBox(width: 10),
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // LevelBadge(level: course.level),
-                            Text('level1'),
-                            SizedBox(width: 10),
-                            // if (course.courseType == 'user')
+                            Text(
+                              courseName,
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 18),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Row(
                               children: [
                                 Text(
-                                  '$score / ',
+                                  '${score} / ',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 14),
+                                      color: Color(0xFFA0A0A0), fontSize: 14),
                                 ),
-                                SizedBox(height: 10),
                                 Text(
-                                  '$runningDistance km',
+                                  '${runningDistance}km / ',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 14),
+                                      color: Color(0xFFA0A0A0), fontSize: 14),
+                                ),
+                                Text(
+                                  '${averageFace.truncate()}\' ${((averageFace) * 100 % 100).toInt()}\"',
+                                  style: TextStyle(
+                                    color: Color(0xFFA0A0A0),
+                                    fontSize: 14,
+                                  ),
                                 )
                               ],
                             ),
+                            SizedBox(
+                              height: 5,
+                            ),
                           ],
                         ),
+                        Icon(Icons.chevron_right_rounded),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [Icon(Icons.chevron_right_rounded)],
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '01:06:56 / ',
-                      style: TextStyle(color: Color(0xFFA0A0A0), fontSize: 14),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '10km / ',
-                          style:
-                              TextStyle(color: Color(0xFFA0A0A0), fontSize: 14),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '6.22',
-                          style:
-                              TextStyle(color: Color(0xFFA0A0A0), fontSize: 14),
-                        )
-                      ],
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 15),
+                      height: 1,
+                      width: MediaQuery.of(context).size.width,
+                      color: Color(0xffF1F1F1),
                     ),
                   ],
                 ),
-                Line(),
-              ],
-            )),
+              ),
+            ),
           ],
         ),
       ),

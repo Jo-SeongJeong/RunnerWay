@@ -14,7 +14,6 @@ class RecordRepository {
   // 월별 러닝 기록 분석 조회
   Future<RecordAnalyze> fetchMonthAnalyze(int year, int month) async {
     final response = await _provider.fetchMonthAnalyze(year, month);
-
     return RecordAnalyze.fromJson(response);
   }
 }
