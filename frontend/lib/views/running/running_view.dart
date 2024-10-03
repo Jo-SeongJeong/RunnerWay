@@ -153,7 +153,7 @@ class RunningView extends StatelessWidget {
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             Obx(() => Text(
-                  '${(controller.value.value.totalDistance / 1000).toStringAsFixed(2)} km',
+                  '${(controller.value.value.totalDistance).toStringAsFixed(2)} km',
                   style: const TextStyle(
                       fontSize: 24, fontWeight: FontWeight.bold),
                 )),

@@ -95,6 +95,7 @@ class RunningController extends GetxController {
   }
 
   // TODO
+  // main인 running_view에서 사용하지 않고 예전 코드임
   Future<void> startRun(
       {bool isOfficial = false, bool isCompetition = false}) async {
     isOfficialRun.value = isOfficial;
@@ -209,7 +210,10 @@ class RunningController extends GetxController {
         double distance = (_runningService.calculateDistance(
                 val.pointOnMap.last, newLocation)) /
             1000;
+
+        dev.log('거리 차 : ${distance}');
         val.totalDistance += distance;
+        dev.log('현재 간 거리: ${val.totalDistance}');
       }
 
       val?.currentSpeed = speed;
@@ -296,10 +300,6 @@ class RunningController extends GetxController {
         .readSavedRunningRecordLog(int.parse(rankid ?? '0'));
 
     dev.log('competitionrecords 결과값: ${competitionRecords}');
-
-    // competitionRecords = await _fileService
-    //     .readSavedRunningRecords('walking_log_noeun_yuseong_3_seconds');
-    // competitionRecords = await
 
     competitionRecordIndex = 0;
   }
@@ -415,6 +415,8 @@ class RunningController extends GetxController {
     }
   }
 
+  // TODO
+  // 데이터 저장 review write 후에 진행되도록 해야 함
   Future<void> endRunning2() async {
     _positionSubscription?.cancel();
     _timer?.cancel();
@@ -468,14 +470,16 @@ class RunningController extends GetxController {
     _positionSubscription?.cancel();
     _timer?.cancel();
     competitionTimer?.cancel();
+
+    dev.log('버튼으로 중지');
     try {
-      // TODO
       // 자유코스로 변경 및 코스, 상대방 초기화
+      type = '자유';
       typeKorean.value = '자유';
       courseid = '0';
       rankid = '0';
     } catch (e) {
-      print('Error ending running session: $e');
+      dev.log('Error ending running session: $e');
       Get.snackbar(
         'Error',
         'Failed to save running record',

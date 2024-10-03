@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/course/widget/course_map.dart';
+import 'package:frontend/controllers/running_controller.dart';
+import 'package:frontend/views/running/widgets/write_map.dart';
 import 'package:get/get.dart';
 import '../../widgets/button/register_button.dart';
 import '../../widgets/map/result_map.dart';
@@ -126,7 +127,7 @@ class ReviewWriteView extends StatelessWidget {
                         absorbing: true,
                         child: SizedBox(
                           height: 300,
-                          child: const CourseMap(),
+                          child: WriteMap(),
                         ),
                       ),
                     ],

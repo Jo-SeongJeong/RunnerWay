@@ -49,11 +49,10 @@ class RunningReviewController extends GetxController {
       calorie: calculateCalorie(),
       averagePace: averagePace,
       comment: '', // 초기값 설정
-      startDate: (runningController.startTime ?? DateTime.now())
+      startDate: DateTime.now()
+          .subtract(runningController.value.value.elapsedTime)
           .copyWith(millisecond: 0, microsecond: 0),
-      finishDate: (runningController.startTime ??
-              DateTime.now().add(runningController.value.value.elapsedTime))
-          .copyWith(millisecond: 0, microsecond: 0),
+      finishDate: DateTime.now().copyWith(millisecond: 0, microsecond: 0),
       personalImage: PersonalImage(url: '', path: ''),
     );
 
