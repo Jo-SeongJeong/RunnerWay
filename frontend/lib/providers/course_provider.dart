@@ -192,12 +192,13 @@ class CourseProvider {
         'https://${Env.s3Name}.s3.${Env.s3Region}.amazonaws.com/upload/course/${id}.json',
       );
 
-      log('$response');
-
       if (response.statusCode == 200) {
+        log('코스 데이터 가져옴 : $response');
         return response.data;
       } else {
-        throw Exception('코스 데이터 조회 중 문제 발생');
+        log('코스 데이터 없음');
+        return [];
+        // throw Exception('코스 데이터 조회 중 문제 발생');
       }
     } on DioException catch (e) {
       log('코스 경로 데이터 조회 중 오류 발생 : ${e.message}');

@@ -26,7 +26,7 @@ class SplashView extends StatelessWidget {
                 // CircularProgressIndicator(),
                 SizedBox(height: 20),
                 Text(
-                  '네트워크 상태를 확인하는 중...',
+                  '네트워크 상태를 확인하는 중',
                   style: TextStyle(fontSize: 18),
                 ),
               ],
@@ -41,9 +41,9 @@ class SplashView extends StatelessWidget {
                   width: screenWidth / 2,
                 ),
                 // CircularProgressIndicator(),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 Text(
-                  '위치 정보를 확인하는 중...',
+                  '위치 정보를 확인하는 중',
                   style: TextStyle(fontSize: 18),
                 ),
               ],
