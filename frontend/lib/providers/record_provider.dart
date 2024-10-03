@@ -41,4 +41,23 @@ class RecordProvider {
       throw Exception('러닝 기록 분석 조회 provider 오류 발생 : ${e.message}');
     }
   }
+
+  // 월별 러닝 기록 조회
+  Future<List<dynamic>> fetchRecords(int year, int month) async {
+    try {
+      final response = await dioClient.dio
+          .get('/record', queryParameters: {'year': year, 'month': month});
+      if (response.statusCode == 200) {
+        log('월별 기록 조회 Response data: ${response.data}');
+        return response.data;
+      } else if (response.statusCode == 204) {
+        return [];
+      } else {
+        throw Exception('러닝 기록 목록 조회 중 문제 발생');
+      }
+    } on DioException catch (e) {
+      log('러닝 기록 조회 provider 오류 발생 : ${e.message}');
+      throw Exception('러닝 기록 조회 provider 오류 발생 : ${e.message}');
+    }
+  }
 }

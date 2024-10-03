@@ -43,8 +43,6 @@ class Calendar extends StatelessWidget {
     }
 
     // selectedDate는 오늘 날짜로 초기화하고, focusedMonth는 선택된 날짜의 달로 초기화
-    // DateTime selectedDate =
-    //     recordController.selectedDate.value ?? DateTime.now();
     DateTime focusedMonth =
         recordController.focusedDate.value ?? DateTime.now();
 
@@ -96,6 +94,57 @@ class Calendar extends StatelessWidget {
             focusedDay: recordController.focusedDate.value ?? DateTime.now(),
             firstDay: DateTime(1999, 1, 1),
             lastDay: DateTime(2100, 1, 31),
+            calendarBuilders: CalendarBuilders(
+              defaultBuilder: (context, day, focusedDay) {
+                DateTime simpleDay = DateTime(day.year, day.month, day.day);
+
+                // stampDays에 해당하는 날짜인지 확인
+                if (recordController.isStampLoading.value) {
+                  return Container();
+                } else {
+                  if (recordController.stampDays.any((stampDay) =>
+                      stampDay.year == simpleDay.year &&
+                      stampDay.month == simpleDay.month &&
+                      stampDay.day == simpleDay.day)) {
+                    return Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Text(
+                            DateFormat('d').format(day),
+                            style: TextStyle(color: Colors.black), // 날짜 텍스트
+                          ),
+                          Image.asset('assets/icons/stamp.png'),
+                        ],
+                      ),
+                    );
+                  }
+                }
+                // 기본 날짜 표시
+                return Center(
+                  child: Text(
+                    DateFormat('d').format(day),
+                  ),
+                );
+              },
+              // selectedBuilder: (context, day, focusedDay) {
+              //   return Container(
+              //     decoration: BoxDecoration(
+              //       color: null,
+              //     ),
+              //     child: Center(
+              //       child: Text(
+              //         DateFormat('d').format(day),
+              //         style: TextStyle(
+              //           fontWeight: FontWeight.w700,
+              //           fontSize: 18,
+              //           color: Color(0xFF1EA6FC),
+              //         ),
+              //       ),
+              //     ),
+              //   );
+              // },
+            ),
             calendarStyle: CalendarStyle(
               outsideDaysVisible: false,
               todayTextStyle: TextStyle(
