@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:developer' as dev;
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/course_controller.dart';
+import 'package:frontend/models/ranking_upload_model.dart';
 import 'package:frontend/services/course_service.dart';
+import 'package:frontend/utils/s3_image_upload.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,6 +14,7 @@ import 'package:frontend/models/running_map_model.dart';
 import 'package:frontend/models/running_record_model.dart';
 import 'package:frontend/services/running_service.dart';
 import 'package:frontend/services/file_service.dart';
+import 'package:path_provider/path_provider.dart';
 
 class RunningController extends GetxController {
   late final RunningService _runningService;
@@ -407,26 +411,35 @@ class RunningController extends GetxController {
     _timer?.cancel();
     competitionTimer?.cancel();
 
+    final score =
+        value.value.elapsedTime.toString().split('.').first.padLeft(8, "0");
+
     // 대결 여부 확인 후
     if (opponentid != '0') {
       //대결에 따른 결과 페이지로 이동 시켜야 해
     }
-    dev.log(
-        '최종 시간: ${value.value.elapsedTime.toString().split('.').first.padLeft(8, "0")}');
+    dev.log('최종 시간: ${score}');
     // 랭킹 등록 가능여부 판단 해야 함
     final response = await _runningService.getRegistRanking(
-        int.parse(courseid ?? '0'),
-        value.value.elapsedTime.toString().split('.').first.padLeft(8, "0"));
+        int.parse(courseid ?? '0'), score);
     dev.log('랭커 등록 여부: ${response}');
 
     if (response) {
+      // s3에 업로드
+      final directory = await getApplicationDocumentsDirectory();
+      final File tmpFile = File('${directory.path}/tmp.json');
+      final url = await S3ImageUpload().uploadRankingLog(tmpFile);
+      dev.log('url: ${url}');
+      RankingUploadModel model = RankingUploadModel(
+          courseId: int.parse(courseid ?? '0'), score: score, logPath: url);
       // 랭킹 등록
-      // final response = await _runningService.
+      final response = await _runningService.registRanking(model);
+      dev.log('랭킹 등록 결과값: ${response}');
     }
 
     try {
       // TODO
-      // recordid로 변경 해야함
+      // 파일 저장을 recordid로 변경 해야함
       final tempRecordId = 'tmp_${DateTime.now().millisecondsSinceEpoch}';
       await _fileService.renameFile2(tempRecordId);
 

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:frontend/models/ranking_upload_model.dart';
 import 'package:frontend/utils/dio_client.dart';
 import 'package:frontend/utils/env.dart';
 
@@ -55,6 +56,24 @@ class RunningProvider {
           options: Options(headers: {'Accept': ''}));
       log('response: ${response}');
       if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('랭킹 등록 확인 중 문제 발생');
+      }
+    } catch (e) {
+      log('An unexpected error occurred: $e');
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+//  랭커 등록
+  Future<dynamic> registRanking(RankingUploadModel model) async {
+    try {
+      final response = await dioClient.dio.post('ranking',
+          data: model.toJson(), options: Options(headers: {'Accept': ''}));
+      log('response: ${response}');
+      if (response.statusCode == 201) {
+        log('여기는? ${response}');
         return response.data;
       } else {
         throw Exception('랭킹 등록 확인 중 문제 발생');

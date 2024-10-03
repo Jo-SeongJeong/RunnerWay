@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/ranking.dart';
+import 'package:frontend/models/ranking_upload_model.dart';
 import 'package:frontend/models/running_record_model.dart';
 import 'package:frontend/repositories/running_repository.dart';
 import 'package:frontend/services/file_service.dart';
@@ -141,6 +143,12 @@ class RunningService extends GetxService {
   Future<bool> getRegistRanking(int courseId, String elapsedTime) async {
     final response =
         await _runningRepository.getRegistRanking(courseId, elapsedTime);
+    return response;
+  }
+
+  // 랭킹 등록
+  Future<bool> registRanking(RankingUploadModel model) async {
+    final response = await _runningRepository.registRanking(model);
     return response;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:frontend/models/ranking_upload_model.dart';
 import 'package:frontend/models/running_record_model.dart';
 import 'package:frontend/providers/running_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -54,5 +55,10 @@ class RunningRepository {
     final response =
         await _runningProvider.getRegistRanking(courseId, elapsedTime);
     return response == '등록 가능';
+  }
+
+  Future<bool> registRanking(RankingUploadModel model) async {
+    final response = await _runningProvider.registRanking(model);
+    return response == '랭킹 등록 완료!!';
   }
 }
