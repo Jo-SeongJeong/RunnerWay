@@ -110,7 +110,10 @@ class RankingCard extends StatelessWidget {
           if (isActive)
             ElevatedButton(
               onPressed: () {
-                Get.toNamed('/running/${type}/${courseId}/${rankId}');
+                Get.toNamed(
+                  '/running/${type}/${courseId}/$rankId',
+                  parameters: {'varid': rankId.toString()},
+                );
               },
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),

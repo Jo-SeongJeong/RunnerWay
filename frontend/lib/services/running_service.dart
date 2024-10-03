@@ -145,6 +145,42 @@ class RunningService extends GetxService {
     return response;
   }
 
+  // 나와의 대결을 위한 polyline 생성 메서드
+  Future<List<RunningRecord>> readSavedRunningLocalLog(int id) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$id.json');
+
+      if (await file.exists()) {
+        String contents = await file.readAsString();
+        List<dynamic> jsonList = jsonDecode(contents);
+
+        return jsonList.map<RunningRecord>((point) {
+          log('포인트: $point');
+          if (point['elapsedTime'] != null) {
+            return RunningRecord(
+              latitude: point['latitude'] as double,
+              longitude: point['longitude'] as double,
+              elapsedTime: Duration(seconds: point['elapsedTime'] as int),
+            );
+          } else {
+            return RunningRecord(
+              latitude: point['latitude'] ?? 0.0,
+              longitude: point['longitude'] ?? 0.0,
+              elapsedTime: Duration.zero,
+            );
+          }
+        }).toList();
+      } else {
+        log('File $id.json does not exist.');
+        return [];
+      }
+    } catch (e) {
+      log('Error reading saved path: $e');
+      return [];
+    }
+  }
+
   // 종료 후 랭킹 등록 가능여부 판단 메서드
   Future<bool> getRegistRanking(int courseId, String elapsedTime) async {
     final response =

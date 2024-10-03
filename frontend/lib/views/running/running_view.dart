@@ -126,7 +126,7 @@ class RunningView extends StatelessWidget {
           '${controller.typeKorean.value} 코스',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        if (controller.rankid != '0')
+        if (controller.varid != '0')
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
@@ -280,7 +280,12 @@ class RunningView extends StatelessWidget {
     String content = '';
     if (controller.isCompetitionMode.value) {
       title = '${controller.typeKorean.value} 대결 러닝';
-      content = '${controller.typeKorean.value} 대결 러닝을 완료하셨습니다';
+      if (controller.value.value.elapsedTime <
+          controller.competitionRecords.last.elapsedTime) {
+        content = '${controller.typeKorean.value} 대결 러닝을 승리하셨습니다';
+      } else {
+        content = '${controller.typeKorean.value} 대결 러닝을 패배하셨습니다';
+      }
     } else {
       title = '${controller.typeKorean.value} 러닝';
       content = '${controller.typeKorean.value} 러닝을 완료하셨습니다';

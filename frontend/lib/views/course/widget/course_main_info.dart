@@ -108,7 +108,8 @@ class CourseMainInfo extends StatelessWidget {
               // 러닝 버튼
               JoinRunningButton(
                 onItemTapped: (p0) {
-                  Get.toNamed('/running/${type}/${courseId}/0');
+                  Get.toNamed('/running/${type}/${courseId}/"0"',
+                      parameters: {'varid': 0.toString()});
                 },
               ),
             ],

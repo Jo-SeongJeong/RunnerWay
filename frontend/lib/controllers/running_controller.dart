@@ -42,7 +42,7 @@ class RunningController extends GetxController {
 
   String? type;
   String? courseid;
-  String? rankid;
+  String? varid; // type이 free이고 대결 시 recordid이고 나머지 경우 rankid
   final typeKorean = ''.obs;
 
   LatLng? _departurePoint; // 시작지점 좌표를 저장하는 변수
@@ -60,7 +60,7 @@ class RunningController extends GetxController {
     // route에서 파라미터 가져오기
     type = Get.parameters['type'];
     courseid = Get.parameters['courseid'];
-    rankid = Get.parameters['rankid'];
+    varid = Get.parameters['varid'];
 
     initialize();
   }
@@ -68,9 +68,9 @@ class RunningController extends GetxController {
   Future<void> initialize() async {
     dev.log('초기화 시작');
     await _fileService.resetJson();
-    if (rankid != '0') {
+    if (varid != '0') {
       isCompetitionMode.value = true;
-      dev.log('대결 상대: $rankid');
+      dev.log('대결 상대: $varid');
     }
 
     if (type == 'free') {
@@ -86,7 +86,7 @@ class RunningController extends GetxController {
       dev.log('User running mode initialized with courseid: $courseid');
     }
 
-    dev.log('type: ${type}, courseid: ${courseid}, rankid: ${rankid}');
+    dev.log('type: ${type}, courseid: ${courseid}, varid: ${varid}');
 
     isLoading(true);
     await _setInitialLocation();
@@ -113,7 +113,11 @@ class RunningController extends GetxController {
       await loadSavedPath();
     }
     if (isCompetitionMode.value) {
-      await loadCompetitionRecords();
+      if (type == 'official' || type == 'user') {
+        await loadCompetitionRecords();
+      } else {
+        await loadCompetitionRecordsFromLocal();
+      }
       startCompetitionMode();
     }
     _startLocationUpdates();
@@ -297,7 +301,16 @@ class RunningController extends GetxController {
     // 자유 코스에서 대결일 경우 내 로그에서 데이터 가져오게 해야 함
 
     competitionRecords = await _runningService
-        .readSavedRunningRecordLog(int.parse(rankid ?? '0'));
+        .readSavedRunningRecordLog(int.parse(varid ?? '0'));
+
+    dev.log('competitionrecords 결과값: ${competitionRecords}');
+
+    competitionRecordIndex = 0;
+  }
+
+  Future<void> loadCompetitionRecordsFromLocal() async {
+    competitionRecords =
+        await _runningService.readSavedRunningLocalLog(int.parse(varid ?? '0'));
 
     dev.log('competitionrecords 결과값: ${competitionRecords}');
 
@@ -424,7 +437,7 @@ class RunningController extends GetxController {
         value.value.elapsedTime.toString().split('.').first.padLeft(8, "0");
 
     // 대결 여부 확인 후
-    if (rankid != '0') {
+    if (varid != '0') {
       //대결에 따른 결과 페이지로 이동 시켜야 해
     }
     dev.log('최종 시간: ${score}');
@@ -458,7 +471,7 @@ class RunningController extends GetxController {
       type = '자유';
       typeKorean.value = '자유';
       courseid = '0';
-      rankid = '0';
+      varid = '0';
     } catch (e) {
       dev.log('Error ending running session: $e');
       Get.snackbar(

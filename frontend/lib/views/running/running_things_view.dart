@@ -133,7 +133,8 @@ class RunningThingsView extends StatelessWidget {
               child: const Text('Go to Competition Course Running'),
             ),
             ElevatedButton(
-              onPressed: () => Get.toNamed('/running/free/0/0'),
+              onPressed: () =>
+                  Get.toNamed('/running/free/0/0', parameters: {'varid': '0'}),
               // Navigates to the RunningDetail page
               child: const Text('Go to view의 free course'),
             ),
