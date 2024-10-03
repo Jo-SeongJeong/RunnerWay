@@ -12,7 +12,9 @@ class RecordController extends GetxController {
   var monthRecords = Rxn<RecordAnalyze>();
   var isDayRecordLoading = false.obs;
   var isMonthRecordLoading = false.obs;
+  var isStampLoading = false.obs;
   var errorMessage = ''.obs;
+  var stampDays = <DateTime>[].obs;
 
   var selectedDate = Rxn<DateTime>(); // 선택된 날짜
   var focusedDate = Rxn<DateTime>(); // 포커스된 날짜
@@ -22,11 +24,11 @@ class RecordController extends GetxController {
     super.onInit();
 
     // 기본적으로 오늘 날짜로 기록 로드
-    setSelectedDate(DateTime.now());
     setFocusedDate(DateTime.now());
-    fetchMonthRecord(focusedDate.value!.year, focusedDate.value!.month);
-    fetchRecordList(selectedDate.value!.year, selectedDate.value!.month,
-        selectedDate.value!.day);
+    setSelectedDate(DateTime.now());
+    // fetchMonthRecord(focusedDate.value!.year, focusedDate.value!.month);
+    // fetchRecordList(selectedDate.value!.year, selectedDate.value!.month,
+    //     selectedDate.value!.day);
   }
 
   // 날짜 설정 및 기록 조회
@@ -39,7 +41,9 @@ class RecordController extends GetxController {
   // 날짜 포커스 설정 메서드
   void setFocusedDate(DateTime date) {
     focusedDate.value = date;
+    log('$focusedDate');
     fetchMonthRecord(focusedDate.value!.year, focusedDate.value!.month);
+    fetchStamps(focusedDate.value!.year, focusedDate.value!.month);
   }
 
   // 월별 러닝 기록 분석 조회
@@ -65,13 +69,30 @@ class RecordController extends GetxController {
     try {
       final fetchedRecords =
           await _recordService.fetchRecordList(year, month, day);
-      if (fetchedRecords.isEmpty) {
-      } else {}
+
       dayRecords.value = fetchedRecords;
     } catch (e) {
       errorMessage.value = '러닝 기록 목록 조회 중 오류 발생: $e';
     } finally {
       isDayRecordLoading(false);
+    }
+  }
+
+  // 월별 스탬프를 찍을 날짜 조회
+  Future<void> fetchStamps(int year, int month) async {
+    isStampLoading.value = true;
+    try {
+      final fetchedRecordDays = await _recordService.fetchRecordDaysByMonth(
+        year,
+        month,
+      );
+      log('$fetchedRecordDays');
+
+      stampDays.value = fetchedRecordDays;
+    } catch (e) {
+      log('스탬프 날짜 조회 중 오류 발생 : $e');
+    } finally {
+      isStampLoading.value = false;
     }
   }
 }

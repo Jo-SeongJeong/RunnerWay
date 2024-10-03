@@ -16,4 +16,10 @@ class RecordRepository {
     final response = await _provider.fetchMonthAnalyze(year, month);
     return RecordAnalyze.fromJson(response);
   }
+
+  // 월별 러닝 기록 목록 조회
+  Future<List<Record>> fetchRecords(int year, int month) async {
+    final response = await _provider.fetchRecords(year, month);
+    return response.map<Record>((record) => Record.fromJson(record)).toList();
+  }
 }
