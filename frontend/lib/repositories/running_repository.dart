@@ -49,4 +49,10 @@ class RunningRepository {
       return [];
     }
   }
+
+  Future<bool> getRegistRanking(int courseId, String elapsedTime) async {
+    final response =
+        await _runningProvider.getRegistRanking(courseId, elapsedTime);
+    return response == '등록 가능';
+  }
 }

@@ -136,4 +136,11 @@ class RunningService extends GetxService {
     final response = await _runningRepository.getRankingCoursePoints(id);
     return response;
   }
+
+  // 종료 후 랭킹 등록 가능여부 판단 메서드
+  Future<bool> getRegistRanking(int courseId, String elapsedTime) async {
+    final response =
+        await _runningRepository.getRegistRanking(courseId, elapsedTime);
+    return response;
+  }
 }

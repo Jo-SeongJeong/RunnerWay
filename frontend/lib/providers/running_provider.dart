@@ -43,4 +43,25 @@ class RunningProvider {
       throw Exception('코스 경로 데이터 조회 중 오류 발생 : ${e.message}');
     }
   }
+
+  // 랭킹등록 가능여부 판단
+  Future<dynamic> getRegistRanking(int courseId, String elapsedTime) async {
+    log('코스아이디: ${courseId}');
+    log('score: ${elapsedTime}');
+
+    try {
+      final response = await dioClient.dio.get('ranking/check',
+          queryParameters: {'courseId': courseId, 'score': elapsedTime},
+          options: Options(headers: {'Accept': ''}));
+      log('response: ${response}');
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('랭킹 등록 확인 중 문제 발생');
+      }
+    } catch (e) {
+      log('An unexpected error occurred: $e');
+      throw Exception('Unexpected error: $e');
+    }
+  }
 }

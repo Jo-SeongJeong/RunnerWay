@@ -41,6 +41,7 @@ class RunningController extends GetxController {
   String? opponentid;
   final typeKorean = ''.obs;
 
+  LatLng? _departurePoint; // 시작지점 좌표를 저장하는 변수
   LatLng? _destinationPoint; // 도착지점 좌표를 저장하는 변수
 
   RunningController() {
@@ -72,8 +73,12 @@ class RunningController extends GetxController {
       dev.log('Free running mode initialized.');
     } else if (type == 'official') {
       isOfficialRun.value = true;
+      await loadSavedPath();
+      // await _checkIfStartLocationIsValid(); // 경로의 시작 위치 확인
       dev.log('Official running mode initialized with courseid: $courseid');
     } else if (type == 'user') {
+      await loadSavedPath();
+      // await _checkIfStartLocationIsValid(); // 경로의 시작 위치 확인
       dev.log('User running mode initialized with courseid: $courseid');
     }
 
@@ -90,9 +95,6 @@ class RunningController extends GetxController {
       {bool isOfficial = false, bool isCompetition = false}) async {
     isOfficialRun.value = isOfficial;
     isCompetitionMode.value = isCompetition;
-    if (isOfficialRun.value) {
-      await loadSavedPath();
-    }
     if (isCompetitionMode.value) {
       await loadCompetitionRecords();
       startCompetitionMode();
@@ -122,6 +124,41 @@ class RunningController extends GetxController {
       typeKorean.value = '유저';
     } else {
       typeKorean.value = '자유';
+    }
+  }
+
+  // TODO
+  // 시작 위치 판단해서 시작 못하게 하지만 3이라는 숫자 보고 뒤로가게 해 둠
+  Future<void> _checkIfStartLocationIsValid() async {
+    Position currentPosition = await _runningService.getCurrentPosition();
+    LatLng currentLocation =
+        LatLng(currentPosition.latitude, currentPosition.longitude);
+
+    dev.log('현재 위치: ${currentLocation}');
+    dev.log('시작 위치: ${_departurePoint}');
+
+    if (_departurePoint != null) {
+      LatLng startLocation = _departurePoint!;
+
+      // 현재 위치와 경로 시작점의 거리 계산
+      double distanceToStart =
+          _runningService.calculateDistance(currentLocation, startLocation);
+      if (distanceToStart > 10.0) {
+        // 10m 이내가 아닌 경우 사용자에게 알림 처리
+        Get.back();
+
+        // TODO
+        // snackbar 안 떠서 어케 하지
+        Get.snackbar(
+          '알림',
+          '현재 위치가 경로의 시작점과 너무 멉니다. 경로 시작점에 가까워지세요.',
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 5),
+        );
+        Get.back();
+      } else {
+        isRun.value = true; // 10m 이내면 러닝을 시작할 수 있음
+      }
     }
   }
 
@@ -224,6 +261,7 @@ class RunningController extends GetxController {
           .getCoursePoints(int.tryParse(courseid ?? '') ?? 0);
 
       if (savedPath.isNotEmpty) {
+        _departurePoint = savedPath.first; // 시작지점 설정
         _destinationPoint = savedPath.last; // 도착지점 설정
       }
 
@@ -368,6 +406,23 @@ class RunningController extends GetxController {
     _positionSubscription?.cancel();
     _timer?.cancel();
     competitionTimer?.cancel();
+
+    // 대결 여부 확인 후
+    if (opponentid != '0') {
+      //대결에 따른 결과 페이지로 이동 시켜야 해
+    }
+    dev.log(
+        '최종 시간: ${value.value.elapsedTime.toString().split('.').first.padLeft(8, "0")}');
+    // 랭킹 등록 가능여부 판단 해야 함
+    final response = await _runningService.getRegistRanking(
+        int.parse(courseid ?? '0'),
+        value.value.elapsedTime.toString().split('.').first.padLeft(8, "0"));
+    dev.log('랭커 등록 여부: ${response}');
+
+    if (response) {
+      // 랭킹 등록
+      // final response = await _runningService.
+    }
 
     try {
       // TODO
