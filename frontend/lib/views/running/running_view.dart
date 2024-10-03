@@ -126,7 +126,7 @@ class RunningView extends StatelessWidget {
           '${controller.typeKorean.value} 코스',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        if (controller.opponentid != '0')
+        if (controller.rankid != '0')
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(

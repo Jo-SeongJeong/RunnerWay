@@ -22,17 +22,29 @@ class RunningProvider {
     }
   }
 
+  Future<dynamic> getRankingLog(int id) async {
+    log('랭커 id: ${id}');
+    try {
+      final response = await dioClient.dio
+          .get('ranking/log/${id}', options: Options(headers: {'Accept': ''}));
+      log('랭커 데이터 가져오기: ${response.data}');
+      return response.data;
+    } catch (e) {
+      log('랭커 경로 데이터 조회 중 오류 발생 : ${e}');
+      throw Exception('랭커 경로 데이터 조회 중 오류 발생 : ${e}');
+    }
+  }
+
   // 코스 경로 데이터 S3에서 가져오기
-  Future<List<dynamic>> fetchRankingCoursePoints(int id) async {
+  Future<List<dynamic>> fetchRankingCoursePoints(String url) async {
     try {
       log('${Env.s3Region}');
       log('${Env.s3Name}');
-      log('${id}');
-      final response = await dio.get(
-        'https://${Env.s3Name}.s3.${Env.s3Region}.amazonaws.com/upload/ranking/${id}.json',
-      );
+      log('조회 경로: ${url}');
+      final response = await dio.get('${url}',
+          options: Options(headers: {'Accept': 'application/json'}));
 
-      log('$response');
+      log('$response.data');
 
       if (response.statusCode == 200) {
         return response.data;

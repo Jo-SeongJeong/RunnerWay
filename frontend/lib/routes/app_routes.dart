@@ -91,7 +91,7 @@ class AppRoutes {
         page: () => ReviewWriteView(),
         transition: Transition.noTransition),
     GetPage(
-        name: '/running/:type/:courseid/:opponentid',
+        name: '/running/:type/:courseid/:rankid',
         page: () => RunningView(),
         transition: Transition.noTransition),
   ];

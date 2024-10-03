@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:frontend/models/ranking_upload_model.dart';
 import 'package:frontend/models/running_record_model.dart';
 import 'package:frontend/providers/running_provider.dart';
@@ -11,11 +13,21 @@ class RunningRepository {
     return await _runningProvider.submitRunningRecord();
   }
 
-  // 랭킹 데이터 조회
-  Future<List<RunningRecord>> getRankingCoursePoints(int id) async {
+  Future<String> getRankingLog(int id) async {
     try {
-      final response = await _runningProvider.fetchRankingCoursePoints(id);
+      final response = await _runningProvider.getRankingLog(id);
+      log('Response type: ${response.runtimeType}');
+      return response;
+    } catch (e) {
+      log('Error fetching ranking course points: $e');
+      return '';
+    }
+  }
 
+  // 랭킹 데이터 조회
+  Future<List<RunningRecord>> getRankingCoursePoints(String url) async {
+    try {
+      final response = await _runningProvider.fetchRankingCoursePoints(url);
       // 시작 시간을 첫 번째 기록의 시간으로 설정
       DateTime? startTime;
       if (response.isNotEmpty && response[0]['timestamp'] != null) {
@@ -23,18 +35,12 @@ class RunningRepository {
       }
 
       return response.map<RunningRecord>((point) {
+        log('포인트: ${point}');
         if (point['elapsedTime'] != null) {
           return RunningRecord(
             latitude: point['latitude'] as double,
             longitude: point['longitude'] as double,
-            elapsedTime: Duration(milliseconds: point['elapsedTime'] as int),
-          );
-        } else if (point['timestamp'] != null && startTime != null) {
-          return RunningRecord.fromTimestamp(
-            latitude: point['latitude'] as double,
-            longitude: point['longitude'] as double,
-            timestamp: DateTime.parse(point['timestamp']),
-            startTime: startTime,
+            elapsedTime: Duration(seconds: point['elapsedTime'] as int),
           );
         } else {
           // 필요한 데이터가 없는 경우 기본값 사용
@@ -46,7 +52,7 @@ class RunningRepository {
         }
       }).toList();
     } catch (e) {
-      print('Error fetching ranking course points: $e');
+      log('Error fetching ranking course points: $e');
       return [];
     }
   }

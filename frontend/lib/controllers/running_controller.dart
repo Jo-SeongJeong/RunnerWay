@@ -42,7 +42,7 @@ class RunningController extends GetxController {
 
   String? type;
   String? courseid;
-  String? opponentid;
+  String? rankid;
   final typeKorean = ''.obs;
 
   LatLng? _departurePoint; // 시작지점 좌표를 저장하는 변수
@@ -60,7 +60,7 @@ class RunningController extends GetxController {
     // route에서 파라미터 가져오기
     type = Get.parameters['type'];
     courseid = Get.parameters['courseid'];
-    opponentid = Get.parameters['opponentid'];
+    rankid = Get.parameters['rankid'];
 
     initialize();
   }
@@ -68,9 +68,9 @@ class RunningController extends GetxController {
   Future<void> initialize() async {
     dev.log('초기화 시작');
     await _fileService.resetJson();
-    if (opponentid != '0') {
+    if (rankid != '0') {
       isCompetitionMode.value = true;
-      dev.log('대결 상대: $opponentid');
+      dev.log('대결 상대: $rankid');
     }
 
     if (type == 'free') {
@@ -86,7 +86,7 @@ class RunningController extends GetxController {
       dev.log('User running mode initialized with courseid: $courseid');
     }
 
-    dev.log('type: ${type}, courseid: ${courseid}, opponentid: ${opponentid}');
+    dev.log('type: ${type}, courseid: ${courseid}, rankid: ${rankid}');
 
     isLoading(true);
     await _setInitialLocation();
@@ -291,7 +291,11 @@ class RunningController extends GetxController {
   Future<void> loadCompetitionRecords() async {
     // TODO
     // 자유 코스에서 대결일 경우 내 로그에서 데이터 가져오게 해야 함
-    // competitionRecords = await _runningService.readSavedRunningRecordLog(id);
+
+    competitionRecords = await _runningService
+        .readSavedRunningRecordLog(int.parse(rankid ?? '0'));
+
+    dev.log('competitionrecords 결과값: ${competitionRecords}');
 
     // competitionRecords = await _fileService
     //     .readSavedRunningRecords('walking_log_noeun_yuseong_3_seconds');
@@ -317,9 +321,8 @@ class RunningController extends GetxController {
 
   void startCompetitionMode() {
     competitionTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (competitionRecordIndex < competitionRecords.length) {
+      if (_currentRecordIndex < competitionRecords.length - 1) {
         updateCompetitionMarker();
-        competitionRecordIndex++;
       } else {
         competitionTimer?.cancel();
       }
@@ -327,12 +330,14 @@ class RunningController extends GetxController {
   }
 
   void updateCompetitionMarker() {
-    if (competitionRecords.isEmpty || value.value.elapsedTime == Duration.zero)
+    if (competitionRecords.isEmpty ||
+        value.value.elapsedTime == Duration.zero) {
       return;
+    }
 
     int currentTimeSeconds = value.value.elapsedTime.inSeconds;
 
-    // Find the current and next records
+    // 현재 시간에 해당하는 기록과 다음 기록을 찾음
     while (_currentRecordIndex < competitionRecords.length - 1 &&
         competitionRecords[_currentRecordIndex + 1].elapsedTime.inSeconds <=
             currentTimeSeconds) {
@@ -344,26 +349,30 @@ class RunningController extends GetxController {
         ? competitionRecords[_currentRecordIndex + 1]
         : null;
 
-    LatLng interpolatedPosition;
-    if (_nextRecord != null) {
-      double progress =
-          (currentTimeSeconds - _currentRecord!.elapsedTime.inSeconds) /
-              (_nextRecord!.elapsedTime.inSeconds -
-                  _currentRecord!.elapsedTime.inSeconds);
-      progress =
-          min(1.0, max(0.0, progress)); // Ensure progress is between 0 and 1
-
-      interpolatedPosition = LatLng(
-        _currentRecord!.latitude +
-            (_nextRecord!.latitude - _currentRecord!.latitude) * progress,
-        _currentRecord!.longitude +
-            (_nextRecord!.longitude - _currentRecord!.longitude) * progress,
-      );
-    } else {
-      interpolatedPosition =
-          LatLng(_currentRecord!.latitude, _currentRecord!.longitude);
+    if (_nextRecord == null) {
+      // 마지막 지점에 도달했으면 현재 위치로 설정
+      return;
     }
 
+    // 현재 시간과 다음 기록 시간 사이의 경과 시간 계산 (예: 3초)
+    int segmentTime = _nextRecord!.elapsedTime.inSeconds -
+        _currentRecord!.elapsedTime.inSeconds;
+    int elapsedInSegment =
+        currentTimeSeconds - _currentRecord!.elapsedTime.inSeconds;
+
+    // 이동할 위치 계산
+    double progress = elapsedInSegment / segmentTime; // 매 1초마다 비율을 계산
+    progress = min(1.0, max(0.0, progress)); // progress가 0~1 사이로 보정
+
+    // 보정된 위치 계산 (두 위치 사이를 progress 비율로 보정)
+    LatLng interpolatedPosition = LatLng(
+      _currentRecord!.latitude +
+          (_nextRecord!.latitude - _currentRecord!.latitude) * progress,
+      _currentRecord!.longitude +
+          (_nextRecord!.longitude - _currentRecord!.longitude) * progress,
+    );
+
+    // 보정된 위치로 마커 업데이트
     value.update((val) {
       val?.markers
           .removeWhere((marker) => marker.markerId.value == 'competition');
@@ -415,7 +424,7 @@ class RunningController extends GetxController {
         value.value.elapsedTime.toString().split('.').first.padLeft(8, "0");
 
     // 대결 여부 확인 후
-    if (opponentid != '0') {
+    if (rankid != '0') {
       //대결에 따른 결과 페이지로 이동 시켜야 해
     }
     dev.log('최종 시간: ${score}');
@@ -464,7 +473,7 @@ class RunningController extends GetxController {
       // 자유코스로 변경 및 코스, 상대방 초기화
       typeKorean.value = '자유';
       courseid = '0';
-      opponentid = '0';
+      rankid = '0';
     } catch (e) {
       print('Error ending running session: $e');
       Get.snackbar(

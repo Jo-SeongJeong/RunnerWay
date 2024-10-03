@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/ranking.dart';
@@ -135,7 +136,12 @@ class RunningService extends GetxService {
 
   // 대결을 위한 polyline 생성 메서드
   Future<List<RunningRecord>> readSavedRunningRecordLog(int id) async {
-    final response = await _runningRepository.getRankingCoursePoints(id);
+    final url = await _runningRepository.getRankingLog(id);
+
+    log('랭커 결과값: ${url}');
+    final response = await _runningRepository.getRankingCoursePoints(url);
+    log('log 결과값: ${response.last.toString()}');
+
     return response;
   }
 

@@ -91,7 +91,7 @@ class CourseDetailView extends StatelessWidget {
                                     imageUrl: ranking.member.memberImage?.url,
                                     rank: index + 1,
                                     isActive: true,
-                                    rankId: ranking.member.memberId,
+                                    rankId: ranking.rankId,
                                     courseId: course.courseId,
                                     type: course.courseType!);
                               },
