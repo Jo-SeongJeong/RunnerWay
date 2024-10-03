@@ -116,6 +116,7 @@ class RecordController extends GetxController {
 
   // 러닝 기록 상세 조회
   Future<void> fetchRecordDetail(int recordId) async {
+    log('$recordId');
     isLoading(true);
     try {
       // TODO 여기 값 이상함

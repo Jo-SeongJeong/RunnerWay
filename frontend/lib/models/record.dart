@@ -26,7 +26,7 @@ class Record {
   // JSON 데이터를 기반으로 Record 객체 생성
   factory Record.fromJson(Map<String, dynamic> json) {
     return Record(
-      recordId: json['recordId'] != null ? json['recordId'] : null,
+      recordId: json['recordId'] != null ? json['recordId'] : 0,
       courseId: json['courseId'] != null ? json['courseId'] : null,
       courseName: json['courseName'],
       comment: json['comment'] as String?,

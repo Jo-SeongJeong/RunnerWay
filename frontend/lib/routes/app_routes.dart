@@ -76,7 +76,7 @@ class AppRoutes {
         page: () => LoginView(),
         transition: Transition.noTransition),
     GetPage(
-        name: '/register',
+        name: '/register/:id',
         page: () => RegisterView(),
         transition: Transition.noTransition),
   ];

@@ -21,8 +21,6 @@ class AuthService {
     try {
       final response =
           await _dioClient.dio.post('members/sign-up', data: authData.toJson());
-
-      // final accessToken = await _repository.signupKakao(authData);
       log('회원가입 성공 service: ${response.data}');
       return response.data['accessToken'];
     } catch (e) {

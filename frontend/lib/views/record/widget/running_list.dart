@@ -23,7 +23,7 @@ class RunningCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // 러닝 상세 기록 페이지 이동
-        Get.toNamed('/record/detail/${recordId}');
+        Get.toNamed('/record/detail/$recordId');
       },
       child: Card(
         color: Colors.white,
