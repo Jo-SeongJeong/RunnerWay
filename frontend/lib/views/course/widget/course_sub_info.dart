@@ -37,7 +37,7 @@ class CourseSubInfo extends StatelessWidget {
 
         // 코스 보여주기
         CourseMap(
-          height: 300,
+          height: 250,
         ),
 
         // 기타 상세 코스 정보

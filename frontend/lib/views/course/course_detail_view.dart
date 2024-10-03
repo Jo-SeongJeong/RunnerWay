@@ -16,6 +16,7 @@ class CourseDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CourseController courseController = Get.put(CourseController());
+    courseController.onInit();
 
     return BaseView(
       child: SingleChildScrollView(

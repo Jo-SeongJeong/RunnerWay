@@ -65,11 +65,12 @@ class _CourseMap extends State<CourseMap> {
           if (courseController.coursePoints.isEmpty) {
             return Container(
               color: Colors.black12.withOpacity(0.03),
-              padding: EdgeInsets.symmetric(
-                vertical: 80,
-              ),
+              // padding: EdgeInsets.symmetric(
+              //   vertical: 80,
+              // ),
               child: Center(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'assets/icons/error.png',

@@ -17,7 +17,7 @@ class CourseCard extends StatelessWidget {
       double screenHeight) {
     // 팝업 크기 설정
     double popupWidth = screenWidth * 3 / 4;
-    double popupHeight = 300; // 예시로 설정한 높이
+    double popupHeight = 280; // 예시로 설정한 높이
 
     // 화면 경계를 넘지 않도록 조정
     double leftPosition = position.dx;
@@ -41,7 +41,7 @@ class CourseCard extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
@@ -57,27 +57,23 @@ class CourseCard extends StatelessWidget {
             height: popupHeight,
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
-                  '코스 미리 보기',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                  'preview',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                // Container(
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(18),
-                //     color: Colors.black12,
-                //   ),
-                //   height: 120,
-                //   width: screenWidth * 2 / 4,
-                // ),
-                CourseMap(
-                  height: 200,
-                ),
-                SizedBox(
-                  height: 6,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: CourseMap(
+                    height: 200,
+                  ),
                 ),
               ],
             ),
