@@ -11,16 +11,16 @@ class RecordDetailView extends StatelessWidget {
   RecordDetailView({super.key});
 
   // 제목, 주소, 시간, 내용 등을 하나의 Map으로 관리
-  // final Map<String, dynamic> details = {
-  //   'title': "유성천 옆 산책로",
-  //   'address': "대전광역시 문화원로 80",
-  //   'time': DateTime(2024, 9, 6, 9, 24, 27), // DateTime 객체
-  //   'image': '',
-  //   'content':
-  //       "오늘 날씨 너무 선선해!\n선선한 날씨에 뛰니까 10km도 뛸 수 있었당\n다음주에는 10km 1시간 내로 도전 !!!",
-  // };
-  //
-  // final List<num> records = const [10, 4016, 67, 480];
+  final Map<String, dynamic> details = {
+    'title': "유성천 옆 산책로",
+    'address': "대전광역시 문화원로 80",
+    'time': DateTime(2024, 9, 6, 9, 24, 27), // DateTime 객체
+    'image': '',
+    'content':
+        "오늘 날씨 너무 선선해!\n선선한 날씨에 뛰니까 10km도 뛸 수 있었당\n다음주에는 10km 1시간 내로 도전 !!!",
+  };
+
+  final List<num> records = const [10, 4016, 67, 480];
 
   @override
   Widget build(BuildContext context) {

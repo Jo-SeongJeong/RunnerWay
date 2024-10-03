@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:frontend/models/running_review_model.dart';
 import 'package:frontend/utils/dio_client.dart';
 
 class RecordProvider {
@@ -43,18 +42,38 @@ class RecordProvider {
     }
   }
 
+  // 월별 러닝 기록 조회
+  Future<List<dynamic>> fetchRecords(int year, int month) async {
+    try {
+      final response = await dioClient.dio
+          .get('/record', queryParameters: {'year': year, 'month': month});
+      if (response.statusCode == 200) {
+        log('월별 기록 조회 Response data: ${response.data}');
+        return response.data;
+      } else if (response.statusCode == 204) {
+        return [];
+      } else {
+        throw Exception('러닝 기록 목록 조회 중 문제 발생');
+      }
+    } on DioException catch (e) {
+      log('러닝 기록 조회 provider 오류 발생 : ${e.message}');
+      throw Exception('러닝 기록 조회 provider 오류 발생 : ${e.message}');
+    }
+  }
+
   // 러닝 기록 상세 조회
   Future<dynamic> fetchRecordDetail(int recordId) async {
     log('러닝 기록 상세: $recordId');
     try {
       final response = await dioClient.dio.get('/record/detail/$recordId');
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data != null) {
+        log('response.data provider: ${response.data}');
         return response.data;
       } else {
-        throw Exception('러닝 기록 상세 조회 중 문제 provider : ${response.statusCode}');
+        throw Exception('러닝 기록 상세 조회 중 문제 provider : 데이터가 없당');
       }
     } on DioException catch (e) {
-      throw Exception('러닝 기록 상세 조회 실패: provider: ${e.message}');
+      throw Exception('러닝 기록 상세 조회 실패: provider: ${e.toString()}');
     }
   }
 }

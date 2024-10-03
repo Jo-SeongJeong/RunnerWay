@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:frontend/models/record_analyze.dart';
 import 'package:frontend/repositories/record_repository.dart';
 import 'package:frontend/models/record.dart';
@@ -26,12 +28,36 @@ class RecordService {
     }
   }
 
+  // 월별 러닝 기록의 날짜 가져오기
+  Future<List<DateTime>> fetchRecordDaysByMonth(int year, int month) async {
+    try {
+      final records = await _repository.fetchRecords(year, month);
+
+      // 날짜만 추출하고, null이 아닌 경우만 변환하여 중복 제거
+      Set<DateTime> days = records
+          .where((record) => record.startDate != null) // null인 startDate는 제외
+          .map(
+        (record) {
+          // String을 DateTime으로 변환하고, 시간 부분을 0으로 설정
+          DateTime fullDate = DateTime.parse(record.startDate!);
+          return DateTime(fullDate.year, fullDate.month, fullDate.day); // 시간 제거
+        },
+      ).toSet();
+
+      return days.toList();
+    } catch (e) {
+      throw Exception('월별 러닝 기록 날짜들 가져오기 중 오류 발생 : $e');
+    }
+  }
+
   // 러닝기록 상세 조회
   Future<Record> fetchRecordDetail(int recordId) async {
     try {
       final response = await _repository.fetchRecordDetail(recordId);
+      log('$response');
       return response;
     } catch (e) {
+      log('service detail: ${e.toString()}');
       throw Exception('러닝 기록 상세 조회 중 오류 service: $e');
     }
   }
