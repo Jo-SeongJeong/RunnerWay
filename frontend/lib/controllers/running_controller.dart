@@ -25,6 +25,7 @@ class RunningController extends GetxController {
 
   var isOfficialRun = false.obs;
   var isCompetitionMode = false.obs;
+  var isRun = true.obs;
   List<RunningRecord> competitionRecords = [];
   int competitionRecordIndex = 0;
   Timer? competitionTimer;
@@ -39,6 +40,8 @@ class RunningController extends GetxController {
   String? courseid;
   String? opponentid;
   final typeKorean = ''.obs;
+
+  LatLng? _destinationPoint; // 도착지점 좌표를 저장하는 변수
 
   RunningController() {
     _runningService = RunningService();
@@ -177,6 +180,7 @@ class RunningController extends GetxController {
       _updateRealTimePolyline();
     });
 
+    _checkIfArrivedAtDestination(newLocation);
     _saveRunningRecord(newLocation);
   }
 
@@ -218,6 +222,11 @@ class RunningController extends GetxController {
       // if (type == 'official') {
       List<LatLng> savedPath = await _courseService
           .getCoursePoints(int.tryParse(courseid ?? '') ?? 0);
+
+      if (savedPath.isNotEmpty) {
+        _destinationPoint = savedPath.last; // 도착지점 설정
+      }
+
       Polyline savedPathPolyline = Polyline(
         polylineId: PolylineId('savedPath'),
         color: Colors.red, // 저장된 경로는 빨간색으로 표시
@@ -247,6 +256,21 @@ class RunningController extends GetxController {
     // competitionRecords = await
 
     competitionRecordIndex = 0;
+  }
+
+  void _checkIfArrivedAtDestination(LatLng currentLocation) {
+    if (_destinationPoint != null) {
+      // 도착지점과 현재 위치의 거리를 계산 (미터 단위)
+      double distanceToDestination = _runningService.calculateDistance(
+          currentLocation, _destinationPoint!);
+
+      if (distanceToDestination <= 10.0) {
+        // 10m 이내 도착 시 러닝 종료
+        dev.log('도착지점에 도착했습니다. 러닝을 종료합니다.');
+        endRunning2();
+        isRun.value = false;
+      }
+    }
   }
 
   void startCompetitionMode() {

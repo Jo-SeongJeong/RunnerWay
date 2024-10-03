@@ -8,7 +8,6 @@ class RunningReviewProvider {
   final dioClient = DioClient();
 
   Future<dynamic> submitReview(RunningReviewModel review) async {
-    log('리뷰다: ${review.toString()}');
     log('리뷰다: ${review.toJson()}');
     try {
       final response = await dioClient.dio.post(

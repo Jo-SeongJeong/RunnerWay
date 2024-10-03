@@ -110,11 +110,11 @@ class RunningReviewController extends GetxController {
         // 사진 넣어야 함
         // 리뷰 제출
         final response = await _service.submitReview(reviewModel.value!);
+        log('${response.data["recordId"]}');
         // TODO
         // 리뷰 등록 후 달력으로 이동
-
         Get.snackbar('Success', 'Review submitted successfully');
-        Get.back();
+        Get.toNamed('/record/detail/${response.data["recordId"]}');
       }
     } catch (e) {
       Get.snackbar('Error', 'Failed to submit review: $e');

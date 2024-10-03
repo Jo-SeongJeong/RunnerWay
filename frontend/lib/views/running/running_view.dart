@@ -66,6 +66,14 @@ class RunningView extends StatelessWidget {
                 ],
               ),
               OverlayWidget(controller: controller),
+              Obx(() {
+                if (!controller.isRun.value) {
+                  Future.delayed(Duration.zero, () {
+                    _showCustomModalWhenArrive(context);
+                  });
+                }
+                return const SizedBox.shrink();
+              }),
             ],
           ),
         );
@@ -217,9 +225,7 @@ class RunningView extends StatelessWidget {
   Widget _buildEndRunningButton(RunningController controller) {
     return ElevatedButton(
       onPressed: () async {
-        // await controller.endRunningByButton();
         await _showCustomModal(Get.context!);
-        // await Future.delayed(Duration(seconds: 1));
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.black,
@@ -260,6 +266,35 @@ class RunningView extends StatelessWidget {
           onConfirm: () {
             Navigator.of(context).pop(); // 모달 닫기
             controller.endRunningByButton();
+            Get.toNamed('/writereview');
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _showCustomModalWhenArrive(BuildContext context) async {
+    final RunningController controller = Get.find<RunningController>();
+
+    String title = '';
+    String content = '';
+    if (controller.isCompetitionMode.value) {
+      title = '${controller.typeKorean.value} 대결 러닝';
+      content = '${controller.typeKorean.value} 대결 러닝을 완료하셨습니다';
+    } else {
+      title = '${controller.typeKorean.value} 러닝';
+      content = '${controller.typeKorean.value} 러닝을 완료하셨습니다';
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomModal(
+          title: title,
+          content: content,
+          onConfirm: () {
+            Navigator.of(context).pop(); // 모달 닫기
+            controller.endRunning2();
             Get.toNamed('/writereview');
           },
         );
