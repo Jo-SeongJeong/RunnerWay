@@ -58,4 +58,9 @@ class Record {
       'url': url,
     };
   }
+
+  @override
+  String toString() {
+    return 'Record(recordId: $recordId, courseId: $courseId, courseName: $courseName, runningDistance: $runningDistance, score: $score, averageFace: $averageFace, startDate: $startDate, calorie: $calorie, url: $url)';
+  }
 }

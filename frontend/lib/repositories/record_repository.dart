@@ -26,11 +26,11 @@ class RecordRepository {
   }
 
   // 러닝 기록 상세 조회
-  Future<Record> fetchRecordDetail(int recordId) async {
+  Future<dynamic> fetchRecordDetail(int recordId) async {
     // dynamic에서 Record로 변경함
     log('repo: $recordId');
     final response = await _provider.fetchRecordDetail(recordId);
-    log('repo data: $response');
+    log('record repo data: $response');
     return Record.fromJson(response);
   }
 }

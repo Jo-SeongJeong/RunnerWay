@@ -51,10 +51,10 @@ class RecordService {
   }
 
   // 러닝기록 상세 조회
-  Future<Record> fetchRecordDetail(int recordId) async {
+  Future<dynamic> fetchRecordDetail(int recordId) async {
     try {
       final response = await _repository.fetchRecordDetail(recordId);
-      log('$response');
+      log('service : ${response.toString()}');
       return response;
     } catch (e) {
       log('service detail: ${e.toString()}');

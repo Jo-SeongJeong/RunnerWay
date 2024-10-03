@@ -173,8 +173,6 @@ class MypageView extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w500),
                     ))),
-
-            // 하단에 유저 코스 등록 테스트 버튼 추가
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -205,7 +203,6 @@ class MypageView extends StatelessWidget {
                 child: Text('유저 코스 등록 테스트'),
               ),
             ),
-
             ElevatedButton(
               onPressed: () {
                 Navigator.push(

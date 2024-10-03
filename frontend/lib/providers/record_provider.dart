@@ -63,9 +63,11 @@ class RecordProvider {
 
   // 러닝 기록 상세 조회
   Future<dynamic> fetchRecordDetail(int recordId) async {
-    log('러닝 기록 상세: $recordId');
+    log('러닝 기록 상세 pro: $recordId');
     try {
       final response = await dioClient.dio.get('/record/detail/$recordId');
+      log('Response status: ${response.statusCode}');
+      log('Response data: ${response.data}');
       if (response.statusCode == 200 && response.data != null) {
         log('response.data provider: ${response.data}');
         return response.data;
