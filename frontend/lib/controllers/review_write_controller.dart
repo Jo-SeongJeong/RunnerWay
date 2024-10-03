@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:frontend/controllers/course_controller.dart';
 import 'package:frontend/controllers/running_controller.dart';
 import 'package:frontend/models/personal_image.dart';
+import 'package:frontend/services/file_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -16,6 +17,7 @@ class RunningReviewController extends GetxController {
       : Get.put(CourseController());
   final RunningReviewService _service = RunningReviewService();
   final S3ImageUpload s3ImageUpload = S3ImageUpload();
+  late final FileService _fileService = FileService();
 
   // RunningReviewModel 인스턴스를 Rxn으로 관리하여 null 가능성도 포함
   var reviewModel = Rxn<RunningReviewModel>();
@@ -110,9 +112,24 @@ class RunningReviewController extends GetxController {
         // 리뷰 제출
         final response = await _service.submitReview(reviewModel.value!);
         log('${response.data["recordId"]}');
-        // TODO
-        // 리뷰 등록 후 달력으로 이동
+
         Get.snackbar('Success', 'Review submitted successfully');
+
+        try {
+          final tempRecordId = '${response.data["recordId"]}';
+          await _fileService.renameFile2(tempRecordId);
+
+          log('Running session ended. Data saved as: $tempRecordId.json');
+        } catch (e) {
+          log('Error ending running session: $e');
+          Get.snackbar(
+            'Error',
+            'Failed to save running record',
+            snackPosition: SnackPosition.BOTTOM,
+            duration: Duration(seconds: 3),
+          );
+        }
+
         Get.toNamed('/record/detail/${response.data["recordId"]}');
       }
     } catch (e) {

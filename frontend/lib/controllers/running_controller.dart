@@ -415,8 +415,6 @@ class RunningController extends GetxController {
     }
   }
 
-  // TODO
-  // 데이터 저장 review write 후에 진행되도록 해야 함
   Future<void> endRunning2() async {
     _positionSubscription?.cancel();
     _timer?.cancel();
@@ -446,23 +444,6 @@ class RunningController extends GetxController {
       // 랭킹 등록
       final response = await _runningService.registRanking(model);
       dev.log('랭킹 등록 결과값: ${response}');
-    }
-
-    try {
-      // TODO
-      // 파일 저장을 recordid로 변경 해야함
-      final tempRecordId = 'tmp_${DateTime.now().millisecondsSinceEpoch}';
-      await _fileService.renameFile2(tempRecordId);
-
-      dev.log('Running session ended. Data saved as: $tempRecordId.json');
-    } catch (e) {
-      print('Error ending running session: $e');
-      Get.snackbar(
-        'Error',
-        'Failed to save running record',
-        snackPosition: SnackPosition.BOTTOM,
-        duration: Duration(seconds: 3),
-      );
     }
   }
 
