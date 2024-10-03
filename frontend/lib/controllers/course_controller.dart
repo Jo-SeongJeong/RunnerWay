@@ -106,7 +106,6 @@ class CourseController extends GetxController {
 
     try {
       final fetchedCourseRanking = await _courseService.getCourseRanking(id);
-
       // 랭킹 정보 업데이트
       ranking.assignAll(fetchedCourseRanking);
     } catch (e) {

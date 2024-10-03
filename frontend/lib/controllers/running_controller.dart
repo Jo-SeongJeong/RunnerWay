@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:developer' as dev;
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:frontend/controllers/course_controller.dart';
+import 'package:frontend/services/course_service.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,6 +14,7 @@ import 'package:frontend/services/file_service.dart';
 
 class RunningController extends GetxController {
   late final RunningService _runningService;
+  late final CourseService _courseService = CourseService();
   late final FileService _fileService;
   StreamSubscription<Position>? _positionSubscription;
   Timer? _timer;
@@ -205,19 +209,43 @@ class RunningController extends GetxController {
     });
   }
 
+  // TODO
+  // view 시작 시 method 순서 변경해서 load하게 해야 함
   Future<void> loadSavedPath() async {
+    // TODO
+    // 서비스로 이동 시켜야 함
     if (isOfficialRun.value) {
-      Polyline savedPathPolyline = await _runningService
-          .createSavedPathPolyline('walking_log_noeun_yuseong_3_seconds');
+      // if (type == 'official') {
+      List<LatLng> savedPath = await _courseService
+          .getCoursePoints(int.tryParse(courseid ?? '') ?? 0);
+      Polyline savedPathPolyline = Polyline(
+        polylineId: PolylineId('savedPath'),
+        color: Colors.red, // 저장된 경로는 빨간색으로 표시
+        width: 5,
+        points: savedPath,
+      );
       value.update((val) {
         val?.polyline.add(savedPathPolyline);
       });
     }
+    // if (isOfficialRun.value) {
+    //   Polyline savedPathPolyline = await _runningService
+    //       .createSavedPathPolyline('walking_log_noeun_yuseong_3_seconds');
+    //   value.update((val) {
+    //     val?.polyline.add(savedPathPolyline);
+    //   });
+    // }
   }
 
   Future<void> loadCompetitionRecords() async {
-    competitionRecords = await _fileService
-        .readSavedRunningRecords('walking_log_noeun_yuseong_3_seconds');
+    // TODO
+    // 자유 코스에서 대결일 경우 내 로그에서 데이터 가져오게 해야 함
+    // competitionRecords = await _runningService.readSavedRunningRecordLog(id);
+
+    // competitionRecords = await _fileService
+    //     .readSavedRunningRecords('walking_log_noeun_yuseong_3_seconds');
+    // competitionRecords = await
+
     competitionRecordIndex = 0;
   }
 

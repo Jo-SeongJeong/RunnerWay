@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/running_record_model.dart';
 import 'package:frontend/repositories/running_repository.dart';
 import 'package:frontend/services/file_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -128,5 +129,11 @@ class RunningService extends GetxService {
       width: 5,
       points: points,
     );
+  }
+
+  // 대결을 위한 polyline 생성 메서드
+  Future<List<RunningRecord>> readSavedRunningRecordLog(int id) async {
+    final response = await _runningRepository.getRankingCoursePoints(id);
+    return response;
   }
 }
