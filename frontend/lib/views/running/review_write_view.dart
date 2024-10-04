@@ -51,9 +51,7 @@ class ReviewWriteView extends StatelessWidget {
                           children: [
                             LocationInfo(
                               title: controller.name.value,
-                              address: controller
-                                      .courseController.course.value?.address ??
-                                  '미상',
+                              address: controller.reviewModel.value!.address,
                               time: controller.reviewModel.value!.startDate,
                             ),
                             const SizedBox(height: 20),

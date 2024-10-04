@@ -5,6 +5,7 @@ import 'package:frontend/controllers/running_controller.dart';
 import 'package:frontend/models/personal_image.dart';
 import 'package:frontend/services/file_service.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../models/running_review_model.dart';
@@ -36,7 +37,7 @@ class RunningReviewController extends GetxController {
   }
 
   // 리뷰 모델 초기화 메서드
-  void initializeReview() {
+  Future<void> initializeReview() async {
     log('review 작성 초기화 시작');
 
     double totalDistance =
@@ -47,6 +48,8 @@ class RunningReviewController extends GetxController {
     double averagePace =
         calculateAveragePace(totalTime, totalDistance); // 평균 페이스 계산
 
+    String address = await loadAddress();
+
     reviewModel.value = RunningReviewModel(
       courseId: courseController.course.value?.courseId ?? 0,
       score: runningController.value.value.elapsedTime.inSeconds,
@@ -54,7 +57,7 @@ class RunningReviewController extends GetxController {
       calorie: calculateCalorie(),
       averagePace: averagePace,
       comment: '',
-      address: '봉명동',
+      address: address,
       startDate: DateTime.now()
           .subtract(runningController.value.value.elapsedTime)
           .copyWith(millisecond: 0, microsecond: 0),
@@ -63,6 +66,8 @@ class RunningReviewController extends GetxController {
       lng: runningController.startPoint?.longitude ?? 0.0,
       personalImage: PersonalImage(url: '', path: ''),
     );
+
+    log('최종 값?: ${reviewModel}');
 
     name.value = runningController.typeKorean.toString() == '자유'
         ? '자유 코스'
@@ -80,6 +85,18 @@ class RunningReviewController extends GetxController {
     if (totalDistanceInKm == 0) return 0.0; // 거리가 0이면 0으로 반환
     double totalTimeInMinutes = totalTimeInSeconds / 60.0;
     return totalTimeInMinutes / totalDistanceInKm; // 분/킬로미터
+  }
+
+  Future<String> loadAddress() async {
+    log('${reviewModel.value}');
+    log('그래서 머야 : ${runningController.startPoint}');
+    final response = await _service.getAddress(
+      LatLng(runningController.startPoint.latitude ?? 0.0,
+          runningController.startPoint.longitude ?? 0.0),
+    );
+
+    log('도로명 주소: ${response}');
+    return response;
   }
 
   // 이미지 선택 및 업로드 (간단하게 처리)
@@ -113,9 +130,6 @@ class RunningReviewController extends GetxController {
   Future<void> onRegisterTapped() async {
     try {
       if (reviewModel.value != null) {
-        // TODO
-        // 사진 넣어야 함
-        // 리뷰 제출
         final response = await _service.submitReview(reviewModel.value!);
         log('${response.data["recordId"]}');
 
