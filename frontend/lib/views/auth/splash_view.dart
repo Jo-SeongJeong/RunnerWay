@@ -20,21 +20,9 @@ class SplashView extends StatelessWidget {
       body: Center(
         child: Obx(
           () {
-            // 네트워크 상태 확인 중
-            if (networkController.isConnected.value == null) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  // CircularProgressIndicator(),
-                  SizedBox(height: 10),
-                  // Text(
-                  //   '네트워크 상태를 확인하는 중',
-                  //   style: TextStyle(fontSize: 18),
-                  // ),
-                ],
-              );
-            }
-            if (locationController.hasPositioned.value == null) {
+            // 네트워크 상태 및 위치 정보 확인 중
+            if (networkController.isConnected.value == null ||
+                locationController.hasPositioned.value == null) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -42,15 +30,11 @@ class SplashView extends StatelessWidget {
                     'assets/logo/logo.png',
                     width: screenWidth / 2,
                   ),
-                  // CircularProgressIndicator(),
                   SizedBox(height: 30),
-                  // Container(
-                  //   width: 100,
                   LoadingAnimationWidget.staggeredDotsWave(
                     color: Color(0xff1EA6FC),
                     size: 60,
                   ),
-                  // )
                 ],
               );
             }
