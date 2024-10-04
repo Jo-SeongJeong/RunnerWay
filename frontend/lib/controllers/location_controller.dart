@@ -8,6 +8,7 @@ class LocationController extends GetxController {
   // 현재 위치 정보를 관리
   var currentPosition = Rxn<Position>();
   var hasPositioned = Rxn<bool>();
+  var isLoading = false.obs;
 
   @override
   void onInit() {
@@ -29,6 +30,7 @@ class LocationController extends GetxController {
 
   // 위치 정보를 가져오는 함수
   Future<void> getCurrentLocation() async {
+    isLoading.value = true;
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
@@ -42,8 +44,8 @@ class LocationController extends GetxController {
       // 위치 정보 요청이 거절된 경우 예외 처리 (사용자가 위치 권한을 거부)
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
+        // log('위치 정보 요청 거절');
         permission = await Geolocator.requestPermission();
-        hasPositioned.value = false;
         if (permission == LocationPermission.denied) {
           print('Location permissions are denied');
           hasPositioned.value = false;
@@ -63,13 +65,15 @@ class LocationController extends GetxController {
         desiredAccuracy: LocationAccuracy.high,
         // forceAndroidLocationManager: true,
       );
+      hasPositioned.value = true;
 
       log('현재 위치 : $position');
       // 현재 위치 업데이트
       currentPosition.value = position;
-      hasPositioned.value = true;
     } catch (e) {
       print("Error getting location: $e");
+    } finally {
+      isLoading.value = false;
     }
   }
 
