@@ -87,6 +87,10 @@ class SignUpView extends StatelessWidget {
                             .onNicknameChanged(_authController.nickname.value);
                       },
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 15,
+                        ),
                         border: InputBorder.none,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(22),
@@ -97,7 +101,7 @@ class SignUpView extends StatelessWidget {
                           borderSide: BorderSide(color: Colors.blueAccent),
                         ),
                         filled: true,
-                        hintText: '  닉네임 (2~8자)',
+                        hintText: '닉네임 (2~8자)',
                         hintStyle: TextStyle(
                           color: Color(0xFF72777A),
                         ),
@@ -127,9 +131,9 @@ class SignUpView extends StatelessWidget {
                 onChanged: (selectedDate) {
                   _authController.birthDate.value = selectedDate;
                 },
-                hintText: '  YYYY-MM-DD',
+                // TODO
+                hintText: '',
               ),
-              // Obx(() => Text('생년월일 : ${_authController.birthDate.value}')),
               // 키 몸무게 input
               Row(
                 children: [

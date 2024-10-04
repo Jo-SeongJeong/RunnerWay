@@ -134,7 +134,6 @@ class RecordDetailView extends StatelessWidget {
                 width: MediaQuery.of(context).size.width - 20,
                 child: FloatingActionButton.extended(
                   onPressed: () {
-                    // final record = recordController.recordDetail.value!;
                     Get.toNamed('/register/$recordId');
                   },
                   label: Text(

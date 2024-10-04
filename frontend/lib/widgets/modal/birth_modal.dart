@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class BirthModal extends StatelessWidget {
@@ -78,6 +81,7 @@ class BirthModal extends StatelessWidget {
     );
 
     if (pickedDate != null) {
+      log('pickedDate : $pickedDate');
       String formattedDate =
           DateFormat('yyyy-MM-dd').format(pickedDate); // 날짜 형식 설정
       onChanged(formattedDate);
@@ -86,8 +90,17 @@ class BirthModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return Obx(() {
     return TextFormField(
+      // onChanged: (value) {
+      //   log('change value : $value');
+      //   onChanged(value); // 사용자가 직접 텍스트를 수정할 때도 콜백 호출
+      // },
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 15,
+        ),
         hintText: hintText,
         hintStyle: TextStyle(
           color: Color(0xFF72777A),
@@ -107,5 +120,6 @@ class BirthModal extends StatelessWidget {
       readOnly: true,
       onTap: () => _selectDate(context),
     );
+    // });
   }
 }

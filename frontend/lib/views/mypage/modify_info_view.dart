@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/auth_controller.dart';
 import 'package:frontend/views/base_view.dart';
@@ -17,9 +19,17 @@ class ModifyInfoView extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     _authController.fetchUserInfo();
 
+    final TextEditingController nicknameController = TextEditingController(
+      text: _authController.nickname.value,
+    );
+
     String formatDate(String date) {
-      if (date.isEmpty) return '  YYYY-MM-DD';
+      log('------------------------');
+      log('date 출력 : $date');
+      if (date.isEmpty) return 'YYYY-MM-DD';
       DateTime dateTime = DateTime.parse(date);
+
+      log('dateTime 출력 : $dateTime');
       return DateFormat('yyyy-MM-dd').format(dateTime);
     }
 
@@ -76,48 +86,51 @@ class ModifyInfoView extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 7),
-                Obx(
-                  () => Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: TextEditingController(
-                              text: _authController.nickname.value),
-                          // 닉네임 글자 수 제한
-                          onChanged: (text) {
-                            if (text.characters.length > 8) {
-                              _authController.nickname.value =
-                                  text.characters.take(8).toString();
-                            } else {
-                              _authController.nickname.value = text;
-                            }
-                            _authController.onNicknameChanged(
-                                _authController.nickname.value);
-                          },
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(22),
-                              borderSide: BorderSide(color: Colors.black12),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(22),
-                              borderSide: BorderSide(color: Colors.blueAccent),
-                            ),
-                            filled: true,
-                            hintText: '  닉네임 (2~8자)',
-                            hintStyle: TextStyle(
-                              color: Color(0xFF72777A),
-                            ),
-                            fillColor: Color(0xFFE3E5E5).withOpacity(0.4),
+                // Obx(
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _authController.textEditingController,
+                        // 닉네임 글자 수 제한
+                        onChanged: (text) {
+                          if (text.characters.length > 8) {
+                            _authController.nickname.value =
+                                text.characters.take(8).toString();
+                          } else {
+                            _authController.nickname.value = text;
+                          }
+                          _authController.onNicknameChanged(
+                              _authController.nickname.value);
+                        },
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 15,
                           ),
-                          cursorColor: Colors.blueAccent,
-                          cursorErrorColor: Colors.red,
+                          border: InputBorder.none,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(22),
+                            borderSide: BorderSide(color: Colors.black12),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(22),
+                            borderSide: BorderSide(color: Colors.blueAccent),
+                          ),
+                          filled: true,
+                          hintText: '닉네임 (2~8자)',
+                          hintStyle: TextStyle(
+                            color: Color(0xFF72777A),
+                          ),
+                          fillColor: Color(0xFFE3E5E5).withOpacity(0.4),
                         ),
-                      )
-                    ],
-                  ),
+                        cursorColor: Colors.blueAccent,
+                        cursorErrorColor: Colors.red,
+                      ),
+                    )
+                  ],
                 ),
+                // ),
                 SizedBox(height: 25),
                 Row(
                   children: [
@@ -132,15 +145,18 @@ class ModifyInfoView extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 7),
+                // Obx(
+                //   () {
                 BirthModal(
                   onChanged: (selectedDate) {
                     _authController.birthDate.value = selectedDate;
                   },
-                  hintText: _authController.birthDate.value != null &&
-                          _authController.birthDate.value.isNotEmpty
+                  hintText: _authController.birthDate.value != null
                       ? formatDate(_authController.birthDate.value)
-                      : '  YYYY-MM-DD',
+                      : 'YYYY-MM-DD',
                 ),
+
+                // ),
                 // 키 몸무게 input
                 Row(
                   children: [
@@ -269,35 +285,35 @@ class ModifyInfoView extends StatelessWidget {
 
                 SizedBox(height: 25),
                 // 수정 버튼 만들기
-                ElevatedButton(
-                    onPressed: () {
-                      Map<String, dynamic> updateInfo = {
-                        if (_authController.nickname.value.isNotEmpty)
-                          'nickname': _authController.nickname.value,
-                        if (_authController.birthDate.value.isNotEmpty)
-                          'birth': _authController.birthDate.value,
-                        if (_authController.height.value != null)
-                          'height': _authController.height.value,
-                        if (_authController.weight.value != null)
-                          'weight': _authController.weight.value,
-                        if (_authController.selectedGender.value != null)
-                          'gender': _authController.selectedGender.value,
-                      };
-                      _authController.patchUserInfo(updateInfo);
-                    },
-                    child: const Text('회원정보 수정'))
                 // ElevatedButton(
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //           builder: (context) => SignUpView(
-                //                 email: '',
-                //               )),
-                //     );
-                //   },
-                //   child: const Text('Go to Signup Page'),
-                // ),
+                //     onPressed: () {
+                //       Map<String, dynamic> updateInfo = {
+                //         if (_authController.nickname.value.isNotEmpty)
+                //           'nickname': _authController.nickname.value,
+                //         if (_authController.birthDate.value.isNotEmpty)
+                //           'birth': _authController.birthDate.value,
+                //         if (_authController.height.value != null)
+                //           'height': _authController.height.value,
+                //         if (_authController.weight.value != null)
+                //           'weight': _authController.weight.value,
+                //         if (_authController.selectedGender.value != null)
+                //           'gender': _authController.selectedGender.value,
+                //       };
+                //       _authController.patchUserInfo(updateInfo);
+                //     },
+                //     child: const Text('회원정보 수정')),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SignUpView(
+                                email: '',
+                              )),
+                    );
+                  },
+                  child: const Text('Go to Signup Page'),
+                ),
               ],
             ),
           ),

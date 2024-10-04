@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/auth/signup_view.dart';
@@ -16,6 +17,9 @@ class AuthController extends GetxController {
   var height = ''.obs;
   var weight = ''.obs;
   final _storage = FlutterSecureStorage();
+
+  TextEditingController textEditingController = TextEditingController();
+
   // 혹시 몰라 넣은 토큰
   var newToken =
       'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
@@ -264,14 +268,17 @@ class AuthController extends GetxController {
   // 정보수정
   Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
     try {
+      // 기존 멤버 정보 가져오기
+      log('update info : $updateInfo');
+
       String? memberId = await _storage.read(key: 'ID');
       if (memberId == null) {
         throw Exception('memberId를 찾을 수 없습니다.');
       }
       updateInfo['memberImage'] = {
         'memberId': int.parse(memberId),
-        'url': 'string', // 실제 이미지 URL을 넣어야 함
-        'path': 'string', // 이미지 경로 입력
+        'url': 'string', // TODO 실제 이미지 URL을 넣어야 함
+        'path': 'string', // TODO 이미지 경로 입력
       };
       final response = await _authService.patchUserInfo(updateInfo);
       log('정보수정controller');
