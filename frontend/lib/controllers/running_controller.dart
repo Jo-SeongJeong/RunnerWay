@@ -78,11 +78,11 @@ class RunningController extends GetxController {
     } else if (type == 'official') {
       isOfficialRun.value = true;
       await loadSavedPath();
-      // await _checkIfStartLocationIsValid(); // 경로의 시작 위치 확인
+      await _checkIfStartLocationIsValid(); // 경로의 시작 위치 확인
       dev.log('Official running mode initialized with courseid: $courseid');
     } else if (type == 'user') {
       await loadSavedPath();
-      // await _checkIfStartLocationIsValid(); // 경로의 시작 위치 확인
+      await _checkIfStartLocationIsValid(); // 경로의 시작 위치 확인
       dev.log('User running mode initialized with courseid: $courseid');
     }
 
@@ -152,8 +152,8 @@ class RunningController extends GetxController {
       // 현재 위치와 경로 시작점의 거리 계산
       double distanceToStart =
           _runningService.calculateDistance(currentLocation, startLocation);
-      if (distanceToStart > 10.0) {
-        // 10m 이내가 아닌 경우 사용자에게 알림 처리
+      if (distanceToStart > 50.0) {
+        // 50m 이내가 아닌 경우 사용자에게 알림 처리
         Get.back();
 
         // TODO
