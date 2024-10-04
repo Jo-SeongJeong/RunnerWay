@@ -56,6 +56,7 @@ class NoBounceScrollBehavior extends ScrollBehavior {
     return const ClampingScrollPhysics(); // 바운스 효과를 제거
   }
 
+  @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child; // 기본 Chrome 유지

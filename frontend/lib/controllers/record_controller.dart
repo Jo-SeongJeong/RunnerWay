@@ -37,9 +37,6 @@ class RecordController extends GetxController {
     // 기본적으로 오늘 날짜로 기록 로드
     setFocusedDate(DateTime.now());
     setSelectedDate(DateTime.now());
-    // fetchMonthRecord(focusedDate.value!.year, focusedDate.value!.month);
-    // fetchRecordList(selectedDate.value!.year, selectedDate.value!.month,
-    //     selectedDate.value!.day);
   }
 
   // 날짜 설정 및 기록 조회

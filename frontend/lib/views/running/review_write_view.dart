@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/running_controller.dart';
+import 'package:frontend/views/running/widgets/write_map.dart';
 import 'package:get/get.dart';
 import '../../widgets/button/register_button.dart';
 import '../../widgets/map/result_map.dart';
@@ -18,7 +20,7 @@ class ReviewWriteView extends StatelessWidget {
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: const Text(
-          '기록 작성',
+          '러닝 기록 작성',
           style: TextStyle(fontSize: 20, color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -43,14 +45,16 @@ class ReviewWriteView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(20.0), //
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             LocationInfo(
-                              title: controller.details['title'] as String,
-                              address: controller.details['address'] as String,
-                              time: controller.details['time'] as DateTime,
+                              title: controller.name.value,
+                              address: controller
+                                      .courseController.course.value?.address ??
+                                  '미상',
+                              time: controller.reviewModel.value!.startDate,
                             ),
                             const SizedBox(height: 20),
                             GestureDetector(
@@ -86,7 +90,8 @@ class ReviewWriteView extends StatelessWidget {
                               ),
                               onChanged: controller.updateContent,
                               controller: TextEditingController(
-                                  text: controller.content.value),
+                                text: controller.reviewModel.value!.comment,
+                              ),
                             ),
                             const SizedBox(height: 50),
                             const Text(
@@ -101,16 +106,16 @@ class ReviewWriteView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ReviewRecordItem(
-                                    value: controller.records[0],
+                                    value: controller
+                                        .reviewModel.value!.runningDistance,
                                     label: '운동 거리'),
                                 ReviewRecordItem(
-                                    value: controller.records[1],
+                                    value: controller.reviewModel.value!.score,
                                     label: '운동 시간'),
+                                ReviewRecordItem(value: 0, label: '러닝 경사도'),
                                 ReviewRecordItem(
-                                    value: controller.records[2],
-                                    label: '러닝 경사도'),
-                                ReviewRecordItem(
-                                    value: controller.records[3],
+                                    value:
+                                        controller.reviewModel.value!.calorie,
                                     label: '소모 칼로리'),
                               ],
                             ),
@@ -122,7 +127,7 @@ class ReviewWriteView extends StatelessWidget {
                         absorbing: true,
                         child: SizedBox(
                           height: 300,
-                          child: const ResultMap(),
+                          child: WriteMap(),
                         ),
                       ),
                     ],

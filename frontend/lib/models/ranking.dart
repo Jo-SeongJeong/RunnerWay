@@ -1,8 +1,10 @@
 class Ranking {
+  final int rankId;
   final String score;
   final MemberDto member;
 
   Ranking({
+    required this.rankId,
     required this.score,
     required this.member,
   });
@@ -10,6 +12,7 @@ class Ranking {
   // JSON 데이터 파싱해 Ranking 객체 생성
   factory Ranking.fromJson(Map<String, dynamic> json) {
     return Ranking(
+      rankId: json['rankId'],
       score: json['score'],
       member: MemberDto.fromJson(json['memberDto']),
     );

@@ -13,7 +13,7 @@ class ReviewRecordItem extends StatelessWidget {
   // 단위를 추가하거나 시간을 포맷팅하는 메서드
   String _formatValue(num value, String label) {
     if (label == '운동 거리') {
-      return '${value}km';
+      return '${value.toStringAsFixed(2)}km';
     } else if (label == '러닝 경사도') {
       return '$value%';
     } else if (label == '운동 시간') {

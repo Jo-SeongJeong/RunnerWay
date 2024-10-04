@@ -15,7 +15,7 @@ class DioClient {
         receiveTimeout: const Duration(seconds: 20),
         followRedirects: false,
         validateStatus: (status) {
-          return status! < 400;
+          return status! < 500;
         },
         headers: {
           'Accept': 'application/json',

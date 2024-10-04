@@ -13,6 +13,15 @@ if (envFile.exists()) {
     throw new FileNotFoundException("Could not find .env file at: ${envFile.path}")
 }
 
+// Signing information from key.properties
+def keystoreProperties = new Properties()
+def keystoreFile = file("./key.properties")
+if (keystoreFile.exists()) {
+    keystoreFile.withInputStream { stream -> keystoreProperties.load(stream) }
+} else {
+    throw new FileNotFoundException("Could not find key.properties file at: ${keystoreFile.path}")
+}
+
 android {
     namespace = "com.runnerway.frontend"
     compileSdk = flutter.compileSdkVersion
@@ -39,18 +48,28 @@ android {
         versionName = flutter.versionName
 
         def GoogleMapAPIKey = dotenv['GOOGLE_MAPS_API_KEY']
-        if (GoogleMapAPIKey == null){
+        if (GoogleMapAPIKey == null) {
             throw new GradleException("GOOGLE_MAPS_API_KEY not found in .env file")
         }
         manifestPlaceholders = [GOOGLE_MAPS_API_KEY: GoogleMapAPIKey]
     }
 
+    signingConfigs {
+        release {
+            // Load signing properties from key.properties
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig signingConfigs.release
+            minifyEnabled false // Set to true for release builds if obfuscation and shrinking is required
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 

@@ -40,4 +40,9 @@ class RunningRecord {
       elapsedTime: timestamp.difference(startTime),
     );
   }
+
+  @override
+  String toString() {
+    return 'RunningRecord(latitude: $latitude, longitude: $longitude, elapsedTime: ${elapsedTime.inSeconds} seconds)';
+  }
 }

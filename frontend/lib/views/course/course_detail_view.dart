@@ -57,6 +57,7 @@ class CourseDetailView extends StatelessWidget {
                         count: course.count,
                         type: course.courseType!,
                         nickName: course.memberNickname,
+                        courseId: course.courseId,
                       ),
 
                       // 구분선
@@ -86,12 +87,14 @@ class CourseDetailView extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 final ranking = rankingList[index];
                                 return RankingCard(
-                                  name: ranking.member.nickname,
-                                  time: ranking.score,
-                                  imageUrl: ranking.member.memberImage?.url,
-                                  rank: index + 1,
-                                  isActive: true,
-                                );
+                                    name: ranking.member.nickname,
+                                    time: ranking.score,
+                                    imageUrl: ranking.member.memberImage?.url,
+                                    rank: index + 1,
+                                    isActive: true,
+                                    rankId: ranking.rankId,
+                                    courseId: course.courseId,
+                                    type: course.courseType!);
                               },
                             )
                           : Container(

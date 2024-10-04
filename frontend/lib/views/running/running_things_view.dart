@@ -29,9 +29,9 @@ class RunningThingsView extends StatelessWidget {
   }
 
   // map.dart 파일의 MyMap 페이지로 이동하는 메소드
-  // void _navigateToMap() {
-  //   Get.to(() => const MyMap());
-  // }
+  void _navigateToMap() {
+    Get.to(() => const MyMap());
+  }
 
   // line.dart 파일의 MyLine 페이지로 이동하는 메소드
   void _navigateToLine() {
@@ -46,13 +46,13 @@ class RunningThingsView extends StatelessWidget {
     Get.to(() => const RunningMap());
   }
 
-  void _navigateToRankingListView() {
-    Get.to(() => RankingListView());
-  }
-
-  // void _navigateToReviewDetailView() {
-  //   Get.to(() => RecordDetailView());
+  // void _navigateToRankingListView() {
+  //   Get.to(() => RankingListView());
   // }
+
+  void _navigateToReviewDetailView() {
+    Get.to(() => RecordDetailView());
+  }
 
   void _navigateToReviewWriteView() {
     Get.to(() => ReviewWriteView());
@@ -79,10 +79,10 @@ class RunningThingsView extends StatelessWidget {
               onPressed: () => _navigateToGeoLocation(), // 위치 페이지로 이동
               child: const Text('Go to GeoLocation'),
             ),
-            // ElevatedButton(
-            //   onPressed: () => _navigateToMap(), // 맵 페이지로 이동
-            //   child: const Text('Go to Map'),
-            // ),
+            ElevatedButton(
+              onPressed: () => _navigateToMap(), // 맵 페이지로 이동
+              child: const Text('Go to Map'),
+            ),
             ElevatedButton(
               onPressed: () => _navigateToLine(), // 라인 페이지로 이동
               child: const Text('Go to Line'),
@@ -97,16 +97,16 @@ class RunningThingsView extends StatelessWidget {
               // Navigates to the Polyline page
               child: const Text('Go to RunningMap'),
             ),
-            ElevatedButton(
-              onPressed: () => _navigateToRankingListView(),
-              // Navigates to the RankingList page
-              child: const Text('Go to RankingList'),
-            ),
             // ElevatedButton(
-            //   onPressed: () => _navigateToReviewDetailView(),
-            //   // Navigates to the RunningDetail page
-            //   child: const Text('Go to ReviewDetail'),
+            //   onPressed: () => _navigateToRankingListView(),
+            //   // Navigates to the RankingList page
+            //   child: const Text('Go to RankingList'),
             // ),
+            ElevatedButton(
+              onPressed: () => _navigateToReviewDetailView(),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to ReviewDetail'),
+            ),
             ElevatedButton(
               onPressed: () => _navigateToReviewWriteView(),
               // Navigates to the RunningDetail page
@@ -118,7 +118,7 @@ class RunningThingsView extends StatelessWidget {
               child: const Text('Go to JWTDecode'),
             ),
             ElevatedButton(
-              onPressed: () => Get.to(() => FreeCourseRunningView()),
+              onPressed: () => Get.toNamed('/freecourserunning'),
               // Navigates to the RunningDetail page
               child: const Text('Go to Free Course Running'),
             ),
@@ -131,6 +131,27 @@ class RunningThingsView extends StatelessWidget {
               onPressed: () => Get.to(() => CompetitionCourseRunningView()),
               // Navigates to the RunningDetail page
               child: const Text('Go to Competition Course Running'),
+            ),
+            ElevatedButton(
+              onPressed: () =>
+                  Get.toNamed('/running/free/0/0', parameters: {'varid': '0'}),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to view의 free course'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/running/official/1/0'),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to view의 official course'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/running/official/2/2'),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to view의 user course 대결'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/running/myself/2/2'),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to view의 내 코스에서 나와 대결'),
             ),
           ],
         ),

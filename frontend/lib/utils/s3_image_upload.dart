@@ -14,6 +14,8 @@ class S3ImageUpload {
 
   S3ImageUpload();
 
+  Dio dio = Dio();
+
   // 이미지 업로드 함수
   Future<String?> uploadImage(File imageFile, String folderPath) async {
     try {
@@ -89,7 +91,6 @@ class S3ImageUpload {
       // Get the length of the file
       int contentLength = await imageFile.length();
 
-      Dio dio = Dio();
       Response response = await dio.put(
         url,
         data: imageFile.openRead(),
@@ -111,6 +112,36 @@ class S3ImageUpload {
       developer.log('Image upload failed: $e');
       return null;
     }
+  }
+
+  Future<dynamic> uploadRankingLog(File log) async {
+    try {
+      String fileName = '${DateTime.now().microsecondsSinceEpoch}';
+      String url =
+          'https://${bucketName}.s3.${region}.amazonaws.com/ranking/${fileName}.json';
+      int contentLength = await log.length();
+      Response response = await dio.put(
+        url,
+        data: log.openRead(),
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': contentLength, // Set Content-Length
+        }),
+      );
+      if (response.statusCode == 200) {
+        developer.log('RankingLog uploaded successfully: $url');
+        return url;
+      } else {
+        developer.log(
+            'RankingLog upload failed with status code: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      developer.log('RankingLog upload failed: $e');
+      return null;
+    }
+
+    return 1;
   }
 
   // 서명 생성 함수
