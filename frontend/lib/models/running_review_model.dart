@@ -8,8 +8,11 @@ class RunningReviewModel {
   final double calorie;
   final double averagePace;
   final String comment;
+  final String address;
   final DateTime startDate;
   final DateTime finishDate;
+  final double lat;
+  final double lng;
   final PersonalImage? personalImage;
 
   RunningReviewModel({
@@ -19,8 +22,11 @@ class RunningReviewModel {
     required this.calorie,
     required this.averagePace,
     required this.comment,
+    required this.address,
     required this.startDate,
     required this.finishDate,
+    required this.lat,
+    required this.lng,
     this.personalImage,
   });
 
@@ -48,8 +54,11 @@ class RunningReviewModel {
       calorie: json['calorie'].toDouble(),
       averagePace: json['averagePace'].toDouble(),
       comment: json['comment'],
+      address: json['address'],
       startDate: DateTime.parse(json['startDate']),
       finishDate: DateTime.parse(json['finishDate']),
+      lat: json['lat'].toDouble(),
+      lng: json['lng'].toDouble(),
       personalImage: json['personalImage'] != null
           ? PersonalImage.fromJson(json['personalImage'])
           : null,
@@ -64,8 +73,11 @@ class RunningReviewModel {
       'calorie': calorie,
       'averagePace': averagePace,
       'comment': comment,
+      'address': address,
       'startDate': formatDate(startDate),
       'finishDate': formatDate(finishDate),
+      'lat': lat,
+      'lng': lng,
       'personalImage': personalImage != null
           ? {'url': personalImage?.url ?? '', 'path': personalImage?.path ?? ''}
           : null,
@@ -74,7 +86,7 @@ class RunningReviewModel {
 
   @override
   String toString() {
-    return 'RunningReviewModel(courseId: $courseId, score: $score, runningDistance: $runningDistance, calorie: $calorie, averagePace: $averagePace, comment: $comment, startDate: $startDate, finishDate: $finishDate, personalImage: $personalImage)';
+    return 'RunningReviewModel(courseId: $courseId, score: $score, runningDistance: $runningDistance, calorie: $calorie, averagePace: $averagePace, comment: $comment, address: $address, startDate: $startDate, finishDate: $finishDate, lat: $lat, lng: $lng, personalImage: $personalImage)';
   }
 
   RunningReviewModel copyWith({
@@ -84,8 +96,11 @@ class RunningReviewModel {
     double? calorie,
     double? averagePace,
     String? comment,
+    String? address,
     DateTime? startDate,
     DateTime? finishDate,
+    double? lat,
+    double? lng,
     PersonalImage? personalImage,
   }) {
     return RunningReviewModel(
@@ -95,8 +110,11 @@ class RunningReviewModel {
       calorie: calorie ?? this.calorie,
       averagePace: averagePace ?? this.averagePace,
       comment: comment ?? this.comment,
+      address: address ?? this.address,
       startDate: startDate ?? this.startDate,
       finishDate: finishDate ?? this.finishDate,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
       personalImage: personalImage ?? this.personalImage,
     );
   }

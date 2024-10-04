@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:frontend/controllers/course_controller.dart';
 import 'package:frontend/controllers/running_controller.dart';
 import 'package:frontend/models/personal_image.dart';
@@ -18,6 +19,7 @@ class RunningReviewController extends GetxController {
   final RunningReviewService _service = RunningReviewService();
   final S3ImageUpload s3ImageUpload = S3ImageUpload();
   late final FileService _fileService = FileService();
+  final TextEditingController commentController = TextEditingController(); // 추가
 
   // RunningReviewModel 인스턴스를 Rxn으로 관리하여 null 가능성도 포함
   var reviewModel = Rxn<RunningReviewModel>();
@@ -30,6 +32,7 @@ class RunningReviewController extends GetxController {
     super.onInit();
 
     initializeReview();
+    commentController.text = reviewModel.value?.comment ?? '';
   }
 
   // 리뷰 모델 초기화 메서드
@@ -50,11 +53,14 @@ class RunningReviewController extends GetxController {
       runningDistance: runningController.value.value.totalDistance,
       calorie: calculateCalorie(),
       averagePace: averagePace,
-      comment: '', // 초기값 설정
+      comment: '',
+      address: '봉명동',
       startDate: DateTime.now()
           .subtract(runningController.value.value.elapsedTime)
           .copyWith(millisecond: 0, microsecond: 0),
       finishDate: DateTime.now().copyWith(millisecond: 0, microsecond: 0),
+      lat: runningController.startPoint?.latitude ?? 0.0,
+      lng: runningController.startPoint?.longitude ?? 0.0,
       personalImage: PersonalImage(url: '', path: ''),
     );
 

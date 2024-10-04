@@ -89,9 +89,7 @@ class ReviewWriteView extends StatelessWidget {
                                 border: OutlineInputBorder(),
                               ),
                               onChanged: controller.updateContent,
-                              controller: TextEditingController(
-                                text: controller.reviewModel.value!.comment,
-                              ),
+                              controller: controller.commentController,
                             ),
                             const SizedBox(height: 50),
                             const Text(
