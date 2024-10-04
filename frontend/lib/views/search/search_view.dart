@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/under_bar_controller.dart';
 import 'package:frontend/views/main/widget/auto_complete.dart';
@@ -41,6 +43,7 @@ class SearchView extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
+                  log('뒤로가기 버튼');
                   searchController.clearSearch();
                   Get.toNamed('/main');
                 },

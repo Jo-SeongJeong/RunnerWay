@@ -30,4 +30,19 @@ class RecordAnalyze {
       'totalCalorie': totalCalorie,
     };
   }
+
+  // copyWith 메서드 추가
+  RecordAnalyze copyWith({
+    double? totalDistance,
+    double? averageFace,
+    String? totalScore,
+    double? totalCalorie,
+  }) {
+    return RecordAnalyze(
+      totalDistance: totalDistance ?? this.totalDistance,
+      averageFace: averageFace ?? this.averageFace,
+      totalScore: totalScore ?? this.totalScore,
+      totalCalorie: totalCalorie ?? this.totalCalorie,
+    );
+  }
 }

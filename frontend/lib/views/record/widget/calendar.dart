@@ -43,8 +43,6 @@ class Calendar extends StatelessWidget {
     }
 
     // selectedDate는 오늘 날짜로 초기화하고, focusedMonth는 선택된 날짜의 달로 초기화
-    DateTime focusedMonth =
-        recordController.focusedDate.value ?? DateTime.now();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -86,8 +84,10 @@ class Calendar extends StatelessWidget {
           if (recordController.isStampLoading.value) {
             // 로딩 중일 때 CircularProgressIndicator 표시
             return Center(
+                child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
               child: CircularProgressIndicator(),
-            );
+            ));
           } else {
             // 로딩이 끝났을 때 달력을 표시
             return TableCalendar(

@@ -137,7 +137,6 @@ class CourseSubInfo extends StatelessWidget {
                         width: 8,
                       ),
                       Text(
-                        // TODO: 시간 데이터 수정 필요
                         '${averageTime?.substring(11)}',
                         style: TextStyle(fontSize: 18),
                       ),

@@ -10,7 +10,7 @@
     <application
         android:name="android.app.Application"
         android:icon="@mipmap/ic_launcher"
-        android:label="frontend">
+        android:label="러너웨이">
 
         <activity
             android:name=".MainActivity"

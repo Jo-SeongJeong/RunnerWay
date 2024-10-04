@@ -20,7 +20,12 @@ class RecordService {
     try {
       final analyze = await _repository.fetchMonthAnalyze(year, month);
 
-      return analyze;
+      // totalDistance를 소수점 한 자리로 자르기
+      final modifiedAnalyze = analyze.copyWith(
+        totalDistance: double.parse(analyze.totalDistance.toStringAsFixed(1)),
+      );
+
+      return modifiedAnalyze;
     } catch (e) {
       throw Exception('월별 러닝 기록 분석 가져오는 중 오류 발생: $e');
     }
