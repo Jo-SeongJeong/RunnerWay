@@ -65,4 +65,14 @@ class AuthRepository {
       rethrow;
     }
   }
+
+  // 회원정보 수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      final response = await _provider.patchUserInfo(updateInfo);
+      log('repo 정보수정: ${response}');
+    } catch (e) {
+      throw Exception('회원수정 repo: $e');
+    }
+  }
 }

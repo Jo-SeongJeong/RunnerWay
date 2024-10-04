@@ -119,7 +119,6 @@ class RecordController extends GetxController {
     log('$recordId');
     isLoading(true);
     try {
-      // TODO 여기 값 이상함
       var detail = await _recordService.fetchRecordDetail(recordId);
       log('record controller: $detail');
       if (detail != null) {
@@ -131,4 +130,16 @@ class RecordController extends GetxController {
       isLoading(false);
     }
   }
+
+  // 러닝 기록 수정
+  Future<dynamic> patchRecord(Map<String, dynamic> updateData) async {
+    try {
+      final response = await _recordService.patchRecord(updateData);
+      log('기록성공controller');
+    } catch (e) {
+      log('기록수정실패: $e');
+    }
+  }
+
+// 러닝 사진 변경
 }

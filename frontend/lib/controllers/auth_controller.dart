@@ -210,7 +210,6 @@ class AuthController extends GetxController {
     // Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
     try {
       // TODO
-      // 서버에서 Map<String, dynamic> 데이터를 받음
       Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
       log('${userInfoMap}');
       Auth userInfo = Auth.fromJson(userInfoMap);
@@ -229,17 +228,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // // 로그아웃
-  // Future<void> logout() async {
-  //   try {
-  //     await _storage.delete(key: 'ACCESS_TOKEN');
-  //     isLoggedIn.value = false;
-  //     Get.toNamed('/login');
-  //   } catch (e) {
-  //     log('로그아웃 실패 controller: ${e}');
-  //     Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
-  //   }
-  // }
   // 로그아웃
   Future<void> logout() async {
     try {
@@ -265,13 +253,30 @@ class AuthController extends GetxController {
   // 회원탈퇴
   Future<void> remove() async {
     try {
-      // TODO
-      // final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
-      // final response = await _authService.removeMember(accessToken);
+      // TODO 회원탈퇴하세요
       Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
     } catch (e) {
       log('회원탈퇴 실패 controller: ${e}');
       Get.snackbar('회원탈퇴 실패 ', '회원탈퇴 중 문제가 발생했습니다.');
+    }
+  }
+
+  // 정보수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      String? memberId = await _storage.read(key: 'ID');
+      if (memberId == null) {
+        throw Exception('memberId를 찾을 수 없습니다.');
+      }
+      updateInfo['memberImage'] = {
+        'memberId': int.parse(memberId),
+        'url': 'string', // 실제 이미지 URL을 넣어야 함
+        'path': 'string', // 이미지 경로 입력
+      };
+      final response = await _authService.patchUserInfo(updateInfo);
+      log('정보수정controller');
+    } catch (e) {
+      log('회원수정실패:$e');
     }
   }
 }

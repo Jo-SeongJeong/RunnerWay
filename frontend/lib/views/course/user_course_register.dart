@@ -175,6 +175,8 @@ class RegisterView extends StatelessWidget {
                             'https://runnerway.s3.ap-northeast-2.amazonaws.com/test/test2.json',
                         'courseImage': {'url': 'test.url', 'path': 'test.path'},
                       });
+                      // 성공하면
+                      Get.toNamed('/runner-pick');
                     }
                   : null,
             ),

@@ -53,7 +53,6 @@ class ModifyInfoView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16)),
                 ),
                 SizedBox(height: 30),
-                // TODO 유저 이름
                 Line(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -178,30 +177,127 @@ class ModifyInfoView extends StatelessWidget {
                     ),
                   ],
                 ),
+                SizedBox(height: 25),
+                Row(
+                  children: [
+                    Text(
+                      '성별',
+                      style: TextStyle(
+                        color: Color(0xFF1C1516),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 25),
 
-                SizedBox(height: 7),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _authController.selectedGender.value = 'woman';
+                      },
+                      child: Obx(() => Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              color: _authController.selectedGender.value ==
+                                      'woman'
+                                  ? Color(0xFF1EA6FC).withOpacity(0.1)
+                                  : Color(0xFFE3E5E5).withOpacity(0.3),
+                              border: Border.all(
+                                color: _authController.selectedGender.value ==
+                                        'woman'
+                                    ? Color(0xFF1EA6FC)
+                                    : Color(0xFFE3E5E5).withOpacity(0.8),
+                                width: _authController.selectedGender.value ==
+                                        'woman'
+                                    ? 4.0
+                                    : 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(60),
+                            ),
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              _authController.selectedGender.value == 'woman'
+                                  ? 'assets/images/auth/woman_ok.png'
+                                  : 'assets/images/auth/woman_no.png',
+                              width: 85,
+                              height: 85,
+                            ),
+                          )),
+                    ),
+                    SizedBox(width: 30),
+                    GestureDetector(
+                      onTap: () {
+                        _authController.selectedGender.value = 'man';
+                      },
+                      child: Obx(() => Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              color:
+                                  _authController.selectedGender.value == 'man'
+                                      ? Color(0xFF1EA6FC).withOpacity(0.1)
+                                      : Color(0xFFE3E5E5).withOpacity(0.3),
+                              border: Border.all(
+                                color: _authController.selectedGender.value ==
+                                        'man'
+                                    ? Color(0xFF1EA6FC)
+                                    : Color(0xFFE3E5E5).withOpacity(0.8),
+                                width: _authController.selectedGender.value ==
+                                        'man'
+                                    ? 4.0
+                                    : 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(60),
+                            ),
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              _authController.selectedGender.value == 'man'
+                                  ? 'assets/images/auth/man_ok.png'
+                                  : 'assets/images/auth/man_no.png',
+                              width: 85,
+                              height: 85,
+                            ),
+                          )),
+                    ),
+                  ],
+                ),
 
                 SizedBox(height: 25),
+                // 수정 버튼 만들기
+                ElevatedButton(
+                    onPressed: () {
+                      Map<String, dynamic> updateInfo = {
+                        if (_authController.nickname.value.isNotEmpty)
+                          'nickname': _authController.nickname.value,
+                        if (_authController.birthDate.value.isNotEmpty)
+                          'birth': _authController.birthDate.value,
+                        if (_authController.height.value != null)
+                          'height': _authController.height.value,
+                        if (_authController.weight.value != null)
+                          'weight': _authController.weight.value,
+                        if (_authController.selectedGender.value != null)
+                          'gender': _authController.selectedGender.value,
+                      };
+                      _authController.patchUserInfo(updateInfo);
+                    },
+                    child: const Text('회원정보 수정'))
                 // ElevatedButton(
                 //   onPressed: () {
-                //     _authController.isEditable.value =
-                //         !_authController.isEditable.value;
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => SignUpView(
+                //                 email: '',
+                //               )),
+                //     );
                 //   },
-                //   child: Obx(() =>
-                //       Text(_authController.isEditable.value ? '저장' : '수정')),
+                //   child: const Text('Go to Signup Page'),
                 // ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SignUpView(
-                                email: '',
-                              )),
-                    );
-                  },
-                  child: const Text('Go to Signup Page'),
-                ),
               ],
             ),
           ),

@@ -39,7 +39,6 @@ class UserCourseController extends GetxController {
       }
 
       // 데이터가 제대로 들어가 있는지 확인
-      // userCourseRegistRequestDto에 memberId 추가
       userCourseRegistRequestDto['recordId'] = recordId;
       userCourseRegistRequestDto['memberId'] = memberId;
       log('usercousrse컨트롤러 data: $userCourseRegistRequestDto');

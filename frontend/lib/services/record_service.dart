@@ -66,4 +66,17 @@ class RecordService {
       throw Exception('러닝 기록 상세 조회 중 오류 service: $e');
     }
   }
+
+  // 러닝 기록 수정
+  Future<dynamic> patchRecord(Map<String, dynamic> updateData) async {
+    try {
+      final response = await _repository.patchRecord(updateData);
+      log('service: ${response.toString()}');
+      // int? id = int.tryParse(Get.parameters['id'] ?? '1');
+      // Record updatedRecord = response.copyWith(recordId: id);
+      return response;
+    } catch (e) {
+      throw Exception('기록수정오류service: $e');
+    }
+  }
 }

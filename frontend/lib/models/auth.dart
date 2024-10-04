@@ -19,9 +19,31 @@ class Auth {
     required this.joinType,
   });
 
+  // copyWith 메서드 추가
+  Auth copyWith({
+    String? email,
+    String? nickname,
+    DateTime? birth,
+    int? gender,
+    int? height,
+    int? weight,
+    MemberImage? memberImage,
+    String? joinType,
+  }) {
+    return Auth(
+      email: email ?? this.email,
+      nickname: nickname ?? this.nickname,
+      birth: birth ?? this.birth,
+      gender: gender ?? this.gender,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      memberImage: memberImage ?? this.memberImage,
+      joinType: joinType ?? this.joinType,
+    );
+  }
+
   factory Auth.fromJson(Map<String, dynamic> json) {
     return Auth(
-      // TODO
       email: json['email'] ?? '',
       nickname: json['nickname'] ?? '',
       birth: json['birth'] != null ? DateTime.parse(json['birth']) : null,

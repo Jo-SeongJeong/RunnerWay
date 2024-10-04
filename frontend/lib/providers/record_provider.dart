@@ -66,8 +66,6 @@ class RecordProvider {
     log('러닝 기록 상세 pro: $recordId');
     try {
       final response = await dioClient.dio.get('/record/detail/$recordId');
-      log('Response status: ${response.statusCode}');
-      log('Response data: ${response.data}');
       if (response.statusCode == 200 && response.data != null) {
         log('response.data provider: ${response.data}');
         return response.data;
@@ -78,4 +76,20 @@ class RecordProvider {
       throw Exception('러닝 기록 상세 조회 실패: provider: ${e.toString()}');
     }
   }
+
+  // 러닝 기록 수정
+  Future<dynamic> patchRecord(Map<String, dynamic> updateData) async {
+    try {
+      final response =
+          await dioClient.dio.patch('/record/comment', data: updateData);
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('러닝 기록 수정문제 pro: 데이터 없어');
+      }
+    } on DioException catch (e) {
+      throw Exception('러닝 수정 실패: pro: ${e.toString()}');
+    }
+  }
+// 러닝 사진 수정
 }

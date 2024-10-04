@@ -114,34 +114,34 @@ class MypageView extends StatelessWidget {
                         '${_authController.birthDate.value}',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
-                  SizedBox(height: 10),
+                  SizedBox(height: 15),
                   Obx(() => Text(
-                        '${_authController.height.value}',
+                        '${_authController.height.value} cm',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
-                  SizedBox(height: 10),
+                  SizedBox(height: 15),
                   Obx(() => Text(
-                        '${_authController.weight.value}',
+                        '${_authController.weight.value} kg',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
-                  SizedBox(height: 10),
+                  SizedBox(height: 15),
                   Obx(() => Text(
                         '${_authController.selectedGender.value}',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),

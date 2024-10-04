@@ -89,4 +89,14 @@ class AuthService {
       throw e;
     }
   }
+
+  // 회원 정보 수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      final response = await _repository.patchUserInfo(updateInfo);
+      log('회원정보수정service: ${response.toString()}');
+    } catch (e) {
+      throw Exception('회원정보수정오류service: $e');
+    }
+  }
 }

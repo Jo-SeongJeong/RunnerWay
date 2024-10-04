@@ -13,13 +13,6 @@ class AuthProvider {
   Future<dynamic> fetchOauthKakao(String email) async {
     try {
       final response = await _dioClient.dio.post('oauth/kakao/${email}');
-      // final response = await dio.post(
-      //     'https://j11b304.p.ssafy.io/api/oauth/kakao/${Uri.encodeComponent(email)}',
-      //     options: Options(
-      //         followRedirects: false,
-      //         validateStatus: (status) {
-      //           return status! < 500;
-      //         }));
       log('사용자 이메일 조회 provider: ${response.data}');
 
       if (response.statusCode == 200) {
@@ -116,15 +109,6 @@ class AuthProvider {
         '/members/tags',
         data: requestBody,
       );
-      // final response =
-      //     await dio.post('https://j11b304.p.ssafy.io/api/members/tags',
-      //         options: Options(
-      //           headers: {
-      //             'Authorization': 'Bearer ${accessToken}',
-      //             'Content-Type': 'application/json',
-      //           },
-      //         ),
-      //         data: requestBody);
       if (response.statusCode == 200) {
         log('선호 태그 등록 성공');
       } else {
@@ -157,6 +141,22 @@ class AuthProvider {
       throw Exception('개인 정보 조회 중 오류 발생: $e');
     } catch (e) {
       throw Exception('예상치 못한 오류 발생: $e');
+    }
+  }
+
+  // 회원정보 수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      log('수정 provider$updateInfo');
+      final response = await _dioClient.dio.patch('/members', data: updateInfo);
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('회원정보수정 pro: 데이터없대');
+      }
+    } catch (e) {
+      log('$updateInfo');
+      throw Exception('회원정보pro안돼: $e');
     }
   }
 }

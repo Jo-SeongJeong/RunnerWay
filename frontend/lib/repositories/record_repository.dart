@@ -33,4 +33,14 @@ class RecordRepository {
     log('record repo data: $response');
     return Record.fromJson(response);
   }
+
+  // 러닝 기록 수정
+  Future<dynamic> patchRecord(Map<String, dynamic> updateData) async {
+    try {
+      final response = await _provider.patchRecord(updateData);
+      return response;
+    } catch (e) {
+      throw Exception('기록수정 repo: $e');
+    }
+  }
 }
