@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/button/wide_button.dart';
 import 'package:frontend/widgets/modal/birth_modal.dart';
@@ -129,6 +131,7 @@ class SignUpView extends StatelessWidget {
               SizedBox(height: 7),
               BirthModal(
                 onChanged: (selectedDate) {
+                  log('선택된 날짜 : $selectedDate');
                   _authController.birthDate.value = selectedDate;
                 },
                 // TODO

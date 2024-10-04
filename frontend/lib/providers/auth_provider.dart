@@ -147,8 +147,27 @@ class AuthProvider {
   // 회원정보 수정
   Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
     try {
+      // memberImage에서 memberId를 제거하고 필요한 형식으로 데이터 수정
+      if (updateInfo.containsKey('memberImage')) {
+        updateInfo['memberImage'].remove('memberId'); // memberId 삭제
+      }
+
+      // 숫자 필드 확인 (null 체크 및 변환)
+      updateInfo['height'] =
+          updateInfo['height'] != null && updateInfo['height'].isNotEmpty
+              ? int.tryParse(updateInfo['height'])
+              : null;
+
+      updateInfo['weight'] =
+          updateInfo['weight'] != null && updateInfo['weight'].isNotEmpty
+              ? int.tryParse(updateInfo['weight'])
+              : null;
+
       log('수정 provider$updateInfo');
+
+      // 서버에 PATCH 요청 보내기
       final response = await _dioClient.dio.patch('/members', data: updateInfo);
+
       if (response.statusCode == 200) {
         return response.data;
       } else {

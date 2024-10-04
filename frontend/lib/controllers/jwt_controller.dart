@@ -7,7 +7,7 @@ class JwtController extends GetxController {
   final _storage = FlutterSecureStorage();
 
   var newToken =
-      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUwMDYsImVtYWlsIjoidG1keGtyNUBoYW5tYWlsLm5ldCIsIm5pY2tuYW1lIjoi44WH44WH44WH44WHIiwiaWF0IjoxNzI3NjcxOTg0LCJleHAiOjE3MzEyNzE5ODR9.VhgRs0aH3h-_I1mhWhkih7cFNM1ebCDHtlYh112XK3Q';
+      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUwMDksImVtYWlsIjoidG1keGtyNUBoYW5tYWlsLm5ldCIsIm5pY2tuYW1lIjoi44WH44WH44WHIiwiaWF0IjoxNzI4MDI2MzU2LCJleHAiOjE3MzE2MjYzNTZ9.IwZ8YtIc3g4A12HQluDzWY7cNKZuaYRTVAUZyUyrz_g';
 
   var id = ''.obs;
   var email = ''.obs;

@@ -22,7 +22,7 @@ class AuthController extends GetxController {
 
   // 혹시 몰라 넣은 토큰
   var newToken =
-      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
+      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUwMDYsImVtYWlsIjoidG1keGtyNUBoYW5tYWlsLm5ldCIsIm5pY2tuYW1lIjoi44WH44WH44WH44WHIiwiaWF0IjoxNzI3NjcxOTg0LCJleHAiOjE3MzEyNzE5ODR9.VhgRs0aH3h-_I1mhWhkih7cFNM1ebCDHtlYh112XK3Q';
 
   final AuthService _authService = AuthService();
   // 선택된 성별 및 버튼 활성화 상태
@@ -217,6 +217,8 @@ class AuthController extends GetxController {
       Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
       log('${userInfoMap}');
       Auth userInfo = Auth.fromJson(userInfoMap);
+
+      log('회원 정보: ${userInfo}');
 
       // nickname.value = 'ㅇㅇㅇㅇ';
       nickname.value =
