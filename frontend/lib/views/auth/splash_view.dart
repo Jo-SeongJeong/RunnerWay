@@ -5,7 +5,7 @@ import 'package:frontend/controllers/location_controller.dart';
 import 'package:frontend/controllers/network_controller.dart';
 import 'package:frontend/widgets/modal/custom_modal.dart';
 import 'package:get/get.dart';
-import 'package:loading_indicator/loading_indicator.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SplashView extends StatelessWidget {
   final NetworkController networkController = Get.find<NetworkController>();
@@ -44,14 +44,13 @@ class SplashView extends StatelessWidget {
                   ),
                   // CircularProgressIndicator(),
                   SizedBox(height: 30),
-                  Container(
-                    width: 100,
-                    child: LoadingIndicator(
-                      indicatorType: Indicator.orbit,
-                      colors: [Color(0xff1C1516), Color(0xff1EA6FC)],
-                      strokeWidth: 1,
-                    ),
-                  )
+                  // Container(
+                  //   width: 100,
+                  LoadingAnimationWidget.staggeredDotsWave(
+                    color: Color(0xff1EA6FC),
+                    size: 60,
+                  ),
+                  // )
                 ],
               );
             }
