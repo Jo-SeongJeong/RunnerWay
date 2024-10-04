@@ -37,7 +37,7 @@ class LocationInfo extends StatelessWidget {
             Expanded(
               child: Text(
                 address,
-                style: TextStyle(fontSize: 16, color: Color(0xffA0A0A0)),
+                style: TextStyle(fontSize: 14, color: Color(0xffA0A0A0)),
               ),
             ),
             Text(
