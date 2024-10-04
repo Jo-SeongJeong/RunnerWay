@@ -5,9 +5,10 @@ import '../repositories/running_review_repository.dart';
 class RunningReviewService extends GetxService {
   final RunningReviewRepository _repository = RunningReviewRepository();
 
-  Future<void> submitReview(RunningReviewModel review) async {
+  Future<dynamic> submitReview(RunningReviewModel review) async {
     try {
-      await _repository.submitReview(review);
+      final response = await _repository.submitReview(review);
+      return response;
     } catch (e) {
       throw e;
     }

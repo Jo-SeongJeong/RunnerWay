@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/ranking.dart';
+import 'package:frontend/models/ranking_upload_model.dart';
+import 'package:frontend/models/running_record_model.dart';
 import 'package:frontend/repositories/running_repository.dart';
 import 'package:frontend/services/file_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -128,5 +132,65 @@ class RunningService extends GetxService {
       width: 5,
       points: points,
     );
+  }
+
+  // 대결을 위한 polyline 생성 메서드
+  Future<List<RunningRecord>> readSavedRunningRecordLog(int id) async {
+    final url = await _runningRepository.getRankingLog(id);
+
+    log('랭커 결과값: ${url}');
+    final response = await _runningRepository.getRankingCoursePoints(url);
+    log('log 결과값: ${response.last.toString()}');
+
+    return response;
+  }
+
+  // 나와의 대결을 위한 polyline 생성 메서드
+  Future<List<RunningRecord>> readSavedRunningLocalLog(int id) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$id.json');
+
+      if (await file.exists()) {
+        String contents = await file.readAsString();
+        List<dynamic> jsonList = jsonDecode(contents);
+
+        return jsonList.map<RunningRecord>((point) {
+          log('포인트: $point');
+          if (point['elapsedTime'] != null) {
+            return RunningRecord(
+              latitude: point['latitude'] as double,
+              longitude: point['longitude'] as double,
+              elapsedTime: Duration(seconds: point['elapsedTime'] as int),
+            );
+          } else {
+            return RunningRecord(
+              latitude: point['latitude'] ?? 0.0,
+              longitude: point['longitude'] ?? 0.0,
+              elapsedTime: Duration.zero,
+            );
+          }
+        }).toList();
+      } else {
+        log('File $id.json does not exist.');
+        return [];
+      }
+    } catch (e) {
+      log('Error reading saved path: $e');
+      return [];
+    }
+  }
+
+  // 종료 후 랭킹 등록 가능여부 판단 메서드
+  Future<bool> getRegistRanking(int courseId, String elapsedTime) async {
+    final response =
+        await _runningRepository.getRegistRanking(courseId, elapsedTime);
+    return response;
+  }
+
+  // 랭킹 등록
+  Future<bool> registRanking(RankingUploadModel model) async {
+    final response = await _runningRepository.registRanking(model);
+    return response;
   }
 }

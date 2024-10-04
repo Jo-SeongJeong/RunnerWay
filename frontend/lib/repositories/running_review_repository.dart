@@ -5,9 +5,10 @@ import '../providers/running_review_provider.dart';
 class RunningReviewRepository {
   final RunningReviewProvider _provider = RunningReviewProvider();
 
-  Future<void> submitReview(RunningReviewModel review) async {
+  Future<dynamic> submitReview(RunningReviewModel review) async {
     try {
-      await _provider.submitReview(review);
+      final response = await _provider.submitReview(review);
+      return response;
     } catch (e) {
       throw e;
     }
