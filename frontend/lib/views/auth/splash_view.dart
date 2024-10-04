@@ -5,6 +5,7 @@ import 'package:frontend/controllers/location_controller.dart';
 import 'package:frontend/controllers/network_controller.dart';
 import 'package:frontend/widgets/modal/custom_modal.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SplashView extends StatelessWidget {
   final NetworkController networkController = Get.find<NetworkController>();
@@ -17,56 +18,50 @@ class SplashView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Obx(() {
-          // 네트워크 상태 확인 중
-          if (networkController.isConnected.value == null) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                // CircularProgressIndicator(),
-                SizedBox(height: 20),
-                Text(
-                  '네트워크 상태를 확인하는 중',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-            );
-          }
-          if (locationController.hasPositioned.value == null) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/logo/logo.png',
-                  width: screenWidth / 2,
-                ),
-                // CircularProgressIndicator(),
-                SizedBox(height: 10),
-                Text(
-                  '위치 정보를 확인하는 중',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-            );
-          }
+        child: Obx(
+          () {
+            // 네트워크 상태 및 위치 정보 확인 중
+            if (networkController.isConnected.value == null ||
+                locationController.hasPositioned.value == null) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/logo/logo.png',
+                    width: screenWidth / 2,
+                  ),
+                  SizedBox(height: 30),
+                  LoadingAnimationWidget.staggeredDotsWave(
+                    color: Color(0xff1EA6FC),
+                    size: 60,
+                  ),
+                ],
+              );
+            }
 
-          // 네트워크 연결이 없을 때
-          else if (networkController.isConnected.value == false) {
-            log('연결 안됨');
-            Future.delayed(Duration.zero, () => _showNoNetworkModal(context));
-            return Container();
-          } else if (locationController.hasPositioned.value == false) {
-            log('위치 설정 꺼짐');
-            Future.delayed(Duration.zero, () => _showNoPositionModal(context));
-            return Container();
-          }
+            // 네트워크 연결이 없을 때
+            else if (networkController.isConnected.value == false) {
+              log('연결 안됨');
+              Future.delayed(Duration.zero, () => _showNoNetworkModal(context));
+              return Container();
+            } else if (locationController.hasPositioned.value == false) {
+              log('위치 설정 꺼짐');
+              Future.delayed(
+                  Duration.zero, () => _showNoPositionModal(context));
+              return Container();
+            }
 
-          // 네트워크 연결이 있을 때
-          else {
-            Future.delayed(Duration.zero, () => _navigateToMain());
-            return const SizedBox.shrink(); // 빈 화면 처리
-          }
-        }),
+            // 네트워크와 위치가 모두 true일 때만 이동
+            else if (networkController.isConnected.value == true &&
+                locationController.hasPositioned.value == true &&
+                Get.currentRoute == '/splash') {
+              Future.delayed(Duration.zero, () => _navigateToMain());
+              return const SizedBox.shrink();
+            } else {
+              return const SizedBox.shrink(); // 기본 반환값 추가
+            }
+          },
+        ),
       ),
     );
   }
