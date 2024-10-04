@@ -1,3 +1,4 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/location_controller.dart';
@@ -15,6 +16,10 @@ Future<void> main() async {
   KakaoSdk.init(
     nativeAppKey: Env.kakaoNativeAppKey,
   );
+
+  await FlutterSecureStorage()
+      .write(key: 'GOOGLE_MAP_API_KEY', value: Env.googleMapsApiKey);
+
   runApp(const MyApp());
 }
 
