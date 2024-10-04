@@ -8,12 +8,19 @@ class NetworkController {
   static final Connectivity _connectivity = Connectivity();
 
   var isConnected = Rxn<bool>();
+  var isLoading = false.obs;
 
   // 네트워크 상태를 처음에 한 번만 확인하는 함수
   Future<void> checkInitialConnectivity(BuildContext context) async {
-    final List<ConnectivityResult> result =
-        await _connectivity.checkConnectivity();
-    _handleConnectionStatus(result, context);
+    isLoading.value = true;
+    try {
+      final List<ConnectivityResult> result =
+          await _connectivity.checkConnectivity();
+      _handleConnectionStatus(result, context);
+    } catch (e) {
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   // log 출력
@@ -37,35 +44,4 @@ class NetworkController {
     AppSettings.openAppSettings(type: AppSettingsType.wireless);
     log('네트워크 설정 화면으로 이동했습니다.');
   }
-
-  // TODO : 네트워크 연결이 없는 경우 모달 표시
-  // static void _showNoConnectionModal(BuildContext context) {
-  //   // Navigator가 있는 context인지 확인
-  //   final navigator = Navigator.maybeOf(context);
-  //   if (navigator != null &&
-  //       Localizations.of<MaterialLocalizations>(
-  //               context, MaterialLocalizations) !=
-  //           null) {
-  //     showDialog(
-  //       context: context,
-  //       barrierDismissible: false,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: const Text('네트워크 연결 없음'),
-  //           content: const Text('네트워크 연결을 확인하세요.'),
-  //           actions: <Widget>[
-  //             ElevatedButton(
-  //               onPressed: () {
-  //                 Navigator.of(context).pop();
-  //               },
-  //               child: const Text('확인'),
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     );
-  //   } else {
-  //     log('Navigator 또는 MaterialLocalizations가 없습니다. 적절한 context인지 확인하세요.');
-  //   }
-  // }
 }
