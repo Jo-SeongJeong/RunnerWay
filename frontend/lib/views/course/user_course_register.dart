@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/user_course_controller.dart';
@@ -38,103 +40,107 @@ class RegisterView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Obx로 감싸서 실시간 반응 처리
-              Obx(() {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextField(
-                      controller: courseNameController,
-                      onChanged: (value) {
-                        userCourseController.isButtonActive.value =
-                            value.isNotEmpty;
-                      },
-                      decoration: InputDecoration(
-                          labelText: '코스 이름을 입력해주세요',
-                          border: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blueAccent))),
-                      cursorColor: Colors.blueAccent,
-                      cursorErrorColor: Colors.red,
-                    ),
-                    SizedBox(height: 20),
-                    Image.asset(
-                      'assets/images/review_default_image.png',
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(height: 28),
-                    Text(
-                      '러닝 리뷰',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+              Obx(
+                () {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        controller: courseNameController,
+                        onChanged: (value) {
+                          userCourseController.isButtonActive.value =
+                              value.isNotEmpty;
+                        },
+                        decoration: InputDecoration(
+                            labelText: '코스 이름을 입력해주세요',
+                            border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black)),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.blueAccent))),
+                        cursorColor: Colors.blueAccent,
+                        cursorErrorColor: Colors.red,
                       ),
-                    ),
-                    SizedBox(height: 16),
-                    TextField(
-                      controller: reviewController,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey.shade100,
-                          enabledBorder:
-                              OutlineInputBorder(borderSide: BorderSide.none)),
-                    ),
-                    SizedBox(height: 50),
-                    recordController.isLoading.isTrue
-                        ? Center(child: CircularProgressIndicator())
-                        : recordController.recordDetail.value == null
-                            ? Center(child: Text('No record data available'))
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '기록 상세',
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w700,
+                      SizedBox(height: 20),
+                      Image.asset(
+                        'assets/images/review_default_image.png',
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(height: 28),
+                      Text(
+                        '러닝 리뷰',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      TextField(
+                        controller: reviewController,
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.grey.shade100,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none)),
+                      ),
+                      SizedBox(height: 50),
+                      recordController.isLoading.isTrue
+                          ? Center(child: CircularProgressIndicator())
+                          : recordController.recordDetail.value == null
+                              ? Center(child: Text('No record data available'))
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '기록 상세',
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 24),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      ReviewRecordItem(
-                                        value: recordController.recordDetail
-                                            .value!.runningDistance,
-                                        label: '운동 거리',
+                                    SizedBox(height: 24),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        ReviewRecordItem(
+                                          value: recordController.recordDetail
+                                              .value!.runningDistance,
+                                          label: '운동 거리',
+                                        ),
+                                        ReviewRecordItem(
+                                          value: recordController
+                                              .recordDetail.value!.courseId,
+                                          label: '운동 시간',
+                                        ),
+                                        ReviewRecordItem(
+                                          value: recordController
+                                              .recordDetail.value!.courseId,
+                                          label: '러닝 경사도',
+                                        ),
+                                        ReviewRecordItem(
+                                          value: recordController.recordDetail
+                                                  .value!.calorie ??
+                                              0.0,
+                                          label: '소모 칼로리',
+                                        ),
+                                      ],
+                                    ),
+                                    AbsorbPointer(
+                                      absorbing: true,
+                                      child: SizedBox(
+                                        height: 300,
+                                        child: const ResultMap(),
                                       ),
-                                      ReviewRecordItem(
-                                        value: recordController
-                                            .recordDetail.value!.courseId,
-                                        label: '운동 시간',
-                                      ),
-                                      ReviewRecordItem(
-                                        value: recordController
-                                            .recordDetail.value!.courseId,
-                                        label: '러닝 경사도',
-                                      ),
-                                      ReviewRecordItem(
-                                        value: recordController
-                                                .recordDetail.value!.calorie ??
-                                            0.0,
-                                        label: '소모 칼로리',
-                                      ),
-                                    ],
-                                  ),
-                                  AbsorbPointer(
-                                    absorbing: true,
-                                    child: SizedBox(
-                                        height: 300, child: const ResultMap()),
-                                  ),
-                                ],
-                              ),
-                  ],
-                );
-              }),
+                                    ),
+                                  ],
+                                ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -149,7 +155,9 @@ class RegisterView extends StatelessWidget {
                       recordController.recordDetail.value != null
                   ? () async {
                       final record = recordController.recordDetail.value!;
+                      log('$record');
 
+                      // TODO 데이터 변경_ address lat lng 받아서 변경하기
                       userCourseController.addUserCourse({
                         'name': courseNameController.text,
                         'recordId': record.recordId ?? 0,

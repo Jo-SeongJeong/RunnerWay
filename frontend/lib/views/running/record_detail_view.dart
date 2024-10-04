@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/record_controller.dart';
@@ -8,14 +10,14 @@ import '../../widgets/review_record_item.dart';
 class RecordDetailView extends StatelessWidget {
   RecordDetailView({super.key});
 
-  final Map<String, dynamic> details = {
-    'title': "유성천 옆 산책로",
-    'address': "대전광역시 문화원로 80",
-    'time': DateTime(2024, 9, 6, 9, 24, 27),
-    'image': '',
-    'content':
-        "오늘 날씨 너무 선선해! 선선한 날씨에 뛰니까 10km도 뛸 수 있었당. 다음주에는 10km 1시간 내로 도전 !!!",
-  };
+  // final Map<String, dynamic> details = {
+  //   'title': "유성천 옆 산책로",
+  //   'address': "대전광역시 문화원로 80",
+  //   'time': DateTime(2024, 9, 6, 9, 24, 27),
+  //   'image': '',
+  //   'content':
+  //       "오늘 날씨 너무 선선해! 선선한 날씨에 뛰니까 10km도 뛸 수 있었당. 다음주에는 10km 1시간 내로 도전 !!!",
+  // };
 
   final List<num> records = const [10, 4016, 67, 480];
 
@@ -23,6 +25,8 @@ class RecordDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final RecordController recordController = Get.find<RecordController>();
+
+    log('parameter : ${Get.parameters['id']}');
     final int recordId = int.tryParse(Get.parameters['id'] ?? '0') ?? 0;
 
     // ID가 유효한 경우에만 fetchRecordDetail 호출
@@ -132,9 +136,7 @@ class RecordDetailView extends StatelessWidget {
                 width: MediaQuery.of(context).size.width - 20,
                 child: FloatingActionButton.extended(
                   onPressed: () {
-                    final record = recordController.recordDetail.value!;
-                    final recordId = record.recordId;
-                    print('$recordId');
+                    // final record = recordController.recordDetail.value!;
                     Get.toNamed('/register/$recordId');
                   },
                   label: Text(

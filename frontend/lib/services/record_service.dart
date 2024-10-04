@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:frontend/models/record_analyze.dart';
 import 'package:frontend/repositories/record_repository.dart';
 import 'package:frontend/models/record.dart';
+import 'package:get/get.dart';
 
 class RecordService {
   final RecordRepository _repository = RecordRepository();
@@ -55,7 +56,11 @@ class RecordService {
     try {
       final response = await _repository.fetchRecordDetail(recordId);
       log('service : ${response.toString()}');
-      return response;
+
+      int? id = int.tryParse(Get.parameters['id'] ?? '1');
+      Record updatedRecord = response.copyWith(recordId: id);
+
+      return updatedRecord;
     } catch (e) {
       log('service detail: ${e.toString()}');
       throw Exception('러닝 기록 상세 조회 중 오류 service: $e');

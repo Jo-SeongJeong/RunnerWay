@@ -59,6 +59,31 @@ class Record {
     };
   }
 
+  // copyWith 메서드
+  Record copyWith({
+    int? recordId,
+    int? courseId,
+    String? courseName,
+    double? runningDistance,
+    String? score,
+    double? averageFace,
+    String? startDate,
+    double? calorie,
+    String? url,
+  }) {
+    return Record(
+      recordId: recordId ?? this.recordId,
+      courseId: courseId ?? this.courseId,
+      courseName: courseName ?? this.courseName,
+      runningDistance: runningDistance ?? this.runningDistance,
+      score: score ?? this.score,
+      averageFace: averageFace ?? this.averageFace,
+      startDate: startDate ?? this.startDate,
+      calorie: calorie ?? this.calorie,
+      url: url ?? this.url,
+    );
+  }
+
   @override
   String toString() {
     return 'Record(recordId: $recordId, courseId: $courseId, courseName: $courseName, runningDistance: $runningDistance, score: $score, averageFace: $averageFace, startDate: $startDate, calorie: $calorie, url: $url)';
