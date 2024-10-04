@@ -119,7 +119,7 @@ class FreeCourseRunningView extends StatelessWidget {
                               onPressed: () async {
                                 await controller.endRunning2();
                                 await Future.delayed(Duration(seconds: 6));
-                                Get.back();
+                                Get.toNamed('/writereview');
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.black,
