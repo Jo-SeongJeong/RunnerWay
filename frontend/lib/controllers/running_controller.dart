@@ -47,6 +47,7 @@ class RunningController extends GetxController {
 
   LatLng? _departurePoint; // 시작지점 좌표를 저장하는 변수
   LatLng? _destinationPoint; // 도착지점 좌표를 저장하는 변수
+  LatLng startPoint = LatLng(0.0, 0.0); // 시작 위치
 
   RunningController() {
     _runningService = RunningService();
@@ -72,6 +73,8 @@ class RunningController extends GetxController {
       isCompetitionMode.value = true;
       dev.log('대결 상대: $varid');
     }
+
+    await setStartPoint();
 
     if (type == 'free') {
       dev.log('Free running mode initialized.');
@@ -136,14 +139,18 @@ class RunningController extends GetxController {
     }
   }
 
-  // TODO
-  // 시작 위치 판단해서 시작 못하게 하지만 3이라는 숫자 보고 뒤로가게 해 둠
-  Future<void> _checkIfStartLocationIsValid() async {
+  Future<void> setStartPoint() async {
     Position currentPosition = await _runningService.getCurrentPosition();
     LatLng currentLocation =
         LatLng(currentPosition.latitude, currentPosition.longitude);
+    startPoint = currentLocation;
 
-    dev.log('현재 위치: ${currentLocation}');
+    dev.log('현재 위치: ${startPoint}');
+  }
+
+  // TODO
+  // 시작 위치 판단해서 시작 못하게 하지만 3이라는 숫자 보고 뒤로가게 해 둠
+  Future<void> _checkIfStartLocationIsValid() async {
     dev.log('시작 위치: ${_departurePoint}');
 
     if (_departurePoint != null) {
@@ -151,7 +158,7 @@ class RunningController extends GetxController {
 
       // 현재 위치와 경로 시작점의 거리 계산
       double distanceToStart =
-          _runningService.calculateDistance(currentLocation, startLocation);
+          _runningService.calculateDistance(startPoint, startLocation);
       if (distanceToStart > 50.0) {
         // 50m 이내가 아닌 경우 사용자에게 알림 처리
         Get.back();
