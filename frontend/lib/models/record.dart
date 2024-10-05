@@ -1,32 +1,45 @@
 class Record {
-  final int recordId;
+  final int? recordId;
   final int courseId;
   final String courseName;
+  final String? comment;
   final double runningDistance;
   final String score;
   final double averageFace;
   final String? startDate;
+  final double? calorie;
+  final String? url;
 
   Record({
-    required this.recordId,
+    this.recordId,
     required this.courseId,
     required this.courseName,
+    this.comment,
     required this.runningDistance,
     required this.score,
     required this.averageFace,
     this.startDate,
+    this.calorie,
+    this.url,
   });
 
   // JSON 데이터를 기반으로 Record 객체 생성
   factory Record.fromJson(Map<String, dynamic> json) {
     return Record(
-      recordId: json['recordId'],
-      courseId: json['courseId'],
+      recordId: json['recordId'] != null ? json['recordId'] : 0,
+      courseId: json['courseId'] != null ? json['courseId'] : null,
       courseName: json['courseName'],
-      runningDistance: (json['runningDistance'] as num).toDouble(),
+      comment: json['comment'] as String?,
+      runningDistance: json['runningDistance'] != null
+          ? (json['runningDistance'] as num).toDouble()
+          : 0.0,
       score: json['score'],
       averageFace: (json['averageFace'] as num).toDouble(),
-      startDate: json['startDate'],
+      startDate: json['startDate'] as String?,
+      calorie: json['calorie'] != null
+          ? (json['calorie'] as num).toDouble()
+          : null, // null을 안전하게 처리
+      url: json['url'] as String?,
     );
   }
 
@@ -36,10 +49,45 @@ class Record {
       'recordId': recordId,
       'courseId': courseId,
       'courseName': courseName,
+      'comment': comment,
       'runningDistance': runningDistance,
       'score': score,
       'averageFace': averageFace,
       'startDate': startDate,
+      'calorie': calorie,
+      'url': url,
     };
+  }
+
+  // copyWith 메서드
+  Record copyWith({
+    int? recordId,
+    int? courseId,
+    String? courseName,
+    String? comment,
+    double? runningDistance,
+    String? score,
+    double? averageFace,
+    String? startDate,
+    double? calorie,
+    String? url,
+  }) {
+    return Record(
+      recordId: recordId ?? this.recordId,
+      courseId: courseId ?? this.courseId,
+      courseName: courseName ?? this.courseName,
+      comment: comment ?? this.comment,
+      runningDistance: runningDistance ?? this.runningDistance,
+      score: score ?? this.score,
+      averageFace: averageFace ?? this.averageFace,
+      startDate: startDate ?? this.startDate,
+      calorie: calorie ?? this.calorie,
+      url: url ?? this.url,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Record(recordId: $recordId, courseId: $courseId, courseName: $courseName, runningDistance: $runningDistance, score: $score, averageFace: $averageFace, startDate: $startDate, calorie: $calorie, url: $url)';
   }
 }

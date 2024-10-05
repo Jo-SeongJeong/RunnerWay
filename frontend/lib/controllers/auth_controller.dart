@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/auth/signup_view.dart';
@@ -15,10 +16,13 @@ class AuthController extends GetxController {
   var birthDate = ''.obs;
   var height = ''.obs;
   var weight = ''.obs;
-  final _storage = FlutterSecureStorage(); // 토큰 저장
+  final _storage = FlutterSecureStorage();
+
+  TextEditingController textEditingController = TextEditingController();
+
   // 혹시 몰라 넣은 토큰
   var newToken =
-      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
+      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUwMDYsImVtYWlsIjoidG1keGtyNUBoYW5tYWlsLm5ldCIsIm5pY2tuYW1lIjoi44WH44WH44WH44WHIiwiaWF0IjoxNzI3NjcxOTg0LCJleHAiOjE3MzEyNzE5ODR9.VhgRs0aH3h-_I1mhWhkih7cFNM1ebCDHtlYh112XK3Q';
 
   final AuthService _authService = AuthService();
   // 선택된 성별 및 버튼 활성화 상태
@@ -80,6 +84,7 @@ class AuthController extends GetxController {
     await _storage.write(key: 'ID', value: decodedToken['id'].toString());
     await _storage.write(key: 'EMAIL', value: decodedToken['email']);
     await _storage.write(key: 'NICKNAME', value: decodedToken['nickname']);
+    await _storage.write(key: 'ACCESS_TOKEN', value: '${newToken}');
 
     id.value = await _storage.read(key: 'ID') ?? 'No ID found';
     email.value = await _storage.read(key: 'EMAIL') ?? 'No Email found';
@@ -209,10 +214,11 @@ class AuthController extends GetxController {
     // Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
     try {
       // TODO
-      // 서버에서 Map<String, dynamic> 데이터를 받음
       Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
       log('${userInfoMap}');
       Auth userInfo = Auth.fromJson(userInfoMap);
+
+      log('회원 정보: ${userInfo}');
 
       // nickname.value = 'ㅇㅇㅇㅇ';
       nickname.value =
@@ -231,25 +237,55 @@ class AuthController extends GetxController {
   // 로그아웃
   Future<void> logout() async {
     try {
+      // 토큰 삭제 시도
       await _storage.delete(key: 'ACCESS_TOKEN');
-      isLoggedIn.value = false;
-      Get.toNamed('/login');
+      // 삭제 후 토큰을 다시 읽어봄
+      String? deletedToken = await _storage.read(key: 'ACCESS_TOKEN');
+
+      if (deletedToken == null) {
+        log('토큰 삭제 성공');
+        isLoggedIn.value = false;
+        Get.offAllNamed('/login'); // 모든 뷰를 스택에서 제거하고 로그인 페이지로 이동
+        Get.snackbar('로그아웃 성공', '성공적으로 로그아웃 되었습니다.');
+      } else {
+        throw Exception('토큰이 여전히 존재합니다.');
+      }
     } catch (e) {
       log('로그아웃 실패 controller: ${e}');
-      Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
+      Get.snackbar('로그아웃 실패', '로그아웃 중 문제가 발생했습니다.');
     }
   }
 
   // 회원탈퇴
   Future<void> remove() async {
     try {
-      // TODO
-      // final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
-      // final response = await _authService.removeMember(accessToken);
+      // TODO 회원탈퇴하세요
       Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
     } catch (e) {
       log('회원탈퇴 실패 controller: ${e}');
       Get.snackbar('회원탈퇴 실패 ', '회원탈퇴 중 문제가 발생했습니다.');
+    }
+  }
+
+  // 정보수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      // 기존 멤버 정보 가져오기
+      log('update info : $updateInfo');
+
+      String? memberId = await _storage.read(key: 'ID');
+      if (memberId == null) {
+        throw Exception('memberId를 찾을 수 없습니다.');
+      }
+      updateInfo['memberImage'] = {
+        'memberId': int.parse(memberId),
+        'url': 'string', // TODO 실제 이미지 URL을 넣어야 함
+        'path': 'string', // TODO 이미지 경로 입력
+      };
+      final response = await _authService.patchUserInfo(updateInfo);
+      log('정보수정controller');
+    } catch (e) {
+      log('회원수정실패:$e');
     }
   }
 }

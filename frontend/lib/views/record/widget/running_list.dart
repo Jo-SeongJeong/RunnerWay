@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 class RunningCard extends StatelessWidget {
   final int courseId;
+  final int? recordId;
   final String courseName;
   final double runningDistance;
   final String score;
@@ -11,6 +12,7 @@ class RunningCard extends StatelessWidget {
   const RunningCard(
       {super.key,
       required this.courseId,
+      this.recordId,
       required this.courseName,
       required this.runningDistance,
       required this.score,
@@ -21,7 +23,7 @@ class RunningCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // 러닝 상세 기록 페이지 이동
-        Get.toNamed('/record/detail/${courseId}');
+        Get.toNamed('/record/detail/$recordId');
       },
       child: Card(
         color: Colors.white,

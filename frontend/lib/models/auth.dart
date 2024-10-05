@@ -19,9 +19,36 @@ class Auth {
     required this.joinType,
   });
 
+  @override
+  String toString() {
+    return 'Auth(email: $email, nickname: $nickname, birth: $birth, gender: $gender, height: $height, weight: $weight, memberImage: $memberImage, joinType: $joinType)';
+  }
+
+  // copyWith 메서드 추가
+  Auth copyWith({
+    String? email,
+    String? nickname,
+    DateTime? birth,
+    int? gender,
+    int? height,
+    int? weight,
+    MemberImage? memberImage,
+    String? joinType,
+  }) {
+    return Auth(
+      email: email ?? this.email,
+      nickname: nickname ?? this.nickname,
+      birth: birth ?? this.birth,
+      gender: gender ?? this.gender,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      memberImage: memberImage ?? this.memberImage,
+      joinType: joinType ?? this.joinType,
+    );
+  }
+
   factory Auth.fromJson(Map<String, dynamic> json) {
     return Auth(
-      // TODO
       email: json['email'] ?? '',
       nickname: json['nickname'] ?? '',
       birth: json['birth'] != null ? DateTime.parse(json['birth']) : null,
@@ -77,5 +104,10 @@ class MemberImage {
       'url': url,
       'path': path,
     };
+  }
+
+  @override
+  String toString() {
+    return 'MemberImage(memberId: $memberId, url: $url, path: $path)';
   }
 }

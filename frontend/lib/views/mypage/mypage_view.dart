@@ -114,34 +114,34 @@ class MypageView extends StatelessWidget {
                         '${_authController.birthDate.value}',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
-                  SizedBox(height: 10),
+                  SizedBox(height: 15),
                   Obx(() => Text(
-                        '${_authController.height.value}',
+                        '${_authController.height.value} cm',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
-                  SizedBox(height: 10),
+                  SizedBox(height: 15),
                   Obx(() => Text(
-                        '${_authController.weight.value}',
+                        '${_authController.weight.value} kg',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
-                  SizedBox(height: 10),
+                  SizedBox(height: 15),
                   Obx(() => Text(
                         '${_authController.selectedGender.value}',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
@@ -173,8 +173,6 @@ class MypageView extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w500),
                     ))),
-
-            // 하단에 유저 코스 등록 테스트 버튼 추가
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -205,7 +203,6 @@ class MypageView extends StatelessWidget {
                 child: Text('유저 코스 등록 테스트'),
               ),
             ),
-
             ElevatedButton(
               onPressed: () {
                 Navigator.push(

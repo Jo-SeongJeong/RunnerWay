@@ -21,8 +21,6 @@ class AuthService {
     try {
       final response =
           await _dioClient.dio.post('members/sign-up', data: authData.toJson());
-
-      // final accessToken = await _repository.signupKakao(authData);
       log('회원가입 성공 service: ${response.data}');
       return response.data['accessToken'];
     } catch (e) {
@@ -74,8 +72,8 @@ class AuthService {
     try {
       log('service사용자정보: ${_repository.getUserInfo()}');
       // return await _repository.getUserInfo();
-      final response = await _dioClient.dio.get('members');
-      return response.data;
+      final response = await _repository.getUserInfo();
+      return response;
     } catch (e) {
       throw Exception('사용자 정보 불러오는 중 발생: $e');
     }
@@ -89,6 +87,16 @@ class AuthService {
     } catch (e) {
       log('회원탈퇴 중 오류 발생: $e');
       throw e;
+    }
+  }
+
+  // 회원 정보 수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      final response = await _repository.patchUserInfo(updateInfo);
+      log('회원정보수정service: ${response.toString()}');
+    } catch (e) {
+      throw Exception('회원정보수정오류service: $e');
     }
   }
 }
