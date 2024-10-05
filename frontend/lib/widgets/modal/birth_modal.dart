@@ -27,7 +27,7 @@ class _BirthModalState extends State<BirthModal> {
   void initState() {
     super.initState();
     // 초기 힌트 텍스트를 controller에 설정합니다.
-    _controller.text = widget.hintText;
+    // _controller.text = widget.hintText;
   }
 
   void _selectDate(BuildContext context) async {

@@ -148,7 +148,7 @@ class SignUpView extends StatelessWidget {
                   _authController.birthDate.value = selectedDate;
                 },
                 // TODO
-                hintText: '',
+                hintText: 'YYYY-MM-DD',
               ),
               // 키 몸무게 input
               Row(
