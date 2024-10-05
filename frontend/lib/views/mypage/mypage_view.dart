@@ -1,23 +1,20 @@
 import 'package:frontend/controllers/auth_controller.dart';
 import 'package:frontend/controllers/jwt_controller.dart';
-import 'package:frontend/controllers/user_course_controller.dart'; // 추가
+import 'package:frontend/controllers/user_course_controller.dart';
+import 'package:frontend/views/auth/signup_view.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/views/mypage/modify_info_view.dart';
 import 'package:frontend/widgets/line.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/modal/custom_modal.dart';
-import 'package:frontend/models/course.dart'; // 추가
-import 'package:frontend/models/course_image.dart';
-
-import '../auth/login_view.dart';
 
 class MypageView extends StatelessWidget {
   MypageView({Key? key}) : super(key: key);
   final AuthController _authController = Get.put(AuthController());
   final JwtController jwtController = Get.put(JwtController());
   final UserCourseController _userCourseController =
-      Get.put(UserCourseController()); // 추가
+      Get.put(UserCourseController());
 
   @override
   Widget build(BuildContext context) {
@@ -206,14 +203,17 @@ class MypageView extends StatelessWidget {
               ),
             ),
 
+            // 회원가입 페이지 이동 임시 버튼
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginView()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          SignUpView(email: 'tmdxkr5@hanmail.com')),
                 );
               },
-              child: const Text('Go to Login Page'),
+              child: const Text('Go to signup Page'),
             ),
           ],
         ),

@@ -19,9 +19,32 @@ class Auth {
     required this.joinType,
   });
 
+  // copyWith 메서드 추가
+  Auth copyWith({
+    String? email,
+    String? nickname,
+    DateTime? birth,
+    int? gender,
+    int? height,
+    int? weight,
+    MemberImage? memberImage,
+    String? joinType,
+  }) {
+    return Auth(
+      email: email ?? this.email,
+      nickname: nickname ?? this.nickname,
+      birth: birth ?? this.birth,
+      gender: gender ?? this.gender,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      memberImage: memberImage ?? this.memberImage,
+      joinType: joinType ?? this.joinType,
+    );
+  }
+
+  // JSON 변환 및 파싱은 그대로 유지
   factory Auth.fromJson(Map<String, dynamic> json) {
     return Auth(
-      // TODO
       email: json['email'] ?? '',
       nickname: json['nickname'] ?? '',
       birth: json['birth'] != null ? DateTime.parse(json['birth']) : null,
@@ -47,7 +70,6 @@ class Auth {
       'weight': weight,
       'joinType': joinType,
       'memberImage': memberImage?.toJson(),
-      // 'memberImage': memberImage != null ? memberImage!.toJson() : null,
     };
   }
 }
@@ -63,6 +85,7 @@ class MemberImage {
     this.path,
   });
 
+  // JSON 변환을 위한 fromJson 메서드
   factory MemberImage.fromJson(Map<String, dynamic> json) {
     return MemberImage(
       memberId: json['memberId'],
@@ -71,6 +94,7 @@ class MemberImage {
     );
   }
 
+  // JSON으로 변환하기 위한 toJson 메서드
   Map<String, dynamic> toJson() {
     return {
       'memberId': memberId,

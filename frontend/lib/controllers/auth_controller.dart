@@ -6,6 +6,9 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:get/get.dart';
 import '../models/auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:frontend/utils/s3_image_upload.dart'; // S3 업로드 기능 사용
 
 class AuthController extends GetxController {
   var id = ''.obs;
@@ -15,6 +18,9 @@ class AuthController extends GetxController {
   var birthDate = ''.obs;
   var height = ''.obs;
   var weight = ''.obs;
+  final Rx<File?> selectedImage = Rx<File?>(null);
+  final Rx<MemberImage?> memberImage = Rx<MemberImage?>(null);
+  final S3ImageUpload s3ImageUpload = S3ImageUpload();
   final _storage = FlutterSecureStorage(); // 토큰 저장
   // 혹시 몰라 넣은 토큰
   var newToken =
@@ -87,7 +93,7 @@ class AuthController extends GetxController {
         await _storage.read(key: 'NICKNAME') ?? 'No Nickname found';
   }
 
-  // 카카오 사용자 정보 가져오기
+  // 카카오 사용자 정보 확인
   Future<void> requestUserInfo() async {
     try {
       User user = await UserApi.instance.me();
@@ -130,18 +136,50 @@ class AuthController extends GetxController {
     }
   }
 
-  // 사용자 정보 입력
+  // 이미지 선택 함수
+  Future<void> pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      selectedImage.value = File(pickedFile.path);
+
+      // S3에 이미지 업로드 및 URL 반환
+      String? uploadedImageUrl = await s3ImageUpload.uploadImage2(
+        selectedImage.value!,
+        "uploads/profile_images",
+      );
+
+      if (uploadedImageUrl != null) {
+        // 프로필 이미지 저장
+        memberImage.value = MemberImage(
+          memberId: null,
+          url: uploadedImageUrl,
+          path: selectedImage.value!.path,
+        );
+        Get.snackbar('성공', '이미지가 성공적으로 업로드되었습니다.');
+      } else {
+        Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
+      }
+    }
+  }
+
+// 회원가입 성공 여부를 상태로 저장하는 Observable 변수 추가
+  var signUpSuccess = false.obs;
+
+  // 회원가입
   Future<void> signup(Auth authData) async {
     try {
       final accessToken = await _authService.signupKakao(authData);
       if (accessToken != null) {
         log('회원가입 성공 controller');
         await _saveToken(accessToken);
+        signUpSuccess.value = true; // 성공 상태 업데이트
         Get.snackbar('성공', '선호태그 입력 페이지로 이동합니다.');
       } else {
         Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
       }
     } catch (e) {
+      signUpSuccess.value = false; // 실패 상태 업데이트
       log('회원가입 중 오류 발생 controller: $e');
       Get.snackbar('오류', '회원가입에 실패했습니다.');
     }
