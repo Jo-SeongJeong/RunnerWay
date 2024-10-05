@@ -28,21 +28,20 @@ class Record {
   // JSON 데이터를 기반으로 Record 객체 생성
   factory Record.fromJson(Map<String, dynamic> json) {
     return Record(
-      recordId: json['recordId'] != null ? json['recordId'] : 0,
-      courseId: json['courseId'] != null ? json['courseId'] : null,
-      courseName: json['courseName'],
+      recordId: json['recordId'] as int?,
+      courseId: json['courseId'] as int,
+      courseName: json['courseName'] as String,
       comment: json['comment'] as String?,
       runningDistance: json['runningDistance'] != null
           ? (json['runningDistance'] as num).toDouble()
           : 0.0,
-      score: json['score'],
+      score: json['score'] as String,
       averageFace: (json['averageFace'] as num).toDouble(),
       startDate: json['startDate'] as String?,
-      calorie: json['calorie'] != null
-          ? (json['calorie'] as num).toDouble()
-          : null, // null을 안전하게 처리
+      calorie:
+          json['calorie'] != null ? (json['calorie'] as num).toDouble() : null,
       url: json['url'] as String?,
-      address: json['address'] as String?, // address 추가
+      address: json['address'] as String,
     );
   }
 
@@ -59,7 +58,7 @@ class Record {
       'startDate': startDate,
       'calorie': calorie,
       'url': url,
-      'address': address, // address 추가
+      'address': address,
     };
   }
 
@@ -75,7 +74,7 @@ class Record {
     String? startDate,
     double? calorie,
     String? url,
-    String? address, // address 추가
+    String? address,
   }) {
     return Record(
       recordId: recordId ?? this.recordId,
@@ -88,7 +87,7 @@ class Record {
       startDate: startDate ?? this.startDate,
       calorie: calorie ?? this.calorie,
       url: url ?? this.url,
-      address: address ?? this.address, // address 초기화
+      address: address ?? this.address,
     );
   }
 

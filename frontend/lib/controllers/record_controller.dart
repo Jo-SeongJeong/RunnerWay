@@ -4,14 +4,16 @@ import 'package:frontend/models/record_analyze.dart';
 import 'package:get/get.dart';
 import 'package:frontend/models/record.dart';
 import 'package:frontend/services/record_service.dart';
-// import 'package:frontend/services/course_service.dart';
+import 'package:frontend/services/course_service.dart';
+import 'package:frontend/models/course.dart';
 
 class RecordController extends GetxController {
   final RecordService _recordService = RecordService();
-  // final CourseService _courseService = CourseService();
+  final CourseService _courseService = CourseService();
   var courseName = ''.obs;
   var startDate = ''.obs;
   var comment = ''.obs;
+  var courseDetail = Rxn<Course>();
 
   var dayRecords = <Record>[].obs;
   var monthRecords = Rxn<RecordAnalyze>();
@@ -25,7 +27,7 @@ class RecordController extends GetxController {
   var recordDetail = Rxn<Record>();
 
   var isLoading = false.obs;
-  var courseId = 0.obs; // 0이면 자유코스
+  var courseId = 0.obs;
 
   var selectedDate = Rxn<DateTime>(); // 선택된 날짜
   var focusedDate = Rxn<DateTime>(); // 포커스된 날짜
@@ -120,7 +122,9 @@ class RecordController extends GetxController {
       log('record controller: $detail');
       if (detail != null) {
         recordDetail.value = detail;
-        log('Fetched Record Address: ${detail.address}');
+        var course =
+            await _courseService.getOfficialCourseDetail(detail.courseId);
+        courseDetail.value = course;
       }
     } catch (e) {
       log('상세정보조회실패: $e');
