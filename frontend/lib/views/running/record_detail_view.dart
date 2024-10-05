@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/models/record.dart';
 import 'package:get/get.dart';
@@ -21,12 +20,7 @@ class RecordDetailView extends StatelessWidget {
     log('parameter : ${Get.parameters['id']}');
     final int recordId = int.tryParse(Get.parameters['id'] ?? '0') ?? 0;
 
-    // ID가 유효한 경우에만 fetchRecordDetail 호출
-    if (recordId != 0) {
-      recordController.fetchRecordDetail(recordId);
-    } else {
-      print("Error: Record ID is 0");
-    }
+    recordController.fetchRecordDetail(recordId);
 
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +38,7 @@ class RecordDetailView extends StatelessWidget {
           }
 
           if (recordController.recordDetail.value == null) {
-            return Center(child: Text('No record data available'));
+            return Center(child: Text('기록없음'));
           }
 
           final record = recordController.recordDetail.value!;
@@ -64,20 +58,28 @@ class RecordDetailView extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 28),
-                Text(
-                  '러닝 리뷰',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      '러닝 리뷰',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        size: 20,
+                      ),
+                      onPressed: () {
+                        _showEditReviewModal(context, record);
+                      },
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    _showEditReviewModal(context, record);
-                  },
-                ),
-                SizedBox(height: 16),
+                SizedBox(height: 5),
                 Text(
                   (record.comment?.isNotEmpty ?? false)
                       ? record.comment!
@@ -158,70 +160,101 @@ class RecordDetailView extends StatelessWidget {
   void _showEditReviewModal(BuildContext context, Record record) {
     final RecordController recordController = Get.find<RecordController>();
     TextEditingController _reviewController = TextEditingController(
-      text: record.comment ?? '', // 기존 리뷰를 TextField에 미리 넣음
+      text: record.comment ?? '',
     );
+
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: true, // 키보드가 올라올 때 스크롤되도록 설정
       builder: (BuildContext context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom:
-                MediaQuery.of(context).viewInsets.bottom, // 키보드 높이만큼 padding 추가
-            left: 16.0,
-            right: 16.0,
-            top: 16.0,
+            bottom: MediaQuery.of(context).viewInsets.bottom, // 키보드와 충돌 방지
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '리뷰 수정',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+          child: SizedBox(
+            height: 250, // TODO 모달 높이 _ 반응형으로 추후 변경
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white, // 배경색
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
                 ),
               ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _reviewController,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  hintText: '리뷰를 입력하세요',
-                  border: OutlineInputBorder(),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10, right: 30, left: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(padding: EdgeInsets.all(15)),
+                    Text(
+                      '러닝 리뷰',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: TextField(
+                          controller: _reviewController,
+                          maxLines: 5, // 최대 5줄까지 입력 가능하게 둠
+                          maxLength: 200,
+                          style: TextStyle(
+                            color: Color(0xFF72777A),
+                          ),
+                          decoration: InputDecoration(
+                            hintText: '러너웨이와 함께 달리기를 마치셨네요.\n오늘을 기억하며 기록해보세요.',
+                            hintStyle: TextStyle(
+                                color: Color(0xFF72777A),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Color(0xFFA0A0A0),
+                          ),
+                          child: Text('취소'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            String updatedComment = _reviewController.text;
+                            if (updatedComment.isNotEmpty) {
+                              Record updatedRecord =
+                                  record.copyWith(comment: updatedComment);
+                              Map<String, dynamic> updateData = {
+                                'recordId': updatedRecord.recordId,
+                                'comment': updatedComment,
+                              };
+                              recordController.patchRecord(updateData);
+                              Get.back();
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                              foregroundColor: Color(0xFF1EA6FC)),
+                          child: Text('저장'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: Text('취소'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      String updatedComment = _reviewController.text;
-                      if (updatedComment.isNotEmpty) {
-                        Record updatedRecord =
-                            record.copyWith(comment: updatedComment);
-                        Map<String, dynamic> updateData = {
-                          'recordId': updatedRecord.recordId, // recordId
-                          'comment': updatedComment,
-                        };
-                        recordController.patchRecord(updateData);
-                        Get.back(); // 모달 닫기
-                        Get.snackbar('성공', '리뷰가 수정되었습니다.');
-                      }
-                    },
-                    child: Text('저장'),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
         );
       },
