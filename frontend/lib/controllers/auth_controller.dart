@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/auth/signup_view.dart';
@@ -22,6 +23,9 @@ class AuthController extends GetxController {
   final Rx<MemberImage?> memberImage = Rx<MemberImage?>(null);
   final S3ImageUpload s3ImageUpload = S3ImageUpload();
   final _storage = FlutterSecureStorage(); // 토큰 저장
+
+  TextEditingController textEditingController = TextEditingController();
+
   // 혹시 몰라 넣은 토큰
   var newToken =
       'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
@@ -93,7 +97,7 @@ class AuthController extends GetxController {
         await _storage.read(key: 'NICKNAME') ?? 'No Nickname found';
   }
 
-  // 카카오 사용자 정보 확인
+  // 카카오 사용자 정보 가져오기
   Future<void> requestUserInfo() async {
     try {
       User user = await UserApi.instance.me();
@@ -156,7 +160,6 @@ class AuthController extends GetxController {
           url: uploadedImageUrl,
           path: selectedImage.value!.path,
         );
-        Get.snackbar('성공', '이미지가 성공적으로 업로드되었습니다.');
       } else {
         Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
       }
@@ -252,6 +255,8 @@ class AuthController extends GetxController {
       log('${userInfoMap}');
       Auth userInfo = Auth.fromJson(userInfoMap);
 
+      log('회원 정보: ${userInfo}');
+
       // nickname.value = 'ㅇㅇㅇㅇ';
       nickname.value =
           await _storage.read(key: 'NICKNAME') ?? userInfo.nickname;
@@ -288,6 +293,28 @@ class AuthController extends GetxController {
     } catch (e) {
       log('회원탈퇴 실패 controller: ${e}');
       Get.snackbar('회원탈퇴 실패 ', '회원탈퇴 중 문제가 발생했습니다.');
+    }
+  }
+
+  // 정보수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      // 기존 멤버 정보 가져오기
+      log('update info : $updateInfo');
+
+      String? memberId = await _storage.read(key: 'ID');
+      if (memberId == null) {
+        throw Exception('memberId를 찾을 수 없습니다.');
+      }
+      updateInfo['memberImage'] = {
+        'memberId': int.parse(memberId),
+        'url': 'string', // TODO 실제 이미지 URL을 넣어야 함
+        'path': 'string', // TODO 이미지 경로 입력
+      };
+      final response = await _authService.patchUserInfo(updateInfo);
+      log('정보수정controller');
+    } catch (e) {
+      log('회원수정실패:$e');
     }
   }
 }

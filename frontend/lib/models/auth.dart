@@ -45,6 +45,7 @@ class Auth {
   // JSON 변환 및 파싱은 그대로 유지
   factory Auth.fromJson(Map<String, dynamic> json) {
     return Auth(
+      // TODO
       email: json['email'] ?? '',
       nickname: json['nickname'] ?? '',
       birth: json['birth'] != null ? DateTime.parse(json['birth']) : null,
@@ -70,6 +71,7 @@ class Auth {
       'weight': weight,
       'joinType': joinType,
       'memberImage': memberImage?.toJson(),
+      // 'memberImage': memberImage != null ? memberImage!.toJson() : null,
     };
   }
 }

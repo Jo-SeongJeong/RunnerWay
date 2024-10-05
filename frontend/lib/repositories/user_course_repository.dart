@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:frontend/models/course.dart';
 import 'package:frontend/providers/user_course_provider.dart';
 
 class UserCourseRepository {
