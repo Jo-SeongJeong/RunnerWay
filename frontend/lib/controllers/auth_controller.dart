@@ -209,31 +209,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // 사용자 정보 불러오기
-  Future<void> fetchUserInfo() async {
-    // Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
-    try {
-      // TODO
-      Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
-      log('${userInfoMap}');
-      Auth userInfo = Auth.fromJson(userInfoMap);
-
-      log('회원 정보: ${userInfo}');
-
-      // nickname.value = 'ㅇㅇㅇㅇ';
-      nickname.value =
-          await _storage.read(key: 'NICKNAME') ?? userInfo.nickname;
-      birthDate.value = userInfo.birth?.toString() ?? '';
-      height.value = userInfo.height?.toString() ?? '';
-      weight.value = userInfo.weight?.toString() ?? '';
-      selectedGender.value = userInfo.gender == 1 ? 'man' : 'woman';
-
-      log('회원 정보 불러오기 성공: $userInfoMap');
-    } catch (e) {
-      log('회원 정보 불러오기controller: $e');
-    }
-  }
-
   // 로그아웃
   Future<void> logout() async {
     try {
@@ -264,6 +239,31 @@ class AuthController extends GetxController {
     } catch (e) {
       log('회원탈퇴 실패 controller: ${e}');
       Get.snackbar('회원탈퇴 실패 ', '회원탈퇴 중 문제가 발생했습니다.');
+    }
+  }
+
+  // 사용자 정보 불러오기
+  Future<void> fetchUserInfo() async {
+    // Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
+    try {
+      // TODO
+      Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
+      log('${userInfoMap}');
+      Auth userInfo = Auth.fromJson(userInfoMap);
+
+      log('회원 정보: ${userInfo}');
+
+      // nickname.value = 'ㅇㅇㅇㅇ';
+      nickname.value =
+          await _storage.read(key: 'NICKNAME') ?? userInfo.nickname;
+      birthDate.value = userInfo.birth?.toString() ?? '';
+      height.value = userInfo.height?.toString() ?? '';
+      weight.value = userInfo.weight?.toString() ?? '';
+      selectedGender.value = userInfo.gender == 1 ? 'man' : 'woman';
+
+      log('회원 정보 불러오기 성공: $userInfoMap');
+    } catch (e) {
+      log('회원 정보 불러오기controller: $e');
     }
   }
 

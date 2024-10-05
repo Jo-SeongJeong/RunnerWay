@@ -43,6 +43,7 @@ class MypageView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
+            // 회원 이미지 불러오기
             Center(
               child: Container(
                 height: 119,
