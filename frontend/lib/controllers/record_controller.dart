@@ -119,7 +119,8 @@ class RecordController extends GetxController {
       var detail = await _recordService.fetchRecordDetail(recordId);
       log('record controller: $detail');
       if (detail != null) {
-        recordDetail.value = detail; // 이 부분을 활성화하여 데이터를 설정
+        recordDetail.value = detail;
+        log('Fetched Record Address: ${detail.address}');
       }
     } catch (e) {
       log('상세정보조회실패: $e');
@@ -138,5 +139,5 @@ class RecordController extends GetxController {
     }
   }
 
-// 러닝 사진 변경
+// TODO 러닝 사진 변경
 }

@@ -9,6 +9,7 @@ class Record {
   final String? startDate;
   final double? calorie;
   final String? url;
+  final String? address;
 
   Record({
     this.recordId,
@@ -21,6 +22,7 @@ class Record {
     this.startDate,
     this.calorie,
     this.url,
+    this.address,
   });
 
   // JSON 데이터를 기반으로 Record 객체 생성
@@ -40,6 +42,7 @@ class Record {
           ? (json['calorie'] as num).toDouble()
           : null, // null을 안전하게 처리
       url: json['url'] as String?,
+      address: json['address'] as String?, // address 추가
     );
   }
 
@@ -56,6 +59,7 @@ class Record {
       'startDate': startDate,
       'calorie': calorie,
       'url': url,
+      'address': address, // address 추가
     };
   }
 
@@ -71,6 +75,7 @@ class Record {
     String? startDate,
     double? calorie,
     String? url,
+    String? address, // address 추가
   }) {
     return Record(
       recordId: recordId ?? this.recordId,
@@ -83,11 +88,12 @@ class Record {
       startDate: startDate ?? this.startDate,
       calorie: calorie ?? this.calorie,
       url: url ?? this.url,
+      address: address ?? this.address, // address 초기화
     );
   }
 
   @override
   String toString() {
-    return 'Record(recordId: $recordId, courseId: $courseId, courseName: $courseName, runningDistance: $runningDistance, score: $score, averageFace: $averageFace, startDate: $startDate, calorie: $calorie, url: $url)';
+    return 'Record(recordId: $recordId, courseId: $courseId, courseName: $courseName, runningDistance: $runningDistance, score: $score, averageFace: $averageFace, startDate: $startDate, calorie: $calorie, url: $url, address: $address)';
   }
 }

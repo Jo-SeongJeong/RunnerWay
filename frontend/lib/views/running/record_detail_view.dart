@@ -49,7 +49,9 @@ class RecordDetailView extends StatelessWidget {
               children: [
                 LocationInfo(
                   title: record.courseName,
-                  address: '',
+                  address: (record.address == null || record.address!.isEmpty)
+                      ? '주소 정보 없음'
+                      : record.address!,
                   time: DateTime.parse(record.startDate ?? ''),
                 ),
                 SizedBox(height: 20),
