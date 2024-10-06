@@ -15,8 +15,7 @@ class AuthRepository {
   // 회원가입 처리 (access token 반환)
   Future<String> signupKakao(Auth authData) async {
     try {
-      final response = await _provider.fetchSignupkakao(authData);
-      // final accessToken = response['accessToken'];
+      final response = await _provider.fetchSignupKakao(authData);
       log('회원가입 성공 repo: $response');
       return response['accessToken'];
     } catch (e) {
