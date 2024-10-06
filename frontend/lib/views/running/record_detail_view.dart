@@ -181,7 +181,7 @@ class RecordDetailView extends StatelessWidget {
                 ),
                 AbsorbPointer(
                   absorbing: true,
-                  child: SizedBox(height: 300, child: const ResultMap()),
+                  // child: SizedBox(height: 300, child: const ResultMap()),
                 ),
                 SizedBox(height: 80),
               ],
