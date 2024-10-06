@@ -123,62 +123,108 @@ class MypageView extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 7),
-
-            // TODO 더 깔끔하게 바꾸기
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 58),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(() {
-                    // 생년월일을 DateTime으로 변환 후 포맷팅
-                    String formattedBirthDate =
-                        _authController.birthDate.value != null
+            SizedBox(height: 17),
+            Row(
+              children: [
+                // 왼쪽: 생년월일, 키, 몸무게, 성별
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '생년월일',
+                        style: const TextStyle(
+                          color: Color(0xFFA0A0A0),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '키',
+                        style: const TextStyle(
+                          color: Color(0xFFA0A0A0),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '몸무게',
+                        style: const TextStyle(
+                          color: Color(0xFFA0A0A0),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '성별',
+                        style: const TextStyle(
+                          color: Color(0xFFA0A0A0),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 100),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Obx(() {
+                        String formattedBirthDate = _authController
+                                    .birthDate.value !=
+                                null
                             ? DateTime.parse(_authController.birthDate.value)
                                 .toLocal()
                                 .toString()
                                 .split(' ')[0]
-                            : ''; // null 체크 후 포맷팅
+                            : '';
 
-                    return Text(
-                      formattedBirthDate, // 포맷된 생년월일을 표시
-                      style: const TextStyle(
-                        color: Color(0xFFA0A0A0),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    );
-                  }),
-                  SizedBox(height: 10),
-                  Obx(() => Text(
-                        '${_authController.height.value} cm',
-                        style: const TextStyle(
-                          color: Color(0xFFA0A0A0),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                  SizedBox(height: 10),
-                  Obx(() => Text(
-                        '${_authController.weight.value} kg',
-                        style: const TextStyle(
-                          color: Color(0xFFA0A0A0),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                  SizedBox(height: 10),
-                  Obx(() => Text(
-                        '${_authController.selectedGender.value}',
-                        style: const TextStyle(
-                          color: Color(0xFFA0A0A0),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                ],
-              ),
+                        return Text(
+                          formattedBirthDate,
+                          style: const TextStyle(
+                            color: Color(0xFFA0A0A0),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                      }),
+                      SizedBox(height: 10),
+                      Obx(() => Text(
+                            '${_authController.height.value} cm',
+                            style: const TextStyle(
+                              color: Color(0xFFA0A0A0),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )),
+                      SizedBox(height: 10),
+                      Obx(() => Text(
+                            '${_authController.weight.value} kg',
+                            style: const TextStyle(
+                              color: Color(0xFFA0A0A0),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )),
+                      SizedBox(height: 10),
+                      Obx(() => Text(
+                            '${_authController.selectedGender.value}',
+                            style: const TextStyle(
+                              color: Color(0xFFA0A0A0),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+              ],
             ),
 
             SizedBox(height: 20),
@@ -207,18 +253,19 @@ class MypageView extends StatelessWidget {
                           fontWeight: FontWeight.w500),
                     ))),
 
+            // TODO 버튼 없애기
             // 회원가입 페이지 이동 임시 버튼
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) =>
-            //               SignUpView(email: 'tmdxkr5@hanmail.com')),
-            //     );
-            //   },
-            //   child: const Text('Go to signup Page'),
-            // ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          SignUpView(email: 'tmdxkr5@hanmail.com')),
+                );
+              },
+              child: const Text('Go to signup Page'),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(

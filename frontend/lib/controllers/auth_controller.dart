@@ -45,10 +45,14 @@ class AuthController extends GetxController {
   Future<void> loginWithKakao() async {
     try {
       // 기본 카카오 로그인
+      log('카카오 로그인 진입1');
       bool isInstalled = await isKakaoTalkInstalled();
+      log('isInstalled : $isInstalled');
+      log('${UserApi.instance.toString()}');
       OAuthToken token = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
+      log('카카오 로그인 진입3');
 
       log('카카오 로그인 성공: ${token.accessToken}');
       // 토큰을 스토리지에 저장
@@ -65,7 +69,7 @@ class AuthController extends GetxController {
       await requestUserInfo();
       isLoggedIn.value = true;
     } catch (error) {
-      log('카카오톡 로그인 실패: $error');
+      log('카카오톡 로그인 실패 auth: $error');
       Get.snackbar('오류', '카카오톡 로그인에 실패했습니다.');
     }
   }
@@ -275,6 +279,7 @@ class AuthController extends GetxController {
     try {
       await _storage.delete(key: 'ACCESS_TOKEN');
       isLoggedIn.value = false;
+      log('로그아웃 성공 controller');
       Get.toNamed('/login');
     } catch (e) {
       log('로그아웃 실패 controller: ${e}');
@@ -285,8 +290,9 @@ class AuthController extends GetxController {
   // 회원탈퇴
   Future<void> remove() async {
     try {
-      // TODO
-      // final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+      // TODO 회원탈퇴 하자
+      final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+      await _storage.delete(key: 'ACCESS_TOKEN');
       // final response = await _authService.removeMember(accessToken);
       Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
     } catch (e) {

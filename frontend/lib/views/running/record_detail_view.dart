@@ -15,6 +15,7 @@ class RecordDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     final RecordController recordController = Get.find<RecordController>();
 
     log('parameter : ${Get.parameters['id']}');
@@ -30,8 +31,7 @@ class RecordDetailView extends StatelessWidget {
         backgroundColor: Colors.white,
         toolbarHeight: 56,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: Container(
         child: Obx(() {
           if (recordController.isLoading.isTrue) {
             return Center(child: CircularProgressIndicator());
@@ -47,96 +47,141 @@ class RecordDetailView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                LocationInfo(
-                  title: record.courseName,
-                  address: (record.address == null || record.address!.isEmpty)
-                      ? '주소 정보 없음'
-                      : record.address!,
-                  time: DateTime.parse(record.startDate ?? ''),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: LocationInfo(
+                    title: record.courseName,
+                    address: (record.address == null || record.address!.isEmpty)
+                        ? '주소 정보 없음'
+                        : record.address!,
+                    time: DateTime.parse(record.startDate ?? ''),
+                  ),
                 ),
                 SizedBox(height: 20),
-                Image.asset(
-                  'assets/images/review_default_image.png',
-                  fit: BoxFit.cover,
+                Container(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: screenHeight * 0.2,
+                        child: record.url != null && record.url!.isNotEmpty
+                            ? Image.network(
+                                record.url!,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    height: screenHeight * 0.2,
+                                    child: Center(
+                                      child: Image.asset(
+                                        'assets/images/main/course_default.png',
+                                        width: 80,
+                                        height: 80,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Container(
+                                height: screenHeight * 0.2,
+                                child: Center(
+                                  child: Image.asset(
+                                    'assets/images/main/course_default.png',
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                      )
+                    ],
+                  ),
                 ),
                 SizedBox(height: 28),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      '러닝 리뷰',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            '러닝 리뷰',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              _showEditReviewModal(context, record);
+                            },
+                          ),
+                        ],
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.edit,
-                        size: 20,
+                      SizedBox(height: 5),
+                      Text(
+                        (record.comment?.isNotEmpty ?? false)
+                            ? record.comment!
+                            : '등록된 글이 없습니다.',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xffA0A0A0),
+                        ),
                       ),
-                      onPressed: () {
-                        _showEditReviewModal(context, record);
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5),
-                Text(
-                  (record.comment?.isNotEmpty ?? false)
-                      ? record.comment!
-                      : '리뷰 없음',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xffA0A0A0),
+                      SizedBox(height: 50),
+                      Text(
+                        '기록 상세',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ReviewRecordItem(
+                            value: record.runningDistance ?? 0.0,
+                            label: '운동 거리',
+                          ),
+                          ReviewRecordItem(
+                            value: (record.finishDate != null &&
+                                    record.startDate != null)
+                                ? DateTime.parse(record.finishDate!)
+                                    .difference(
+                                        DateTime.parse(record.startDate!))
+                                    .inSeconds
+                                : 0,
+                            label: '운동 시간',
+                          ),
+                          ReviewRecordItem(
+                            value: recordController
+                                    .courseDetail.value?.averageSlope ??
+                                0.0,
+                            label: '러닝 경사도',
+                          ),
+                          ReviewRecordItem(
+                            value: record.calorie ?? 0.0,
+                            label: '소모 칼로리',
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 50),
-                Text(
-                  '기록 상세',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(height: 44),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // TODO distance이면 0.0 으로 불러와져서 courseLength로 둠.
-                    // 확인 필요
-                    ReviewRecordItem(
-                      value: record.runningDistance ?? 0.0,
-                      label: '운동 거리',
-                    ),
-                    // 운동 시간 (finishDate - startDate)
-                    // 운동 시간 (초 단위로 계산 후 전달)
-                    ReviewRecordItem(
-                      value: (record.finishDate != null &&
-                              record.startDate != null)
-                          ? DateTime.parse(record.finishDate!)
-                              .difference(DateTime.parse(record.startDate!))
-                              .inSeconds // 초 단위로 계산하여 전달
-                          : 0,
-                      label: '운동 시간',
-                    ),
-                    // TODO 러닝 경사도 이거 맞나
-                    ReviewRecordItem(
-                      value:
-                          recordController.courseDetail.value?.averageSlope ??
-                              0.0,
-                      label: '러닝 경사도',
-                    ),
-                    ReviewRecordItem(
-                      value: record.calorie ?? 0.0,
-                      label: '소모 칼로리',
-                    ),
-                  ],
+                SizedBox(
+                  height: 20,
                 ),
                 AbsorbPointer(
                   absorbing: true,
                   child: SizedBox(height: 300, child: const ResultMap()),
                 ),
+                SizedBox(height: 80),
               ],
             ),
           );
@@ -179,11 +224,11 @@ class RecordDetailView extends StatelessWidget {
 
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // 키보드가 올라올 때 스크롤되도록 설정
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom, // 키보드와 충돌 방지
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: SizedBox(
             height: 250, // TODO 모달 높이 _ 반응형으로 추후 변경
