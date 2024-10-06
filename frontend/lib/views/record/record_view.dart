@@ -33,7 +33,7 @@ class RecordView extends StatelessWidget {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                    child: IntrinsicHeight(
+                    child: Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
