@@ -6,20 +6,20 @@ class SignupInput extends StatelessWidget {
   final Function(String) onChanged;
   final String hintText;
 
-  const SignupInput(
-      {Key? key,
-      required this.inputType,
-      required this.onChanged,
-      this.enabled = true,
-      required this.hintText})
-      : super(key: key);
+  const SignupInput({
+    Key? key,
+    required this.inputType,
+    required this.onChanged,
+    this.enabled = true,
+    required this.hintText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String text;
     String suffixText;
     final double screenWidth = MediaQuery.of(context).size.width;
-    // 조건에 따라 달라짐
+
     if (inputType == 'height') {
       text = '키';
       suffixText = 'cm';
@@ -71,6 +71,9 @@ class SignupInput extends StatelessWidget {
                     fillColor: Color(0xFFE3E5E5).withOpacity(0.4),
                   ),
                   cursorColor: Colors.blueAccent,
+                  onTap: () {
+                    Scrollable.ensureVisible(context);
+                  },
                 ),
               ),
               Padding(
@@ -82,7 +85,7 @@ class SignupInput extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ],

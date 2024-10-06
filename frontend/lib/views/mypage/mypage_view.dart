@@ -255,17 +255,17 @@ class MypageView extends StatelessWidget {
 
             // TODO 버튼 없애기
             // 회원가입 페이지 이동 임시 버튼
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) =>
-            //               SignUpView(email: 'tmdxkr5@hanmail.com')),
-            //     );
-            //   },
-            //   child: const Text('Go to signup Page'),
-            // ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          SignUpView(email: 'tmdxkr5@hanmail.com')),
+                );
+              },
+              child: const Text('Go to signup Page'),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
