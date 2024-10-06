@@ -32,7 +32,6 @@ class RecordDetailView extends StatelessWidget {
         toolbarHeight: 56,
       ),
       body: Container(
-        // padding: const EdgeInsets.all(20.0),
         child: Obx(() {
           if (recordController.isLoading.isTrue) {
             return Center(child: CircularProgressIndicator());
@@ -59,10 +58,6 @@ class RecordDetailView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-                // Image.asset(
-                //   'assets/images/review_default_image.png',
-                //   fit: BoxFit.cover,
-                // ),
                 Container(
                   child: Column(
                     children: [
@@ -73,16 +68,14 @@ class RecordDetailView extends StatelessWidget {
                                 record.url!,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
-                                  // 이미지 로드 중 에러 발생 시 기본 이미지 표시
                                   return Container(
                                     height: screenHeight * 0.2,
                                     child: Center(
                                       child: Image.asset(
                                         'assets/images/main/course_default.png',
-                                        width: 80, // 이미지 너비를 80으로 설정
-                                        height: 80, // 이미지 높이를 80으로 설정
-                                        fit: BoxFit
-                                            .cover, // 이미지를 Container 안에 맞게 조정
+                                        width: 80,
+                                        height: 80,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   );
@@ -93,10 +86,9 @@ class RecordDetailView extends StatelessWidget {
                                 child: Center(
                                   child: Image.asset(
                                     'assets/images/main/course_default.png',
-                                    width: 80, // 이미지 너비를 80으로 설정
-                                    height: 80, // 이미지 높이를 80으로 설정
-                                    fit:
-                                        BoxFit.cover, // 이미지를 Container 안에 맞게 조정
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
@@ -135,7 +127,7 @@ class RecordDetailView extends StatelessWidget {
                       Text(
                         (record.comment?.isNotEmpty ?? false)
                             ? record.comment!
-                            : '리뷰 없음',
+                            : '등록된 글이 없습니다.',
                         style: TextStyle(
                           fontSize: 16,
                           color: Color(0xffA0A0A0),
@@ -163,7 +155,7 @@ class RecordDetailView extends StatelessWidget {
                                 ? DateTime.parse(record.finishDate!)
                                     .difference(
                                         DateTime.parse(record.startDate!))
-                                    .inSeconds // 초 단위로 계산하여 전달
+                                    .inSeconds
                                 : 0,
                             label: '운동 시간',
                           ),
@@ -232,11 +224,11 @@ class RecordDetailView extends StatelessWidget {
 
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // 키보드가 올라올 때 스크롤되도록 설정
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom, // 키보드와 충돌 방지
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: SizedBox(
             height: 250, // TODO 모달 높이 _ 반응형으로 추후 변경
