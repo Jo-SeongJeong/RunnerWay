@@ -1,8 +1,7 @@
 import 'dart:developer';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
-import 'package:frontend/views/auth/signup_view.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:get/get.dart';
@@ -28,7 +27,7 @@ class AuthController extends GetxController {
 
   // 혹시 몰라 넣은 토큰
   var newToken =
-      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
+      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUwMDYsImVtYWlsIjoidG1keGtyNUBoYW5tYWlsLm5ldCIsIm5pY2tuYW1lIjoi44WH44WH44WH44WHIiwiaWF0IjoxNzI3NjcxOTg0LCJleHAiOjE3MzEyNzE5ODR9.VhgRs0aH3h-_I1mhWhkih7cFNM1ebCDHtlYh112XK3Q';
 
   final AuthService _authService = AuthService();
   // 선택된 성별 및 버튼 활성화 상태
@@ -68,7 +67,6 @@ class AuthController extends GetxController {
       }
       // 사용자 정보 요청
       await requestUserInfo();
-      // loadDecodedData();
       isLoggedIn.value = true;
     } catch (error) {
       log('카카오톡 로그인 실패 auth: $error');
@@ -78,7 +76,6 @@ class AuthController extends GetxController {
 
   // 디코드
   Future<void> loadDecodedData() async {
-    // 'ACCESS_TOKEN' 읽기 시 비동기 처리를 위한 await 추가
     String? storedToken = await _storage.read(key: 'ACCESS_TOKEN');
 
     if (storedToken != null) {
@@ -90,6 +87,7 @@ class AuthController extends GetxController {
     await _storage.write(key: 'ID', value: decodedToken['id'].toString());
     await _storage.write(key: 'EMAIL', value: decodedToken['email']);
     await _storage.write(key: 'NICKNAME', value: decodedToken['nickname']);
+    await _storage.write(key: 'ACCESS_TOKEN', value: '${newToken}');
 
     id.value = await _storage.read(key: 'ID') ?? 'No ID found';
     email.value = await _storage.read(key: 'EMAIL') ?? 'No Email found';
@@ -127,12 +125,13 @@ class AuthController extends GetxController {
       else if (response['token'] != null) {
         // accessToken 저장
         await _saveToken(response['token']);
+        // 기존 회원이라면 선호 코스 등록 여부 확인 t / f
+
         checkFavoriteTag();
       } else {
         log('서버 응답에서 예상치 못한 값이 있습니다.');
       }
-
-      log('ㅎㅎㅎㅎ${userEmail}');
+      log('${userEmail}');
     } catch (e) {
       log('회원 여부 확인 중 오류 발생 controller: $e');
       Get.snackbar('오류', '회원 여부 확인 중 오류가 발생했습니다.');
@@ -180,11 +179,12 @@ class AuthController extends GetxController {
         log('회원가입 성공 controller, 토큰: $accessToken');
         signUpSuccess.value = true;
         Get.snackbar('성공', '선호태그 입력 페이지로 이동합니다.');
+        loadDecodedData();
       } else {
         Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
       }
     } catch (e) {
-      signUpSuccess.value = false; // 실패 상태 업데이트
+      signUpSuccess.value = false;
       log('회원가입 중 오류 발생 controller: $e');
       Get.snackbar('오류', '회원가입에 실패했습니다.');
     }
@@ -260,8 +260,7 @@ class AuthController extends GetxController {
       Auth userInfo = Auth.fromJson(userInfoMap);
 
       log('회원 정보: ${userInfo}');
-
-      // nickname.value = 'ㅇㅇㅇㅇ';
+      //  TODO 이미지 불러오기
       nickname.value =
           await _storage.read(key: 'NICKNAME') ?? userInfo.nickname;
       birthDate.value = userInfo.birth?.toString() ?? '';
