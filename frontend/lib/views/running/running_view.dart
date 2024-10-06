@@ -25,7 +25,7 @@ class RunningView extends StatelessWidget {
               Column(
                 children: [
                   SizedBox(
-                    height: 500,
+                    height: MediaQuery.of(context).size.height * 0.5,
                     child: GoogleMap(
                       polylines: controller.value.value.polyline,
                       myLocationEnabled: true,
