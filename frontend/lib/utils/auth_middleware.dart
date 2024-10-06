@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/auth_controller.dart';
@@ -8,6 +10,8 @@ class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     // 로그인 상태가 아니라면 리다이렉트
+    authController.isLoggedIn.refresh();
+    log('현재 로그인 상태: ${authController.isLoggedIn.value}');
     if (!authController.isLoggedIn.value) {
       return RouteSettings(name: '/runningthings'); // 로그인 안 되어 있을 때 리다이렉트할 페이지
     }
