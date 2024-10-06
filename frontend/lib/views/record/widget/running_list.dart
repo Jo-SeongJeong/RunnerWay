@@ -61,7 +61,7 @@ class RunningCard extends StatelessWidget {
                                       color: Color(0xFFA0A0A0), fontSize: 14),
                                 ),
                                 Text(
-                                  '${runningDistance}km / ',
+                                  '${runningDistance.toStringAsFixed(2)}km / ',
                                   style: TextStyle(
                                       color: Color(0xFFA0A0A0), fontSize: 14),
                                 ),

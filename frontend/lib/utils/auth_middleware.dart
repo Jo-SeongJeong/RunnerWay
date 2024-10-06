@@ -13,7 +13,7 @@ class AuthMiddleware extends GetMiddleware {
     authController.isLoggedIn.refresh();
     log('현재 로그인 상태: ${authController.isLoggedIn.value}');
     if (!authController.isLoggedIn.value) {
-      return RouteSettings(name: '/runningthings'); // 로그인 안 되어 있을 때 리다이렉트할 페이지
+      return RouteSettings(name: '/login'); // 로그인 안 되어 있을 때 리다이렉트할 페이지
     }
     return null; // 로그인 되어 있으면 그대로 진행
   }
