@@ -1,6 +1,7 @@
 import 'package:frontend/controllers/auth_controller.dart';
 import 'package:frontend/controllers/jwt_controller.dart';
 import 'package:frontend/controllers/user_course_controller.dart';
+import 'package:frontend/views/auth/login_view.dart';
 import 'package:frontend/views/auth/signup_view.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/views/mypage/modify_info_view.dart';
@@ -204,16 +205,25 @@ class MypageView extends StatelessWidget {
             ),
 
             // 회원가입 페이지 이동 임시 버튼
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) =>
+            //               SignUpView(email: 'tmdxkr5@hanmail.com')),
+            //     );
+            //   },
+            //   child: const Text('Go to signup Page'),
+            // ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          SignUpView(email: 'tmdxkr5@hanmail.com')),
+                  MaterialPageRoute(builder: (context) => LoginView()),
                 );
               },
-              child: const Text('Go to signup Page'),
+              child: const Text('Go to login Page'),
             ),
           ],
         ),

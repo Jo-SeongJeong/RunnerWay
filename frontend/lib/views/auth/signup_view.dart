@@ -15,7 +15,7 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController _authController = Get.put(AuthController());
+    final AuthController _authController = Get.find<AuthController>();
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -50,7 +50,7 @@ class SignUpView extends StatelessWidget {
                                 _authController.selectedImage.value!,
                                 width: 100,
                                 height: 100,
-                                fit: BoxFit.cover, // 이미지가 컨테이너에 맞게 조정
+                                fit: BoxFit.cover,
                               )
                             : Image.asset(
                                 'assets/images/auth/default_profile.png',
@@ -285,9 +285,10 @@ class SignUpView extends StatelessWidget {
                     int? weight = _authController.weight.value.isNotEmpty
                         ? int.tryParse(_authController.weight.value)
                         : null;
+                    log('${_authController.email.value}');
                     await _authController.signup(
                       Auth(
-                        email: this.email,
+                        email: _authController.email.value,
                         nickname: _authController.nickname.value,
                         birth:
                             DateTime.tryParse(_authController.birthDate.value),

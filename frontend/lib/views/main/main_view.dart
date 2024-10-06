@@ -211,6 +211,7 @@ class _MainViewState extends State<MainView> {
 
                     // 검색 조건 위젯
                     SizedBox(height: 15),
+                    // TODO 여기 부분 픽셀 넘어감
                     FilterCondition(),
 
                     // 메인 화면 추천 코스 리스트
