@@ -1,3 +1,4 @@
+import 'package:frontend/utils/auth_middleware.dart';
 import 'package:frontend/views/auth/splash_view.dart';
 import 'package:frontend/views/course/course_detail_view.dart';
 import 'package:frontend/views/runnerPick/runner_pick_view.dart';
@@ -27,38 +28,47 @@ class AppRoutes {
     GetPage(
         name: '/main',
         page: () => MainView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/course/:type/:id',
         page: () => CourseDetailView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/search',
         page: () => SearchView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/search',
         page: () => SearchView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/runner',
         page: () => RunnerView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/runner-pick',
         page: () => RunnerPickView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/record',
         page: () => RecordView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/record/detail/:id',
         page: () => RecordDetailView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/mypage',
         page: () => MypageView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/signup',
@@ -73,6 +83,7 @@ class AppRoutes {
     GetPage(
         name: '/modify',
         page: () => ModifyInfoView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/login',
@@ -85,14 +96,17 @@ class AppRoutes {
     GetPage(
         name: '/freecourserunning',
         page: () => FreeCourseRunningView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/writereview',
         page: () => ReviewWriteView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
     GetPage(
         name: '/running/:type/:courseid/:rankid',
         page: () => RunningView(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.noTransition),
   ];
 }
