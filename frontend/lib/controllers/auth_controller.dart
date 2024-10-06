@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/auth/signup_view.dart';
@@ -6,6 +7,9 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:get/get.dart';
 import '../models/auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:frontend/utils/s3_image_upload.dart'; // S3 업로드 기능 사용
 
 class AuthController extends GetxController {
   var id = ''.obs;
@@ -15,7 +19,13 @@ class AuthController extends GetxController {
   var birthDate = ''.obs;
   var height = ''.obs;
   var weight = ''.obs;
+  final Rx<File?> selectedImage = Rx<File?>(null);
+  final Rx<MemberImage?> memberImage = Rx<MemberImage?>(MemberImage());
+  final S3ImageUpload s3ImageUpload = S3ImageUpload();
   final _storage = FlutterSecureStorage(); // 토큰 저장
+
+  TextEditingController textEditingController = TextEditingController();
+
   // 혹시 몰라 넣은 토큰
   var newToken =
       'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
@@ -50,11 +60,11 @@ class AuthController extends GetxController {
       if (accessToken != null) {
         log('카카오톡으로 로그인 성공 controller: ${token.accessToken}');
       } else {
-        log('토큰 저장 실패: 불러올 수 없습니다.');
+        log('카카오 토큰 저장 실패: 불러올 수 없습니다.');
       }
       // 사용자 정보 요청
       await requestUserInfo();
-      loadDecodedData();
+      // loadDecodedData();
       isLoggedIn.value = true;
     } catch (error) {
       log('카카오톡 로그인 실패: $error');
@@ -70,13 +80,9 @@ class AuthController extends GetxController {
     if (storedToken != null) {
       newToken = storedToken;
     }
-
     final token = newToken.substring(7);
-
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-
     log('Decoded JWT: $decodedToken');
-
     await _storage.write(key: 'ID', value: decodedToken['id'].toString());
     await _storage.write(key: 'EMAIL', value: decodedToken['email']);
     await _storage.write(key: 'NICKNAME', value: decodedToken['nickname']);
@@ -104,50 +110,83 @@ class AuthController extends GetxController {
   Future<void> checkUserEmailOnServer(String userEmail) async {
     try {
       final response = await _authService.getOuathKakao(userEmail);
-      log('${response}');
+      log('ㅇㅇㅇ${response}');
       // 서버에서 받은 응답이 이메일인 경우(신규 회원)
       if (response == userEmail) {
         email.value = userEmail;
-        Get.to(SignUpView(email: email.value));
+        // Get.to(SignUpView(email: email.value));
         // TODO toNamed로 바꾸기
-        // Get.toNamed('/signup', arguments: {'email': email.value}); //이렇게 두면 오류 남
+        Get.toNamed('/signup', arguments: {'email': email.value});
       }
 
       // 서버에서 받은 응답이 accessToken인 경우(기존 회원)
       else if (response['token'] != null) {
         // accessToken 저장
         await _saveToken(response['token']);
-        // 기존 회원이라면 선호 코스 등록 여부 확인 t / f
-
         checkFavoriteTag();
       } else {
         log('서버 응답에서 예상치 못한 값이 있습니다.');
       }
-      log('${userEmail}');
+
+      log('ㅎㅎㅎㅎ${userEmail}');
     } catch (e) {
       log('회원 여부 확인 중 오류 발생 controller: $e');
       Get.snackbar('오류', '회원 여부 확인 중 오류가 발생했습니다.');
     }
   }
 
-  // 사용자 정보 입력
+  // 이미지 선택 함수
+  Future<void> pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      selectedImage.value = File(pickedFile.path);
+
+      // S3에 이미지 업로드 및 URL 반환
+      String? uploadedImageUrl = await s3ImageUpload.uploadImage2(
+        selectedImage.value!,
+        "uploads/profile_images",
+      );
+
+      if (uploadedImageUrl != null) {
+        // 프로필 이미지 저장
+        memberImage.value = MemberImage(
+          memberId: null,
+          url: uploadedImageUrl,
+          path: selectedImage.value!.path,
+        );
+      } else {
+        Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
+      }
+    }
+  }
+
+// 회원가입 성공 여부를 상태로 저장하는 Observable 변수 추가
+  var signUpSuccess = false.obs;
+
+  // 회원가입
   Future<void> signup(Auth authData) async {
     try {
-      final accessToken = await _authService.signupKakao(authData);
+      // 'String?' 타입의 accessToken을 반환하는 메서드 호출
+      String? accessToken = await _authService.signupKakao(authData);
+
+      // accessToken이 존재하면 저장
       if (accessToken != null) {
-        log('회원가입 성공 controller');
-        await _saveToken(accessToken);
+        await _saveToken(accessToken); // 토큰 저장
+        log('회원가입 성공 controller, 토큰: $accessToken');
+        signUpSuccess.value = true;
         Get.snackbar('성공', '선호태그 입력 페이지로 이동합니다.');
       } else {
         Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
       }
     } catch (e) {
+      signUpSuccess.value = false; // 실패 상태 업데이트
       log('회원가입 중 오류 발생 controller: $e');
       Get.snackbar('오류', '회원가입에 실패했습니다.');
     }
   }
 
-  // 이메일 중복 체크
+  // 닉네임 중복 체크
   Future<bool> checkNickname(String nickname) async {
     try {
       final isAvailable = await _authService.checkNicknameDuplicate(nickname);
@@ -159,7 +198,7 @@ class AuthController extends GetxController {
         return false;
       }
     } catch (e) {
-      log('이메일 체크 controller: $e');
+      log('닉네임 체크 중 오류 발생 service: $e');
       return false;
     }
   }
@@ -170,7 +209,7 @@ class AuthController extends GetxController {
     if (accessToken != null) {
       await _storage.write(key: 'ACCESS_TOKEN', value: accessToken);
       final accessToken1 = await _storage.read(key: 'ACCESS_TOKEN');
-      log('${accessToken1}');
+      log('토큰저장:${accessToken1}');
       log('토큰 저장 성공');
     } else {
       log('토큰 저장 실패 controller: accessToken이 없습니다.');
@@ -200,7 +239,9 @@ class AuthController extends GetxController {
       await _authService.sendFavoriteTag(requestBody);
       Get.toNamed('/main');
     } catch (e) {
-      Get.snackbar('오류', '선호 태그 등록 중 오류가 발생했습니다.');
+      // TODO 오류가 떠도 DB에 올라가서 우선 main으로 가게 둠
+      log('선호태그: $e');
+      Get.toNamed('/main');
     }
   }
 
@@ -213,6 +254,8 @@ class AuthController extends GetxController {
       Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
       log('${userInfoMap}');
       Auth userInfo = Auth.fromJson(userInfoMap);
+
+      log('회원 정보: ${userInfo}');
 
       // nickname.value = 'ㅇㅇㅇㅇ';
       nickname.value =
@@ -250,6 +293,28 @@ class AuthController extends GetxController {
     } catch (e) {
       log('회원탈퇴 실패 controller: ${e}');
       Get.snackbar('회원탈퇴 실패 ', '회원탈퇴 중 문제가 발생했습니다.');
+    }
+  }
+
+  // 정보수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      // 기존 멤버 정보 가져오기
+      log('update info : $updateInfo');
+
+      String? memberId = await _storage.read(key: 'ID');
+      if (memberId == null) {
+        throw Exception('memberId를 찾을 수 없습니다.');
+      }
+      updateInfo['memberImage'] = {
+        'memberId': int.parse(memberId),
+        'url': 'string', // TODO 실제 이미지 URL을 넣어야 함
+        'path': 'string', // TODO 이미지 경로 입력
+      };
+      final response = await _authService.patchUserInfo(updateInfo);
+      log('정보수정controller');
+    } catch (e) {
+      log('회원수정실패:$e');
     }
   }
 }

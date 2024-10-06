@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/button/wide_button.dart';
 import 'package:frontend/widgets/modal/birth_modal.dart';
@@ -13,7 +15,7 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController _authController = Get.put(AuthController());
+    final AuthController _authController = Get.find<AuthController>();
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -32,22 +34,35 @@ class SignUpView extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 10),
+              SizedBox(height: 30),
               // 회원가입 유저 이미지
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Image.asset(
-                      'assets/images/auth/default_profile.png',
-                      width: 90,
-                      height: 90,
+                  GestureDetector(
+                    onTap: _authController.pickImage, // 이미지 선택 기능 연결
+                    child: Obx(
+                      () => ClipRRect(
+                        borderRadius:
+                            BorderRadius.circular(50), // 모서리를 50만큼 둥글게 처리
+                        child: _authController.selectedImage.value != null
+                            ? Image.file(
+                                _authController.selectedImage.value!,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/images/auth/default_profile.png',
+                                width: 90,
+                                height: 90,
+                              ),
+                      ),
                     ),
                   )
                 ],
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 60),
               // 회원가입 폼 시작
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -87,6 +102,10 @@ class SignUpView extends StatelessWidget {
                             .onNicknameChanged(_authController.nickname.value);
                       },
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 15,
+                        ),
                         border: InputBorder.none,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(22),
@@ -97,7 +116,7 @@ class SignUpView extends StatelessWidget {
                           borderSide: BorderSide(color: Colors.blueAccent),
                         ),
                         filled: true,
-                        hintText: '  닉네임 (2~8자)',
+                        hintText: '닉네임 (2~8자)',
                         hintStyle: TextStyle(
                           color: Color(0xFF72777A),
                         ),
@@ -125,11 +144,12 @@ class SignUpView extends StatelessWidget {
               SizedBox(height: 7),
               BirthModal(
                 onChanged: (selectedDate) {
+                  log('선택된 날짜 : $selectedDate');
                   _authController.birthDate.value = selectedDate;
                 },
-                hintText: '  YYYY-MM-DD',
+                // TODO
+                hintText: 'YYYY-MM-DD',
               ),
-              // Obx(() => Text('생년월일 : ${_authController.birthDate.value}')),
               // 키 몸무게 input
               Row(
                 children: [
@@ -257,7 +277,7 @@ class SignUpView extends StatelessWidget {
                   bool isNicknameCheck = await _authController
                       .checkNickname(_authController.nickname.value);
                   if (isNicknameCheck) {
-                    Get.snackbar('오류', '이미 사용중인 닉네임입니다');
+                    Get.snackbar('죄송', '이미 사용중인 닉네임입니다');
                   } else {
                     int? height = _authController.height.value.isNotEmpty
                         ? int.tryParse(_authController.height.value)
@@ -265,9 +285,10 @@ class SignUpView extends StatelessWidget {
                     int? weight = _authController.weight.value.isNotEmpty
                         ? int.tryParse(_authController.weight.value)
                         : null;
+                    log('${_authController.email.value}');
                     await _authController.signup(
                       Auth(
-                        email: this.email,
+                        email: _authController.email.value,
                         nickname: _authController.nickname.value,
                         birth:
                             DateTime.tryParse(_authController.birthDate.value),
@@ -277,15 +298,12 @@ class SignUpView extends StatelessWidget {
                             ? 1
                             : 0,
                         joinType: 'kakao',
-                        memberImage: MemberImage(
-                          memberId: null,
-                          url: "",
-                          path: "",
-                        ),
+                        memberImage: _authController.memberImage.value,
                       ),
                     );
-
-                    Get.toNamed('/signup2');
+                    if (_authController.signUpSuccess.value) {
+                      Get.toNamed('/signup2');
+                    }
                   }
                 }
               : null,

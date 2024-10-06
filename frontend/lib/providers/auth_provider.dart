@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,13 +14,6 @@ class AuthProvider {
   Future<dynamic> fetchOauthKakao(String email) async {
     try {
       final response = await _dioClient.dio.post('oauth/kakao/${email}');
-      // final response = await dio.post(
-      //     'https://j11b304.p.ssafy.io/api/oauth/kakao/${Uri.encodeComponent(email)}',
-      //     options: Options(
-      //         followRedirects: false,
-      //         validateStatus: (status) {
-      //           return status! < 500;
-      //         }));
       log('사용자 이메일 조회 provider: ${response.data}');
 
       if (response.statusCode == 200) {
@@ -36,15 +30,23 @@ class AuthProvider {
   }
 
   // 회원가입
-  Future<Map<String, dynamic>> fetchSignupkakao(Auth authData) async {
+  Future<Map<String, dynamic>> fetchSignupKakao(Auth authData) async {
     try {
-      log('autoData: ${authData.toJson()}');
-      final response = await _dioClient.dio
-          .post('/members/sign-up', data: authData.toJson());
-      // final response = await dio.post(
-      //   'https://j11b304.p.ssafy.io/api/members/sign-up',
+      // Auth 객체를 JSON으로 변환
+      final authDataJson = authData.toJson();
+
+      // JSON 데이터를 로그로 찍기
+      log('회원가입 데이터 전송: $authDataJson');
+
+      // final response = await _dioClient.dio.post(
+      //   '/members/sign-up',
       //   data: authData.toJson(),
+      //   options: Options(headers: {'Content-Type': 'application/json'}),
       // );
+      final response = await dio.post(
+        'https://j11b304.p.ssafy.io/api/members/sign-up',
+        data: authData.toJson(),
+      );
       log('서버 응답 provider: ${response.data}');
 
       if (response.statusCode == 200) {
@@ -58,6 +60,19 @@ class AuthProvider {
       log('회원가입 중 오류 발생 provider: ${e}');
       throw Exception('회원가입 중 오류 발생 provider: ${e}');
     }
+  }
+
+// 텍스트 응답에서 토큰 추출 메서드
+  String extractToken(String responseText) {
+    // 텍스트에서 시작 위치 찾기
+    int startIndex = responseText.indexOf("Raw result:") + "Raw result:".length;
+    if (startIndex != -1) {
+      // 토큰 추출 (끝 위치는 예시에 따라 조정 가능)
+      int endIndex = responseText.length; // 끝까지 읽기
+      String token = responseText.substring(startIndex, endIndex).trim();
+      return token;
+    }
+    return ''; // 토큰을 찾지 못한 경우
   }
 
   // 닉네임 중복 체크
@@ -82,17 +97,7 @@ class AuthProvider {
   // 선호 태그 등록 여부 조회
   Future<bool> checkFavoriteTag() async {
     // TODO
-    // final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
     try {
-      // final response = await dio.get(
-      //   'https://j11b304.p.ssafy.io/api/members/tags',
-      //   options: Options(
-      //     headers: {
-      //       'Authorization': 'Bearer ${accessToken}',
-      //       'Content-Type': 'application/json',
-      //     },
-      //   ),
-      // );
       final response = await _dioClient.dio.get('/members/tags');
 
       if (response.statusCode == 200) {
@@ -109,22 +114,13 @@ class AuthProvider {
   // 선호 태그 등록
   Future<void> sendFavoriteTag(Map<String, dynamic> requestBody) async {
     final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
-    log('${accessToken}');
+    log('선호태그등록: ${accessToken}');
 
     try {
       final response = await _dioClient.dio.post(
         '/members/tags',
         data: requestBody,
       );
-      // final response =
-      //     await dio.post('https://j11b304.p.ssafy.io/api/members/tags',
-      //         options: Options(
-      //           headers: {
-      //             'Authorization': 'Bearer ${accessToken}',
-      //             'Content-Type': 'application/json',
-      //           },
-      //         ),
-      //         data: requestBody);
       if (response.statusCode == 200) {
         log('선호 태그 등록 성공');
       } else {
@@ -141,18 +137,9 @@ class AuthProvider {
     try {
       final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
       log('개인정보조회 provider: ${accessToken}');
-      // final response = await dio.get(
-      //   'https://j11b304.p.ssafy.io/api/members',
-      //   options: Options(
-      //     headers: {
-      //       'Authorization': 'Bearer $accessToken',
-      //       'Content-Type': 'application/json',
-      //     },
-      //   ),
-      // );
       final response = await _dioClient.dio.get('/members');
       if (response.statusCode == 200) {
-        log('$response');
+        log('개인정보조회 : $response');
         if (response.data is Map<String, dynamic>) {
           return response.data as Map<String, dynamic>;
         } else {
@@ -166,6 +153,41 @@ class AuthProvider {
       throw Exception('개인 정보 조회 중 오류 발생: $e');
     } catch (e) {
       throw Exception('예상치 못한 오류 발생: $e');
+    }
+  }
+
+  // 회원정보 수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      // memberImage에서 memberId를 제거하고 필요한 형식으로 데이터 수정
+      if (updateInfo.containsKey('memberImage')) {
+        updateInfo['memberImage'].remove('memberId'); // memberId 삭제
+      }
+
+      // 숫자 필드 확인 (null 체크 및 변환)
+      updateInfo['height'] =
+          updateInfo['height'] != null && updateInfo['height'].isNotEmpty
+              ? int.tryParse(updateInfo['height'])
+              : null;
+
+      updateInfo['weight'] =
+          updateInfo['weight'] != null && updateInfo['weight'].isNotEmpty
+              ? int.tryParse(updateInfo['weight'])
+              : null;
+
+      log('수정 provider$updateInfo');
+
+      // 서버에 PATCH 요청 보내기
+      final response = await _dioClient.dio.patch('/members', data: updateInfo);
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('회원정보수정 pro: 데이터없대');
+      }
+    } catch (e) {
+      log('회원수정 :$updateInfo');
+      throw Exception('회원정보pro안돼: $e');
     }
   }
 }

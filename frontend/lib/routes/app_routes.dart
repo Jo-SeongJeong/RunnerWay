@@ -1,6 +1,7 @@
 import 'package:frontend/utils/auth_middleware.dart';
 import 'package:frontend/views/auth/splash_view.dart';
 import 'package:frontend/views/course/course_detail_view.dart';
+import 'package:frontend/views/course/user_course_register.dart';
 import 'package:frontend/views/runnerPick/runner_pick_view.dart';
 import 'package:frontend/views/running/record_detail_view.dart';
 import 'package:frontend/views/running/free_course_running_view.dart';
@@ -88,6 +89,10 @@ class AppRoutes {
     GetPage(
         name: '/login',
         page: () => LoginView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/register/:id',
+        page: () => RegisterView(),
         transition: Transition.noTransition),
     GetPage(
         name: '/runningthings',

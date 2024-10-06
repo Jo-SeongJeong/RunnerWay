@@ -228,6 +228,7 @@ class RecordView extends StatelessWidget {
                                 ..._recordController.dayRecords
                                     .map(
                                       (record) => RunningCard(
+                                        recordId: record.recordId,
                                         courseId: record.courseId,
                                         courseName: record.courseName,
                                         runningDistance: record.runningDistance,

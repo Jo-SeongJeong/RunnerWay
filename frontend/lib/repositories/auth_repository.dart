@@ -15,8 +15,7 @@ class AuthRepository {
   // 회원가입 처리 (access token 반환)
   Future<String> signupKakao(Auth authData) async {
     try {
-      final response = await _provider.fetchSignupkakao(authData);
-      // final accessToken = response['accessToken'];
+      final response = await _provider.fetchSignupKakao(authData);
       log('회원가입 성공 repo: $response');
       return response['accessToken'];
     } catch (e) {
@@ -58,10 +57,21 @@ class AuthRepository {
 // 사용자 정보 불러오기
   Future<Map<String, dynamic>> getUserInfo() async {
     try {
-      log('repo사용자정보: ${_provider.getUserInfo()}');
-      return await _provider.getUserInfo();
+      final response = _provider.getUserInfo();
+      log('repo사용자정보: ${response}');
+      return await response;
     } catch (e) {
-      rethrow; // 오류를 상위 계층으로 전파
+      rethrow;
+    }
+  }
+
+  // 회원정보 수정
+  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    try {
+      final response = await _provider.patchUserInfo(updateInfo);
+      log('repo 정보수정: ${response}');
+    } catch (e) {
+      throw Exception('회원수정 repo: $e');
     }
   }
 }
