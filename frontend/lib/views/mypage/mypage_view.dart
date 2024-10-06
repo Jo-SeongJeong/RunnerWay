@@ -98,6 +98,7 @@ class MypageView extends StatelessWidget {
                   child: Text("로그아웃")),
             ),
             Line(),
+            SizedBox(height: 35),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 18),
               child: Row(
@@ -105,28 +106,27 @@ class MypageView extends StatelessWidget {
                 children: [
                   Text(
                     '개인 상세 정보',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: Color(0xFF1EA6FC)),
                   ),
-                  TextButton(
-                      style: TextButton.styleFrom(
-                          foregroundColor: Color(0xFF1EA6FC)),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ModifyInfoView()));
-                      },
-                      child: const Text(
-                        '회원 정보 수정',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                  // TextButton(
+                  //     style: TextButton.styleFrom(
+                  //         foregroundColor: Color(0xFF1EA6FC)),
+                  //     onPressed: () {
+                  //       Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) => ModifyInfoView()));
+                  //     },
+                  //     child: const Text(
+                  //       '회원 정보 수정',
+                  //       style: TextStyle(fontSize: 12),
+                  //     )),
                 ],
               ),
             ),
             SizedBox(height: 17),
             Row(
               children: [
-                // 왼쪽: 생년월일, 키, 몸무게, 성별
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 18),
                   child: Column(
@@ -228,53 +228,30 @@ class MypageView extends StatelessWidget {
             ),
 
             SizedBox(height: 20),
-            Center(
-                child: TextButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return CustomModal(
-                              title: '회원탈퇴',
-                              content: '정말로 회원탈퇴를 하시겠습니까?',
-                              onConfirm: () {
-                                _authController.remove();
-                                Get.toNamed('/login');
-                              },
-                              confirmText: '확인',
-                            );
-                          });
-                    },
-                    child: Text(
-                      '회원탈퇴',
-                      style: TextStyle(
-                          color: Color(0xFFA0A0A0),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
-                    ))),
-
-            // TODO 버튼 없애기
-            // 회원가입 페이지 이동 임시 버튼
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          SignUpView(email: 'tmdxkr5@hanmail.com')),
-                );
-              },
-              child: const Text('Go to signup Page'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginView()),
-                );
-              },
-              child: const Text('Go to login Page'),
-            ),
+            // Center(
+            //     child: TextButton(
+            //         onPressed: () {
+            //           showDialog(
+            //               context: context,
+            //               builder: (BuildContext context) {
+            //                 return CustomModal(
+            //                   title: '회원탈퇴',
+            //                   content: '정말로 회원탈퇴를 하시겠습니까?',
+            //                   onConfirm: () {
+            //                     _authController.remove();
+            //                     Get.toNamed('/login');
+            //                   },
+            //                   confirmText: '확인',
+            //                 );
+            //               });
+            //         },
+            //         child: Text(
+            //           '회원탈퇴',
+            //           style: TextStyle(
+            //               color: Color(0xFFA0A0A0),
+            //               fontSize: 14,
+            //               fontWeight: FontWeight.w500),
+            //         ))),
           ],
         ),
       ),

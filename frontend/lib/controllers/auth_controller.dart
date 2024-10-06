@@ -116,8 +116,6 @@ class AuthController extends GetxController {
       // 서버에서 받은 응답이 이메일인 경우(신규 회원)
       if (response == userEmail) {
         email.value = userEmail;
-        // Get.to(SignUpView(email: email.value));
-        // TODO toNamed로 바꾸기
         Get.toNamed('/signup', arguments: {'email': email.value});
       }
 
