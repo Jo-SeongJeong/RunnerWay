@@ -234,10 +234,10 @@ class RecordDetailView extends StatelessWidget {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: SizedBox(
-            height: screenHeight * 0.35, // TODO 모달 높이 _ 반응형으로 추후 변경
+            height: screenHeight * 0.35,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: Colors.white, // 배경색
+                color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.0),
                   topRight: Radius.circular(20.0),
@@ -262,7 +262,7 @@ class RecordDetailView extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: TextField(
                           controller: _reviewController,
-                          maxLines: 5, // 최대 5줄까지 입력 가능하게 둠
+                          maxLines: 5,
                           maxLength: 200,
                           style: TextStyle(
                             color: Color(0xFF72777A),
