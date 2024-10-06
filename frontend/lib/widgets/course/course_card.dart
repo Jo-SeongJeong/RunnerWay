@@ -126,6 +126,9 @@ class CourseCard extends StatelessWidget {
                       course.courseImage!.url.isNotEmpty
                   ? Image.network(
                       course.courseImage!.url,
+                      width: 90,
+                      height: 90,
+                      fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTree) {
                         // 이미지 로드 중 에러 발생 시 기본 이미지 표시
                         return Image.asset(
