@@ -145,14 +145,12 @@ class AuthController extends GetxController {
     if (pickedFile != null) {
       selectedImage.value = File(pickedFile.path);
 
-      // S3에 이미지 업로드 및 URL 반환
       String? uploadedImageUrl = await s3ImageUpload.uploadImage2(
         selectedImage.value!,
         "uploads/profile_images",
       );
 
       if (uploadedImageUrl != null) {
-        // 프로필 이미지 저장
         memberImage.value = MemberImage(
           memberId: null,
           url: uploadedImageUrl,
@@ -170,10 +168,7 @@ class AuthController extends GetxController {
   // 회원가입
   Future<void> signup(Auth authData) async {
     try {
-      // 'String?' 타입의 accessToken을 반환하는 메서드 호출
       String? accessToken = await _authService.signupKakao(authData);
-
-      // accessToken이 존재하면 저장
       if (accessToken != null) {
         await _saveToken(accessToken); // 토큰 저장
         log('회원가입 성공 controller, 토큰: $accessToken');
@@ -251,7 +246,6 @@ class AuthController extends GetxController {
 
   // 사용자 정보 불러오기
   Future<void> fetchUserInfo() async {
-    // Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
     try {
       // TODO
       // 서버에서 Map<String, dynamic> 데이터를 받음
