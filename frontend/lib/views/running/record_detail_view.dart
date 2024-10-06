@@ -103,8 +103,12 @@ class RecordDetailView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    // TODO distance이면 0.0 으로 불러와져서 courseLength로 둠.
+                    // 확인 필요
                     ReviewRecordItem(
-                      value: record.runningDistance,
+                      value:
+                          recordController.courseDetail.value?.courseLength ??
+                              0.0,
                       label: '운동 거리',
                     ),
                     ReviewRecordItem(
