@@ -20,14 +20,11 @@ class BirthModal extends StatefulWidget {
 }
 
 class _BirthModalState extends State<BirthModal> {
-  // TextEditingController로 TextField를 제어합니다.
   final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // 초기 힌트 텍스트를 controller에 설정합니다.
-    _controller.text = widget.hintText;
   }
 
   void _selectDate(BuildContext context) async {
@@ -35,7 +32,6 @@ class _BirthModalState extends State<BirthModal> {
 
     DateTime? tempPickedDate = DateTime.now();
 
-    // 하단 달력
     DateTime? pickedDate = await showModalBottomSheet<DateTime>(
       context: context,
       builder: (BuildContext context) {
@@ -50,26 +46,16 @@ class _BirthModalState extends State<BirthModal> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   CupertinoButton(
-                    child: Text(
-                      '취소',
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 15,
-                      ),
-                    ),
+                    child: Text('취소',
+                        style:
+                            TextStyle(color: Colors.blueAccent, fontSize: 15)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   CupertinoButton(
-                    child: Text(
-                      '완료',
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 15,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop(tempPickedDate);
-                    },
+                    child: Text('완료',
+                        style:
+                            TextStyle(color: Colors.blueAccent, fontSize: 15)),
+                    onPressed: () => Navigator.of(context).pop(tempPickedDate),
                   ),
                 ],
               ),
@@ -93,42 +79,34 @@ class _BirthModalState extends State<BirthModal> {
     );
 
     if (pickedDate != null) {
-      log('pickedDate : $pickedDate');
-      String formattedDate =
-          DateFormat('yyyy-MM-dd').format(pickedDate); // 날짜 형식 설정
-      widget.onChanged(formattedDate);
-
-      // 선택한 날짜를 TextField에 반영합니다.
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       _controller.text = formattedDate;
+      widget.onChanged(formattedDate);
+    } else {
+      // 사용자가 날짜를 선택하지 않고 완료 버튼을 누를 경우 현재 날짜 설정하지 않고 필드를 비워 둠
+      _controller.clear();
+      widget.onChanged("");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: _controller, // controller 연결
+      controller: _controller,
       onChanged: (value) {
-        log('value : $value');
         widget.onChanged(value);
       },
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 15,
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         hintText: widget.hintText,
-        hintStyle: TextStyle(
-          color: Color(0xFF72777A),
-        ),
+        hintStyle: TextStyle(color: Color(0xFF72777A)),
         border: InputBorder.none,
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(22),
-          borderSide: BorderSide(color: Colors.black12),
-        ),
+            borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(color: Colors.black12)),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(22),
-          borderSide: BorderSide(color: Colors.blueAccent),
-        ),
+            borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(color: Colors.blueAccent)),
         filled: true,
         fillColor: Color(0xFFE3E5E5).withOpacity(0.4),
       ),

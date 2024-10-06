@@ -49,7 +49,9 @@ class RecordDetailView extends StatelessWidget {
               children: [
                 LocationInfo(
                   title: record.courseName,
-                  address: '',
+                  address: (record.address == null || record.address!.isEmpty)
+                      ? '주소 정보 없음'
+                      : record.address!,
                   time: DateTime.parse(record.startDate ?? ''),
                 ),
                 SizedBox(height: 20),
@@ -101,16 +103,28 @@ class RecordDetailView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    // TODO distance이면 0.0 으로 불러와져서 courseLength로 둠.
+                    // 확인 필요
                     ReviewRecordItem(
-                      value: record.runningDistance,
+                      value: record.runningDistance ?? 0.0,
                       label: '운동 거리',
                     ),
+                    // 운동 시간 (finishDate - startDate)
+                    // 운동 시간 (초 단위로 계산 후 전달)
                     ReviewRecordItem(
-                      value: record.courseId, // 운동 시간 값으로 수정 필요
+                      value: (record.finishDate != null &&
+                              record.startDate != null)
+                          ? DateTime.parse(record.finishDate!)
+                              .difference(DateTime.parse(record.startDate!))
+                              .inSeconds // 초 단위로 계산하여 전달
+                          : 0,
                       label: '운동 시간',
                     ),
+                    // TODO 러닝 경사도 이거 맞나
                     ReviewRecordItem(
-                      value: record.courseId, // 경사도 값으로 수정 필요
+                      value:
+                          recordController.courseDetail.value?.averageSlope ??
+                              0.0,
                       label: '러닝 경사도',
                     ),
                     ReviewRecordItem(

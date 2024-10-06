@@ -39,7 +39,6 @@ class RegisterView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Obx로 감싸서 실시간 반응 처리
               Obx(
                 () {
                   return Column(

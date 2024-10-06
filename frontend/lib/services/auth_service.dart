@@ -19,13 +19,11 @@ class AuthService {
 // 사용자 회원가입
   Future<String?> signupKakao(Auth authData) async {
     try {
-      final response =
-          await _dioClient.dio.post('members/sign-up', data: authData.toJson());
-      log('회원가입 성공 service: ${response.data}');
-      return response.data['accessToken'];
+      final auth = await _repository.signupKakao(authData);
+      return auth;
     } catch (e) {
       log('회원가입 중 오류 발생 service: $e');
-      throw e;
+      throw Exception('회원가입 중 오류 발생 service: $e');
     }
   }
 
@@ -33,9 +31,11 @@ class AuthService {
   Future<bool> checkNicknameDuplicate(String nickname) async {
     try {
       // return await _repository.nickNameCheck(nickname);
-      final response = await _dioClient.dio.get('members/duplication-nickname',
-          queryParameters: {'nickname': nickname});
-      return response.data['isAvailable'];
+      final response = await _dioClient.dio.get(
+        'members/duplication-nickname/$nickname', // 경로 변수로 닉네임을 포함
+      );
+
+      return response.data['duplicateResult'];
     } catch (e) {
       throw Exception('닉네임 중복 확인 중 오류 발생 service: $e');
     }
@@ -48,7 +48,7 @@ class AuthService {
       final response =
           await _dioClient.dio.post('members/tags', data: requestBody);
     } catch (e) {
-      throw Exception('선호 태그 전송 중 오류 발생 service: $e');
+      // throw Exception('선호 태그 전송 중 오류 발생 service: $e');
     }
   }
 
