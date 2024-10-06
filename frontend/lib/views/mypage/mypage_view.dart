@@ -42,7 +42,6 @@ class MypageView extends StatelessWidget {
           children: [
             SizedBox(height: 10),
             // 회원 이미지 불러오기
-            // 프로필 이미지 불러오기 및 변경 버튼
             Center(
               child: Column(
                 children: [
@@ -50,27 +49,21 @@ class MypageView extends StatelessWidget {
                     String? profileImageUrl =
                         _authController.memberImage.value?.url;
 
-                    return GestureDetector(
-                      onTap: () {
-                        _authController.selectedImage(); // 이미지 선택 메서드 호출
-                      },
-                      child: Container(
-                        height: 119,
-                        width: 119,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE4E4E4),
-                          border:
-                              Border.all(color: Color(0xFFE4E4E4), width: 2),
-                          borderRadius: BorderRadius.circular(16),
-                          image: DecorationImage(
-                            image: profileImageUrl != null &&
-                                    profileImageUrl.isNotEmpty
-                                ? NetworkImage(profileImageUrl) // 이미지가 존재할 경우
-                                : AssetImage(
-                                        'assets/images/default_profile.png')
-                                    as ImageProvider, // 기본 이미지
-                            fit: BoxFit.cover,
-                          ),
+                    return Container(
+                      height: 119,
+                      width: 119,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE4E4E4),
+                        border: Border.all(color: Color(0xFFE4E4E4), width: 2),
+                        borderRadius: BorderRadius.circular(16),
+                        image: DecorationImage(
+                          image: profileImageUrl != null &&
+                                  profileImageUrl.isNotEmpty
+                              ? NetworkImage(profileImageUrl)
+                              : AssetImage(
+                                      'assets/images/auth/default_profile.png')
+                                  as ImageProvider, // 기본 이미지
+                          fit: BoxFit.cover,
                         ),
                       ),
                     );
@@ -79,7 +72,7 @@ class MypageView extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             Center(
               child: Obx(() => Text(
                     '${_authController.nickname.value}',
@@ -90,7 +83,7 @@ class MypageView extends StatelessWidget {
                     ),
                   )),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
             Center(
               child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
@@ -131,34 +124,47 @@ class MypageView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 7),
+
+            // TODO 더 깔끔하게 바꾸기
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 58),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Obx(() {
+                    // 생년월일을 DateTime으로 변환 후 포맷팅
+                    String formattedBirthDate =
+                        _authController.birthDate.value != null
+                            ? DateTime.parse(_authController.birthDate.value)
+                                .toLocal()
+                                .toString()
+                                .split(' ')[0]
+                            : ''; // null 체크 후 포맷팅
+
+                    return Text(
+                      formattedBirthDate, // 포맷된 생년월일을 표시
+                      style: const TextStyle(
+                        color: Color(0xFFA0A0A0),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    );
+                  }),
+                  SizedBox(height: 10),
                   Obx(() => Text(
-                        '${_authController.birthDate.value}',
+                        '${_authController.height.value} cm',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
                   SizedBox(height: 10),
                   Obx(() => Text(
-                        '${_authController.height.value}',
+                        '${_authController.weight.value} kg',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                  SizedBox(height: 10),
-                  Obx(() => Text(
-                        '${_authController.weight.value}',
-                        style: const TextStyle(
-                          color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
@@ -167,13 +173,14 @@ class MypageView extends StatelessWidget {
                         '${_authController.selectedGender.value}',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
                 ],
               ),
             ),
+
             SizedBox(height: 20),
             Center(
                 child: TextButton(

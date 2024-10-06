@@ -30,7 +30,7 @@ class SignUpView extends StatelessWidget {
         toolbarHeight: 56,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20), // 화면 전체 margin 20
+        padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -40,11 +40,10 @@ class SignUpView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: _authController.pickImage, // 이미지 선택 기능 연결
+                    onTap: _authController.pickImage,
                     child: Obx(
                       () => ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(50), // 모서리를 50만큼 둥글게 처리
+                        borderRadius: BorderRadius.circular(50),
                         child: _authController.selectedImage.value != null
                             ? Image.file(
                                 _authController.selectedImage.value!,
@@ -63,7 +62,6 @@ class SignUpView extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 60),
-              // 회원가입 폼 시작
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -90,7 +88,6 @@ class SignUpView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TextField(
-                      // 닉네임 글자 수 제한
                       onChanged: (text) {
                         if (text.characters.length > 8) {
                           _authController.nickname.value =
