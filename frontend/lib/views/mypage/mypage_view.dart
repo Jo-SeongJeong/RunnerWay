@@ -42,16 +42,43 @@ class MypageView extends StatelessWidget {
           children: [
             SizedBox(height: 10),
             // 회원 이미지 불러오기
+            // 프로필 이미지 불러오기 및 변경 버튼
             Center(
-              child: Container(
-                height: 119,
-                width: 119,
-                decoration: BoxDecoration(
-                    color: Color(0xFFE4E4E4),
-                    border: Border.all(color: Color(0xFFE4E4E4), width: 2),
-                    borderRadius: BorderRadius.circular(16)),
+              child: Column(
+                children: [
+                  Obx(() {
+                    String? profileImageUrl =
+                        _authController.memberImage.value?.url;
+
+                    return GestureDetector(
+                      onTap: () {
+                        _authController.selectedImage(); // 이미지 선택 메서드 호출
+                      },
+                      child: Container(
+                        height: 119,
+                        width: 119,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFE4E4E4),
+                          border:
+                              Border.all(color: Color(0xFFE4E4E4), width: 2),
+                          borderRadius: BorderRadius.circular(16),
+                          image: DecorationImage(
+                            image: profileImageUrl != null &&
+                                    profileImageUrl.isNotEmpty
+                                ? NetworkImage(profileImageUrl) // 이미지가 존재할 경우
+                                : AssetImage(
+                                        'assets/images/default_profile.png')
+                                    as ImageProvider, // 기본 이미지
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
               ),
             ),
+
             SizedBox(height: 30),
             Center(
               child: Obx(() => Text(
@@ -172,38 +199,6 @@ class MypageView extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w500),
                     ))),
-
-            // 하단에 유저 코스 등록 테스트 버튼 추가
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // 임의의 코스 데이터 생성
-                  var userCourseRegistRequestDto = {
-                    "name": "테스트 코스",
-                    "address": "서울",
-                    "content": "이것은 테스트 코스입니다.",
-                    "memberId": _authController.id.value,
-                    "level": 1,
-                    "averageSlope": 10,
-                    "averageDownhill": 5,
-                    "averageTime": "2024-10-01T07:30:00",
-                    "courseLength": 5.5,
-                    "courseType": "OFFICIAL",
-                    "averageCalorie": 500.5,
-                    "lat": 37.5665,
-                    "lng": 126.9780,
-                    "area": "서울",
-                    "courseImage": {"url": "https://example.com/course.png"},
-                    "recordId": 1001
-                  };
-
-                  // 유저 코스 등록 메서드 호출
-                  _userCourseController.addUserCourse(
-                      userCourseRegistRequestDto); // Course 객체 전달
-                },
-                child: Text('유저 코스 등록 테스트'),
-              ),
-            ),
 
             // 회원가입 페이지 이동 임시 버튼
             // ElevatedButton(

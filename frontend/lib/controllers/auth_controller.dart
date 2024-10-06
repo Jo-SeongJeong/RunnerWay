@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
-import 'package:frontend/views/auth/signup_view.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:get/get.dart';
@@ -64,7 +63,6 @@ class AuthController extends GetxController {
       }
       // 사용자 정보 요청
       await requestUserInfo();
-      // loadDecodedData();
       isLoggedIn.value = true;
     } catch (error) {
       log('카카오톡 로그인 실패: $error');
@@ -74,7 +72,6 @@ class AuthController extends GetxController {
 
   // 디코드
   Future<void> loadDecodedData() async {
-    // 'ACCESS_TOKEN' 읽기 시 비동기 처리를 위한 await 추가
     String? storedToken = await _storage.read(key: 'ACCESS_TOKEN');
 
     if (storedToken != null) {
@@ -178,11 +175,12 @@ class AuthController extends GetxController {
         log('회원가입 성공 controller, 토큰: $accessToken');
         signUpSuccess.value = true;
         Get.snackbar('성공', '선호태그 입력 페이지로 이동합니다.');
+        loadDecodedData();
       } else {
         Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
       }
     } catch (e) {
-      signUpSuccess.value = false; // 실패 상태 업데이트
+      signUpSuccess.value = false;
       log('회원가입 중 오류 발생 controller: $e');
       Get.snackbar('오류', '회원가입에 실패했습니다.');
     }
@@ -258,8 +256,7 @@ class AuthController extends GetxController {
       Auth userInfo = Auth.fromJson(userInfoMap);
 
       log('회원 정보: ${userInfo}');
-
-      // nickname.value = 'ㅇㅇㅇㅇ';
+      //  TODO 이미지 불러오기
       nickname.value =
           await _storage.read(key: 'NICKNAME') ?? userInfo.nickname;
       birthDate.value = userInfo.birth?.toString() ?? '';
