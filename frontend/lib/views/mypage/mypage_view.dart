@@ -41,17 +41,38 @@ class MypageView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
+            // 회원 이미지 불러오기
             Center(
-              child: Container(
-                height: 119,
-                width: 119,
-                decoration: BoxDecoration(
-                    color: Color(0xFFE4E4E4),
-                    border: Border.all(color: Color(0xFFE4E4E4), width: 2),
-                    borderRadius: BorderRadius.circular(16)),
+              child: Column(
+                children: [
+                  Obx(() {
+                    String? profileImageUrl =
+                        _authController.memberImage.value?.url;
+
+                    return Container(
+                      height: 119,
+                      width: 119,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE4E4E4),
+                        border: Border.all(color: Color(0xFFE4E4E4), width: 2),
+                        borderRadius: BorderRadius.circular(16),
+                        image: DecorationImage(
+                          image: profileImageUrl != null &&
+                                  profileImageUrl.isNotEmpty
+                              ? NetworkImage(profileImageUrl)
+                              : AssetImage(
+                                      'assets/images/auth/default_profile.png')
+                                  as ImageProvider, // 기본 이미지
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  }),
+                ],
               ),
             ),
-            SizedBox(height: 30),
+
+            SizedBox(height: 20),
             Center(
               child: Obx(() => Text(
                     '${_authController.nickname.value}',
@@ -62,7 +83,7 @@ class MypageView extends StatelessWidget {
                     ),
                   )),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
             Center(
               child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
@@ -103,34 +124,47 @@ class MypageView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 7),
+
+            // TODO 더 깔끔하게 바꾸기
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 58),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Obx(() {
+                    // 생년월일을 DateTime으로 변환 후 포맷팅
+                    String formattedBirthDate =
+                        _authController.birthDate.value != null
+                            ? DateTime.parse(_authController.birthDate.value)
+                                .toLocal()
+                                .toString()
+                                .split(' ')[0]
+                            : ''; // null 체크 후 포맷팅
+
+                    return Text(
+                      formattedBirthDate, // 포맷된 생년월일을 표시
+                      style: const TextStyle(
+                        color: Color(0xFFA0A0A0),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    );
+                  }),
+                  SizedBox(height: 10),
                   Obx(() => Text(
-                        '${_authController.birthDate.value}',
+                        '${_authController.height.value} cm',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
                   SizedBox(height: 10),
                   Obx(() => Text(
-                        '${_authController.height.value}',
+                        '${_authController.weight.value} kg',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                  SizedBox(height: 10),
-                  Obx(() => Text(
-                        '${_authController.weight.value}',
-                        style: const TextStyle(
-                          color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
@@ -139,13 +173,14 @@ class MypageView extends StatelessWidget {
                         '${_authController.selectedGender.value}',
                         style: const TextStyle(
                           color: Color(0xFFA0A0A0),
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       )),
                 ],
               ),
             ),
+
             SizedBox(height: 20),
             Center(
                 child: TextButton(
@@ -171,38 +206,6 @@ class MypageView extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w500),
                     ))),
-
-            // 하단에 유저 코스 등록 테스트 버튼 추가
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // 임의의 코스 데이터 생성
-                  var userCourseRegistRequestDto = {
-                    "name": "테스트 코스",
-                    "address": "서울",
-                    "content": "이것은 테스트 코스입니다.",
-                    "memberId": _authController.id.value,
-                    "level": 1,
-                    "averageSlope": 10,
-                    "averageDownhill": 5,
-                    "averageTime": "2024-10-01T07:30:00",
-                    "courseLength": 5.5,
-                    "courseType": "OFFICIAL",
-                    "averageCalorie": 500.5,
-                    "lat": 37.5665,
-                    "lng": 126.9780,
-                    "area": "서울",
-                    "courseImage": {"url": "https://example.com/course.png"},
-                    "recordId": 1001
-                  };
-
-                  // 유저 코스 등록 메서드 호출
-                  _userCourseController.addUserCourse(
-                      userCourseRegistRequestDto); // Course 객체 전달
-                },
-                child: Text('유저 코스 등록 테스트'),
-              ),
-            ),
 
             // 회원가입 페이지 이동 임시 버튼
             // ElevatedButton(
