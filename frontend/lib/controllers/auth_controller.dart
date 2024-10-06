@@ -275,6 +275,7 @@ class AuthController extends GetxController {
     try {
       await _storage.delete(key: 'ACCESS_TOKEN');
       isLoggedIn.value = false;
+      log('로그아웃 성공 controller');
       Get.toNamed('/login');
     } catch (e) {
       log('로그아웃 실패 controller: ${e}');
@@ -285,8 +286,9 @@ class AuthController extends GetxController {
   // 회원탈퇴
   Future<void> remove() async {
     try {
-      // TODO
-      // final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+      // TODO 회원탈퇴 하자
+      final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+      await _storage.delete(key: 'ACCESS_TOKEN');
       // final response = await _authService.removeMember(accessToken);
       Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
     } catch (e) {

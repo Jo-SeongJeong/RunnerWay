@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
@@ -42,12 +44,12 @@ class SignUpController extends GetxController {
     }
   }
 
-  // 카카오톡 로그아웃
+  // 로그아웃
   Future<void> logout() async {
     try {
       await UserApi.instance.logout();
       isLoggedIn.value = false;
-      print("카카오톡 로그아웃 성공");
+      log("로그아웃 성공");
     } catch (e) {
       print("로그아웃 실패: $e");
     }
