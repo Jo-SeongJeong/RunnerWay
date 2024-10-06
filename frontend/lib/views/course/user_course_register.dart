@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/user_course_controller.dart';
@@ -8,21 +7,20 @@ import '../../controllers/record_controller.dart';
 import '../../widgets/button/wide_button.dart';
 import '../../widgets/map/result_map.dart';
 import '../../widgets/review_record_item.dart';
-import '../../widgets/review_info_item.dart';
 
 class RegisterView extends StatelessWidget {
   RegisterView({Key? key}) : super(key: key);
   final TextEditingController courseNameController = TextEditingController();
-  final TextEditingController reviewController =
-      TextEditingController(); // 리뷰 입력 필드 추가
+  final TextEditingController reviewController = TextEditingController();
   final UserCourseController userCourseController =
       Get.put(UserCourseController());
   final RecordController recordController = Get.find<RecordController>();
 
   @override
   Widget build(BuildContext context) {
-    final int recordId =
-        int.tryParse(Get.parameters['id'] ?? '0') ?? 0; // URL에서 recordId 가져오기
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final int recordId = int.tryParse(Get.parameters['id'] ?? '0') ?? 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -41,6 +39,7 @@ class RegisterView extends StatelessWidget {
             children: [
               Obx(
                 () {
+                  final record = recordController.recordDetail.value!;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -51,21 +50,56 @@ class RegisterView extends StatelessWidget {
                               value.isNotEmpty;
                         },
                         decoration: InputDecoration(
-                            labelText: '코스 이름을 입력해주세요',
-                            border: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black)),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black)),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.blueAccent))),
+                          labelText: '코스 이름을 입력해주세요',
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueAccent)),
+                        ),
                         cursorColor: Colors.blueAccent,
                         cursorErrorColor: Colors.red,
                       ),
                       SizedBox(height: 20),
-                      Image.asset(
-                        'assets/images/review_default_image.png',
-                        fit: BoxFit.cover,
+                      GestureDetector(
+                        onTap: () async {
+                          await userCourseController.pickImage();
+                        },
+                        child: Container(
+                          height: screenHeight * 0.3,
+                          width: screenWidth,
+                          child:
+                              userCourseController.selectedImage.value != null
+                                  ? Image.file(
+                                      userCourseController.selectedImage.value!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : record.url != null && record.url!.isNotEmpty
+                                      ? Image.network(
+                                          record.url!,
+                                          fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Center(
+                                              child: Image.asset(
+                                                'assets/images/main/course_default.png',
+                                                width: 80,
+                                                height: 80,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      : Center(
+                                          child: Image.asset(
+                                            'assets/images/main/course_default.png',
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                        ),
                       ),
                       SizedBox(height: 28),
                       Text(
@@ -79,16 +113,17 @@ class RegisterView extends StatelessWidget {
                       TextField(
                         controller: reviewController,
                         decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey.shade100,
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none)),
+                          filled: true,
+                          fillColor: Colors.grey.shade100,
+                          enabledBorder:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                        ),
                       ),
                       SizedBox(height: 50),
                       recordController.isLoading.isTrue
                           ? Center(child: CircularProgressIndicator())
                           : recordController.recordDetail.value == null
-                              ? Center(child: Text('No record data available'))
+                              ? Center(child: Text('기록이 없습니다.'))
                               : Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -105,8 +140,7 @@ class RegisterView extends StatelessWidget {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         ReviewRecordItem(
-                                          value: recordController.recordDetail
-                                              .value!.runningDistance,
+                                          value: record.runningDistance ?? 0.0,
                                           label: '운동 거리',
                                         ),
                                         ReviewRecordItem(
@@ -156,25 +190,38 @@ class RegisterView extends StatelessWidget {
                       final record = recordController.recordDetail.value!;
                       log('$record');
 
-                      // TODO 데이터 변경_ address lat lng 받아서 변경하기
                       userCourseController.addUserCourse({
                         'name': courseNameController.text,
                         'recordId': record.recordId ?? 0,
-                        'address': '유성구',
+                        'address': record.address ?? 0,
                         'content': reviewController.text.isNotEmpty
                             ? reviewController.text
-                            : '리뷰 없음', // 비어 있는 경우 기본 값 설정
+                            : '리뷰 없음',
                         'averageTime': record.startDate ?? '',
                         'courseLength': record.runningDistance,
                         'courseType': 'user',
                         'averageCalorie': record.calorie ?? 0.0,
-                        'lat': 36.35498566873416,
-                        'lng': 127.3008971772697,
+                        'lat': record.lat ?? 0.0,
+                        'lng': record.lng ?? 0.0,
                         'url':
                             'https://runnerway.s3.ap-northeast-2.amazonaws.com/test/test2.json',
-                        'courseImage': {'url': 'test.url', 'path': 'test.path'},
+                        'courseImage': {
+                          'url': userCourseController.selectedImage.value !=
+                                      null &&
+                                  userCourseController
+                                      .selectedImage.value!.path.isNotEmpty
+                              ? await userCourseController.s3ImageUpload
+                                  .uploadImage2(
+                                      userCourseController.selectedImage.value!,
+                                      "uploads/course_images")
+                              : (record.url != null && record.url!.isNotEmpty
+                                  ? record.url
+                                  : 'default_url'),
+                          'path':
+                              userCourseController.selectedImage.value?.path ??
+                                  'path/to/image',
+                        },
                       });
-                      // 성공하면
                       Get.toNamed('/runner-pick');
                     }
                   : null,

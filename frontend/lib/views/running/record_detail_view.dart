@@ -62,14 +62,16 @@ class RecordDetailView extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        height: screenHeight * 0.2,
+                        height: screenHeight * 0.3,
                         child: record.url != null && record.url!.isNotEmpty
                             ? Image.network(
+                                height: screenHeight * 0.3,
+                                width: screenWidth,
                                 record.url!,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Container(
-                                    height: screenHeight * 0.2,
+                                    height: screenHeight * 0.3,
                                     child: Center(
                                       child: Image.asset(
                                         'assets/images/main/course_default.png',
@@ -82,7 +84,7 @@ class RecordDetailView extends StatelessWidget {
                                 },
                               )
                             : Container(
-                                height: screenHeight * 0.2,
+                                height: screenHeight * 0.3,
                                 child: Center(
                                   child: Image.asset(
                                     'assets/images/main/course_default.png',
@@ -218,6 +220,7 @@ class RecordDetailView extends StatelessWidget {
 
   void _showEditReviewModal(BuildContext context, Record record) {
     final RecordController recordController = Get.find<RecordController>();
+    final double screenHeight = MediaQuery.of(context).size.height;
     TextEditingController _reviewController = TextEditingController(
       text: record.comment ?? '',
     );
@@ -231,7 +234,7 @@ class RecordDetailView extends StatelessWidget {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: SizedBox(
-            height: 250, // TODO 모달 높이 _ 반응형으로 추후 변경
+            height: screenHeight * 0.35, // TODO 모달 높이 _ 반응형으로 추후 변경
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: Colors.white, // 배경색

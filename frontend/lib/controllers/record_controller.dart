@@ -14,7 +14,6 @@ class RecordController extends GetxController {
   var startDate = ''.obs;
   var comment = ''.obs;
   var courseDetail = Rxn<Course>();
-
   var dayRecords = <Record>[].obs;
   var monthRecords = Rxn<RecordAnalyze>();
   var isDayRecordLoading = false.obs;

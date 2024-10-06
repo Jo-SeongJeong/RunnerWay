@@ -7,12 +7,12 @@ class Record {
   final String score;
   final double averageFace;
   final String? startDate;
-  final String? finishDate; // 추가된 finishDate
+  final String? finishDate;
   final double? calorie;
   final String? url;
   final String? address;
-  final double? lat; // 추가된 lat
-  final double? lng; // 추가된 lng
+  final double? lat;
+  final double? lng;
 
   Record({
     this.recordId,
@@ -23,12 +23,12 @@ class Record {
     required this.score,
     required this.averageFace,
     this.startDate,
-    this.finishDate, // 추가
+    this.finishDate,
     this.calorie,
     this.url,
     this.address,
-    this.lat, // 추가
-    this.lng, // 추가
+    this.lat,
+    this.lng,
   });
 
   // JSON 데이터를 기반으로 Record 객체 생성
