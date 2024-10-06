@@ -46,10 +46,14 @@ class AuthController extends GetxController {
   Future<void> loginWithKakao() async {
     try {
       // 기본 카카오 로그인
+      log('카카오 로그인 진입1');
       bool isInstalled = await isKakaoTalkInstalled();
+      log('isInstalled : $isInstalled');
+      log('${UserApi.instance.toString()}');
       OAuthToken token = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
+      log('카카오 로그인 진입3');
 
       log('카카오 로그인 성공: ${token.accessToken}');
       // 토큰을 스토리지에 저장
@@ -67,7 +71,7 @@ class AuthController extends GetxController {
       // loadDecodedData();
       isLoggedIn.value = true;
     } catch (error) {
-      log('카카오톡 로그인 실패: $error');
+      log('카카오톡 로그인 실패 auth: $error');
       Get.snackbar('오류', '카카오톡 로그인에 실패했습니다.');
     }
   }

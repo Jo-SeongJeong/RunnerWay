@@ -67,7 +67,6 @@ class RunnerView extends StatelessWidget {
             ),
 
             // 필터
-            // TODO 픽셀 값 넘어감
             FilterCondition(),
             SizedBox(height: 25),
 
