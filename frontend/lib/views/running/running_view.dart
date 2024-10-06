@@ -241,9 +241,6 @@ class RunningView extends StatelessWidget {
     );
   }
 
-  // TODO
-  // 확인 취소 모달로 변경
-  // 확인 눌렀을 시 아래 모달 띄우는 것으로 변경 요망
   Future<void> _showCustomModal(BuildContext context) async {
     final RunningController controller = Get.find<RunningController>();
 
