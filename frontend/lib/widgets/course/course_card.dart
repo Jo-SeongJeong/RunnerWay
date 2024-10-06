@@ -209,24 +209,40 @@ class CourseCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(children: [
-                        Image.asset(
-                          'assets/icons/picker.png',
-                          width: 14,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/icons/picker.png',
+                              width: 14,
+                            ),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            // LayoutBuilder로 남은 너비 계산 후 주소 텍스트 표시
+                            Expanded(
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  // 주소 부분은 남은 공간만큼 사용하고 나머지는 줄임표(...) 처리
+                                  return Text(
+                                    '${course.address}',
+                                    style: TextStyle(
+                                      color: Color(0xffA0A0A0),
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis, // 너무 길면 "..."으로 표시
+                                    maxLines: 1, // 한 줄로만 표시
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 6, // 주소와 참여자 수 사이의 여백을 5로 설정
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          '${course.address}',
-                          style: TextStyle(
-                            color: Color(0xffA0A0A0),
-                            fontSize: 14,
-                          ),
-                        )
-                      ]),
-
-                      // 1명 이상 참여 중인 경우에만 참여자 수 보이도록 조건 처리
+                      ),
+                      // 참여자 수 부분은 고정된 크기로 처리
                       if (course.count > 0)
                         Text(
                           '${course.count}명 참여 중',

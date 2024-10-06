@@ -107,7 +107,7 @@ class Calendar extends StatelessWidget {
 
                   // stampDays에 해당하는 날짜인지 확인
                   if (recordController.stampDays.any((stampDay) =>
-                      stampDay.year == simpleDay.year &&
+                  stampDay.year == simpleDay.year &&
                       stampDay.month == simpleDay.month &&
                       stampDay.day == simpleDay.day)) {
                     return Center(
@@ -130,7 +130,37 @@ class Calendar extends StatelessWidget {
                     ),
                   );
                 },
+                todayBuilder: (context, day, focusedDay) {
+                  DateTime simpleDay = DateTime(day.year, day.month, day.day);
+
+                  // 오늘 날짜에 stampDays가 있으면 스탬프 표시
+                  if (recordController.stampDays.any((stampDay) =>
+                  stampDay.year == simpleDay.year &&
+                      stampDay.month == simpleDay.month &&
+                      stampDay.day == simpleDay.day)) {
+                    return Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Text(
+                            DateFormat('d').format(day),
+                            style: TextStyle(color: Colors.black), // 날짜 텍스트
+                          ),
+                          Image.asset('assets/icons/stamp.png'),
+                        ],
+                      ),
+                    );
+                  }
+                  // 오늘 날짜 기본 표시
+                  return Center(
+                    child: Text(
+                      DateFormat('d').format(day),
+                      style: TextStyle(color: Colors.blue), // 오늘 날짜 텍스트 스타일
+                    ),
+                  );
+                },
               ),
+
               calendarStyle: CalendarStyle(
                 outsideDaysVisible: false,
                 todayTextStyle: TextStyle(

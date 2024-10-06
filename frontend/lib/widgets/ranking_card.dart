@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../widgets/map/running_map.dart';
 
 class RankingCard extends StatelessWidget {
   final String name;
@@ -64,20 +63,17 @@ class RankingCard extends StatelessWidget {
                       child: rank == 1
                           ? Image.asset(
                               'assets/images/medals/gold_medal.png',
-                              width: 38,
                               height: 30,
                               fit: BoxFit.cover,
                             )
                           : rank == 2
                               ? Image.asset(
                                   'assets/images/medals/silver_medal.png',
-                                  width: 38,
                                   height: 30,
                                   fit: BoxFit.cover,
                                 )
                               : Image.asset(
                                   'assets/images/medals/bronze_medal.png',
-                                  width: 38,
                                   height: 30,
                                   fit: BoxFit.cover,
                                 ),

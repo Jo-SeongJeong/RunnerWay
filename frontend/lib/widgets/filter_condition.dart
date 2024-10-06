@@ -10,140 +10,149 @@ class FilterCondition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      // 정렬 기준 버튼
-      Obx(
-        () => DecoratedBox(
-          decoration: BoxDecoration(
-            color: Color(0xff1C1516),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-            child: ButtonTheme(
-              // padding: EdgeInsets.symmetric(vertical: 0),
-              child: DropdownButton<String>(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                value: controller.sortCondition.value,
-                items:
-                    <String>['추천순', '인기순', '거리순'].map<DropdownMenuItem<String>>(
-                  (String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style:
-                            TextStyle(color: Color(0xffE8E8E8), fontSize: 14),
-                      ),
-                    );
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+        // 정렬 기준 버튼
+        Obx(
+              () => DecoratedBox(
+            decoration: BoxDecoration(
+              color: Color(0xff1C1516),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+              child: ButtonTheme(
+                // padding: EdgeInsets.symmetric(vertical: 0),
+                child: DropdownButton<String>(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  value: controller.sortCondition.value,
+                  items:
+                  <String>['추천순', '인기순', '거리순'].map<DropdownMenuItem<String>>(
+                        (String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style:
+                          TextStyle(color: Color(0xffE8E8E8), fontSize: 14),
+                        ),
+                      );
+                    },
+                  ).toList(),
+                  icon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: Color(0xffE8E8E8),
+                  ),
+                  onChanged: (String? newCondition) {
+                    controller.updateSortCondition(newCondition!);
                   },
-                ).toList(),
-                icon: Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: Color(0xffE8E8E8),
+                  dropdownColor: Color(0xff1C1516),
+                  underline: Container(),
+                  focusColor: Color(0xff1C1516),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                onChanged: (String? newCondition) {
-                  controller.updateSortCondition(newCondition!);
-                },
-                dropdownColor: Color(0xff1C1516),
-                underline: Container(),
-                focusColor: Color(0xff1C1516),
-                borderRadius: BorderRadius.circular(14),
               ),
             ),
           ),
         ),
-      ),
 
-      SizedBox(
-        width: 10,
-      ),
+        SizedBox(
+          width: 10,
+        ),
 
-      // 난이도 필터 버튼
-      GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return ConditionDialog(
-                controller: controller,
-                conditionType: 'difficulty',
-              );
-            },
-          );
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          decoration: BoxDecoration(
-            color: Color(0xffe8e8e8).withOpacity(0.5),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Row(
-            children: [
-              Text(
-                '난이도',
-                style: TextStyle(color: Colors.black, fontSize: 14),
-              ),
-              Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black),
-            ],
+        // 난이도 필터 버튼
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return ConditionDialog(
+                  controller: controller,
+                  conditionType: 'difficulty',
+                );
+              },
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: Color(0xffe8e8e8).withOpacity(0.5),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  '난이도',
+                  style: TextStyle(color: Colors.black, fontSize: 14),
+                ),
+                Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black),
+              ],
+            ),
           ),
         ),
-      ),
 
-      SizedBox(
-        width: 10,
-      ),
+        SizedBox(
+          width: 10,
+        ),
 
-      // 코스 거리 필터 버튼
-      GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return ConditionDialog(
-                controller: controller,
-                conditionType: 'distance',
-              );
-            },
-          );
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          decoration: BoxDecoration(
-            color: Color(0xffe8e8e8).withOpacity(0.5),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Row(
-            children: [
-              Text(
-                '코스 거리',
-                style: TextStyle(color: Colors.black, fontSize: 14),
-              ),
-              Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black),
-            ],
+        // 코스 거리 필터 버튼
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return ConditionDialog(
+                  controller: controller,
+                  conditionType: 'distance',
+                );
+              },
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: Color(0xffe8e8e8).withOpacity(0.5),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  '코스 거리',
+                  style: TextStyle(color: Colors.black, fontSize: 14),
+                ),
+                Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black),
+              ],
+            ),
           ),
         ),
-      ),
 
-      // 남은 공간 차지
-      Spacer(),
+          SizedBox(width: 10),
 
-      // 현위치 불러오기 버튼
-      IconButton(
-        onPressed: () async {
-          // 현위치로 위치 정보 갱신
-          if (Get.currentRoute == '/main') {
-            await Get.find<LocationController>().getCurrentLocation();
-            Get.find<MainController>().fetchOfficialCourses();
-          } else
-            await Get.find<RunnerController>().updateCurrentLocation();
-        },
-        icon: Image.asset(
-          'assets/images/main/gps.png',
-          width: 30,
+          // 남은 공간 차지 부분 처리
+          Flexible(
+            child: Container(),  // Flexible로 남은 공간 처리
+          ),
+
+        // 현위치 불러오기 버튼
+        IconButton(
+          onPressed: () async {
+            // 현위치로 위치 정보 갱신
+            if (Get.currentRoute == '/main') {
+              await Get.find<LocationController>().getCurrentLocation();
+              Get.find<MainController>().fetchOfficialCourses();
+            } else
+              await Get.find<RunnerController>().updateCurrentLocation();
+          },
+          icon: Image.asset(
+            'assets/images/main/gps.png',
+            width: 30,
+          ),
         ),
-      ),
-    ]);
+      ],),
+    );
   }
 }
 
