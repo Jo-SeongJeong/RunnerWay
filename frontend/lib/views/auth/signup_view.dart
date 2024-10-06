@@ -17,8 +17,9 @@ class SignUpView extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthController _authController = Get.find<AuthController>();
     final double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         scrolledUnderElevation: 0,
         centerTitle: true,
@@ -144,10 +145,9 @@ class SignUpView extends StatelessWidget {
                   log('선택된 날짜 : $selectedDate');
                   _authController.birthDate.value = selectedDate;
                 },
-                // TODO
                 hintText: 'YYYY-MM-DD',
               ),
-              // 키 몸무게 input
+              // 키, 몸무게 입력
               Row(
                 children: [
                   Padding(
@@ -167,8 +167,6 @@ class SignUpView extends StatelessWidget {
                       _authController.weight.value = value;
                     },
                   ),
-                  // Obx(() => Text('키: ${_authController.height.value} cm')),
-                  // Obx(() => Text('몸무게: ${_authController.weight.value} kg')),
                 ],
               ),
               SizedBox(height: 25),
