@@ -154,6 +154,9 @@ class CourseSubInfo extends StatelessWidget {
                 child: courseImage?.url != null && courseImage!.url.isNotEmpty
                     ? Image.network(
                         courseImage!.url,
+                        width: 130,
+                        height: 130,
+                        fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTree) {
                           // 이미지 로드 중 에러 발생 시 기본 이미지 표시
                           return Image.asset(
@@ -166,8 +169,8 @@ class CourseSubInfo extends StatelessWidget {
                       )
                     : Image.asset(
                         'assets/images/main/course_default.png',
-                        width: 90,
-                        height: 90,
+                        width: 130,
+                        height: 130,
                         fit: BoxFit.cover,
                       ),
               ),
