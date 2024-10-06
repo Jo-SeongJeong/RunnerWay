@@ -153,6 +153,16 @@ class RunningThingsView extends StatelessWidget {
               // Navigates to the RunningDetail page
               child: const Text('Go to view의 내 코스에서 나와 대결'),
             ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/main'),
+              // Navigates to the RunningDetail page
+              child: const Text('메인 뷰'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/login'),
+              // Navigates to the RunningDetail page
+              child: const Text('로그인'),
+            ),
           ],
         ),
       ),
