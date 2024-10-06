@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -7,7 +8,7 @@ class JwtController extends GetxController {
   final _storage = FlutterSecureStorage();
 
   var newToken =
-      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUwMDksImVtYWlsIjoidG1keGtyNUBoYW5tYWlsLm5ldCIsIm5pY2tuYW1lIjoi44WH44WH44WHIiwiaWF0IjoxNzI4MDI2MzU2LCJleHAiOjE3MzE2MjYzNTZ9.IwZ8YtIc3g4A12HQluDzWY7cNKZuaYRTVAUZyUyrz_g';
+      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
 
   var id = ''.obs;
   var email = ''.obs;
@@ -38,5 +39,9 @@ class JwtController extends GetxController {
     email.value = await _storage.read(key: 'EMAIL') ?? 'No Email found';
     nickname.value =
         await _storage.read(key: 'NICKNAME') ?? 'No Nickname found';
+
+    final authController = Get.find<AuthController>();
+    authController.isLoggedIn.value = true;
+    log('${authController.isLoggedIn.value}');
   }
 }
