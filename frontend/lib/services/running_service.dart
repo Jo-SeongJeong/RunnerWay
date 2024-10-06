@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:frontend/models/ranking.dart';
 import 'package:frontend/models/ranking_upload_model.dart';
 import 'package:frontend/models/running_record_model.dart';
 import 'package:frontend/repositories/running_repository.dart';
