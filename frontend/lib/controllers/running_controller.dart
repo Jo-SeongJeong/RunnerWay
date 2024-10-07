@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/course_controller.dart';
 import 'package:frontend/models/ranking_upload_model.dart';
@@ -15,6 +16,7 @@ import 'package:frontend/models/running_record_model.dart';
 import 'package:frontend/services/running_service.dart';
 import 'package:frontend/services/file_service.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flowery_tts/flowery_tts.dart';
 
 class RunningController extends GetxController {
   late final RunningService _runningService;
@@ -26,6 +28,10 @@ class RunningController extends GetxController {
   var isLoading = true.obs;
   final value = RunningMapModel().obs;
   GoogleMapController? _mapController;
+
+  // tts를 위한 flowery 추가
+  final Flowery tts = const Flowery();
+  final AudioPlayer audioPlayer = AudioPlayer();
 
   var isOfficialRun = false.obs;
   var isCompetitionMode = false.obs;
@@ -95,6 +101,7 @@ class RunningController extends GetxController {
     await _setInitialLocation();
     getRunTypeText();
     isLoading(false);
+    await _playTTS("러닝을 시작합니다. 현재 위치에서 출발하세요.");
   }
 
   // TODO
@@ -501,5 +508,25 @@ class RunningController extends GetxController {
     competitionTimer?.cancel();
     _mapController?.dispose();
     super.onClose();
+  }
+
+  Future<void> _playTTS(String text) async {
+    try {
+      final audio = await tts.tts(
+        text: text,
+        voice: 'korean_voice_name',
+        speed: 1.3,
+        translate: false,
+      );
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/tts_output.mp3');
+      file.writeAsBytesSync(audio);
+
+      // Use DeviceFileSource for local file playback
+      await audioPlayer.play(DeviceFileSource(file.path));
+      dev.log('음성 파일이 재생되었습니다.');
+    } catch (e) {
+      dev.log('TTS 재생 실패: $e');
+    }
   }
 }
