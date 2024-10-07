@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/utils/env.dart';
 import '../models/auth.dart';
 import 'package:frontend/utils/dio_client.dart';
 
@@ -44,7 +45,7 @@ class AuthProvider {
       //   options: Options(headers: {'Content-Type': 'application/json'}),
       // );
       final response = await dio.post(
-        'https://j11b304.p.ssafy.io/api/members/sign-up',
+        '${Env.baseUrl}members/sign-up',
         data: authData.toJson(),
       );
       log('서버 응답 provider: ${response.data}');
@@ -80,9 +81,6 @@ class AuthProvider {
     try {
       final response =
           await _dioClient.dio.get('/members/duplication-nickname/${nickname}');
-      // final response = await dio.get(
-      //   'https://j11b304.p.ssafy.io/api/members/duplication-nickname/${Uri.encodeComponent(nickname)}',
-      // );
 
       if (response.statusCode == 200) {
         return response.data['duplicateResult']; // 서버 응답에서 중복 여부 반환

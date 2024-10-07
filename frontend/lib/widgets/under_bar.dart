@@ -235,8 +235,7 @@ class ModalContent extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Get.back(); // 모달 닫기
-                  Get.toNamed('/runningthings' // RunningScreen 페이지로 이동
-                      );
+                  Get.toNamed('/running/free/0/0', parameters: {'varid': '0'});
                 },
                 child: Column(
                   children: const [

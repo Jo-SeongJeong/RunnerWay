@@ -35,7 +35,7 @@ class UserCourseController extends GetxController {
       if (uploadedImageUrl != null) {
         log("업로드된 이미지 URL: $uploadedImageUrl");
       } else {
-        Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
+        // Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
       }
     }
   }
@@ -69,7 +69,7 @@ class UserCourseController extends GetxController {
 
       // 유저 코스 등록 메서드 호출
       await _userCourseService.addUserCourse(userCourseRegistRequestDto);
-      Get.snackbar('성공', '유저 코스 추가가 완료되었습니다.');
+      // Get.snackbar('성공', '유저 코스 추가가 완료되었습니다.');
     } catch (e) {
       errorMessage('유저 코스 추가 중 오류 발생 controller: $e');
       log(errorMessage.value);
