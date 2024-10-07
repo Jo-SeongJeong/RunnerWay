@@ -6,6 +6,7 @@ import 'package:frontend/models/record.dart';
 import 'package:frontend/services/record_service.dart';
 import 'package:frontend/services/course_service.dart';
 import 'package:frontend/models/course.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RecordController extends GetxController {
   final RecordService _recordService = RecordService();
@@ -31,6 +32,9 @@ class RecordController extends GetxController {
 
   var selectedDate = Rxn<DateTime>(); // 선택된 날짜
   var focusedDate = Rxn<DateTime>(); // 포커스된 날짜
+
+  var pointOnMap = <LatLng>[].obs;
+  var polyline = <Polyline>{}.obs;
 
   @override
   void onInit() {
@@ -125,6 +129,14 @@ class RecordController extends GetxController {
         var course =
             await _courseService.getOfficialCourseDetail(detail.courseId);
         courseDetail.value = course;
+
+        // 기존 Polyline을 업데이트하는 로직
+        var loadedPolyline = await _recordService.loadPresetPath(recordId);
+        if (loadedPolyline != null) {
+          polyline.clear(); // 기존 폴리라인 삭제 (필요한 경우)
+          polyline.addAll({loadedPolyline}); // 새 폴리라인 추가
+          log('Preset path loaded for recordId $recordId');
+        }
       }
     } catch (e) {
       log('상세정보조회실패: $e');
