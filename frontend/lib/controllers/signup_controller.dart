@@ -25,7 +25,7 @@ class SignUpController extends GetxController {
       await _getUserInfo();
     } catch (e) {
       print("카카오톡 로그인 실패: $e");
-      Get.snackbar('오류', '카카오톡 로그인에 실패했습니다.');
+      // Get.snackbar('오류', '카카오톡 로그인에 실패했습니다.');
     }
   }
 
@@ -40,7 +40,7 @@ class SignUpController extends GetxController {
       print("카카오톡 로그인 성공, 닉네임: ${nickname.value}, 성별: ${selectedGender.value}");
     } catch (e) {
       print("사용자 정보 가져오기 실패: $e");
-      Get.snackbar('오류', '사용자 정보를 가져오지 못했습니다.');
+      // Get.snackbar('오류', '사용자 정보를 가져오지 못했습니다.');
     }
   }
 
