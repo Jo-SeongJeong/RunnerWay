@@ -41,7 +41,7 @@ class SignupInput extends StatelessWidget {
             text,
             style: TextStyle(
               color: Color(0xFF1C1516),
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: FontWeight.w500,
             ),
           ),

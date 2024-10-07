@@ -1,8 +1,6 @@
 import 'package:frontend/controllers/auth_controller.dart';
 import 'package:frontend/controllers/jwt_controller.dart';
 import 'package:frontend/controllers/user_course_controller.dart';
-import 'package:frontend/views/auth/login_view.dart';
-import 'package:frontend/views/auth/signup_view.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/views/mypage/modify_info_view.dart';
 import 'package:frontend/widgets/line.dart';
@@ -19,7 +17,7 @@ class MypageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.of(context).size.width;
     _authController.fetchUserInfo();
 
     return BaseView(
@@ -41,14 +39,12 @@ class MypageView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            // 회원 이미지 불러오기
             Center(
               child: Column(
                 children: [
                   Obx(() {
                     String? profileImageUrl =
                         _authController.memberImage.value?.url;
-
                     return Container(
                       height: 119,
                       width: 119,
@@ -62,7 +58,7 @@ class MypageView extends StatelessWidget {
                               ? NetworkImage(profileImageUrl)
                               : AssetImage(
                                       'assets/images/auth/default_profile.png')
-                                  as ImageProvider, // 기본 이미지
+                                  as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -71,7 +67,6 @@ class MypageView extends StatelessWidget {
                 ],
               ),
             ),
-
             SizedBox(height: 20),
             Center(
               child: Obx(() => Text(
@@ -98,7 +93,7 @@ class MypageView extends StatelessWidget {
                   child: Text("로그아웃")),
             ),
             Line(),
-            SizedBox(height: 35),
+            SizedBox(height: 15),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 18),
               child: Row(
@@ -106,7 +101,7 @@ class MypageView extends StatelessWidget {
                 children: [
                   Text(
                     '개인 상세 정보',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF1EA6FC)),
+                    style: TextStyle(fontSize: 16, color: Color(0xFF1C1516)),
                   ),
                   // TextButton(
                   //     style: TextButton.styleFrom(
@@ -176,14 +171,20 @@ class MypageView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Obx(() {
-                        String formattedBirthDate = _authController
-                                    .birthDate.value !=
-                                null
-                            ? DateTime.parse(_authController.birthDate.value)
-                                .toLocal()
-                                .toString()
-                                .split(' ')[0]
-                            : '';
+                        String formattedBirthDate = '';
+
+                        if (_authController.birthDate.value != null &&
+                            _authController.birthDate.value.isNotEmpty) {
+                          try {
+                            formattedBirthDate =
+                                DateTime.parse(_authController.birthDate.value)
+                                    .toLocal()
+                                    .toString()
+                                    .split(' ')[0];
+                          } catch (e) {
+                            formattedBirthDate = 'Invalid Date';
+                          }
+                        }
 
                         return Text(
                           formattedBirthDate,
@@ -226,32 +227,32 @@ class MypageView extends StatelessWidget {
                 ),
               ],
             ),
-
-            SizedBox(height: 20),
-            // Center(
-            //     child: TextButton(
-            //         onPressed: () {
-            //           showDialog(
-            //               context: context,
-            //               builder: (BuildContext context) {
-            //                 return CustomModal(
-            //                   title: '회원탈퇴',
-            //                   content: '정말로 회원탈퇴를 하시겠습니까?',
-            //                   onConfirm: () {
-            //                     _authController.remove();
-            //                     Get.toNamed('/login');
-            //                   },
-            //                   confirmText: '확인',
-            //                 );
-            //               });
-            //         },
-            //         child: Text(
-            //           '회원탈퇴',
-            //           style: TextStyle(
-            //               color: Color(0xFFA0A0A0),
-            //               fontSize: 14,
-            //               fontWeight: FontWeight.w500),
-            //         ))),
+            SizedBox(height: 10),
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              TextButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomModal(
+                            title: '회원탈퇴',
+                            content: '정말로 회원탈퇴를 하시겠습니까?',
+                            onConfirm: () {
+                              _authController.remove();
+                              Get.toNamed('/login');
+                            },
+                            confirmText: '확인',
+                          );
+                        });
+                  },
+                  child: Text(
+                    '회원탈퇴',
+                    style: TextStyle(
+                        color: Color(0xFFA0A0A0).withOpacity(0.6),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ))
+            ]),
           ],
         ),
       ),

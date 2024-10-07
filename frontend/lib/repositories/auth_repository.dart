@@ -70,8 +70,18 @@ class AuthRepository {
     try {
       final response = await _provider.patchUserInfo(updateInfo);
       log('repo 정보수정: ${response}');
+      return response;
     } catch (e) {
       throw Exception('회원수정 repo: $e');
+    }
+  }
+
+  // 회원 탈퇴
+  Future<dynamic> deleteMember() async {
+    try {
+      final response = await _provider.deleteMember();
+    } catch (e) {
+      throw Exception('회원탈퇴 repo: $e');
     }
   }
 }

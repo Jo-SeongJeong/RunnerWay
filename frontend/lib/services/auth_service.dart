@@ -82,7 +82,7 @@ class AuthService {
   // 회원 탈퇴
   Future<void> removeMember() async {
     try {
-      final response = await _dioClient.dio.delete('members');
+      final response = await _repository.deleteMember();
       log('회원탈퇴 성공 service: ${response.data}');
     } catch (e) {
       log('회원탈퇴 중 오류 발생: $e');
@@ -94,7 +94,8 @@ class AuthService {
   Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
     try {
       final response = await _repository.patchUserInfo(updateInfo);
-      log('회원정보수정service: ${response.toString()}');
+      log('회원정보수정service: ${response}');
+      return response;
     } catch (e) {
       throw Exception('회원정보수정오류service: $e');
     }
