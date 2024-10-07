@@ -98,7 +98,7 @@ class MypageView extends StatelessWidget {
                   child: Text("로그아웃")),
             ),
             Line(),
-            SizedBox(height: 35),
+            SizedBox(height: 15),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 18),
               child: Row(
@@ -106,21 +106,21 @@ class MypageView extends StatelessWidget {
                 children: [
                   Text(
                     '개인 상세 정보',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF1EA6FC)),
+                    style: TextStyle(fontSize: 16, color: Color(0xFF1C1516)),
                   ),
-                  // TextButton(
-                  //     style: TextButton.styleFrom(
-                  //         foregroundColor: Color(0xFF1EA6FC)),
-                  //     onPressed: () {
-                  //       Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //               builder: (context) => ModifyInfoView()));
-                  //     },
-                  //     child: const Text(
-                  //       '회원 정보 수정',
-                  //       style: TextStyle(fontSize: 12),
-                  //     )),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                          foregroundColor: Color(0xFF1EA6FC)),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ModifyInfoView()));
+                      },
+                      child: const Text(
+                        '회원 정보 수정',
+                        style: TextStyle(fontSize: 12),
+                      )),
                 ],
               ),
             ),
@@ -176,14 +176,21 @@ class MypageView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Obx(() {
-                        String formattedBirthDate = _authController
-                                    .birthDate.value !=
-                                null
-                            ? DateTime.parse(_authController.birthDate.value)
-                                .toLocal()
-                                .toString()
-                                .split(' ')[0]
-                            : '';
+                        String formattedBirthDate = '';
+
+                        if (_authController.birthDate.value != null &&
+                            _authController.birthDate.value.isNotEmpty) {
+                          try {
+                            formattedBirthDate =
+                                DateTime.parse(_authController.birthDate.value)
+                                    .toLocal()
+                                    .toString()
+                                    .split(' ')[0];
+                          } catch (e) {
+                            // 날짜 파싱에 실패했을 경우 기본값 설정
+                            formattedBirthDate = 'Invalid Date';
+                          }
+                        }
 
                         return Text(
                           formattedBirthDate,
@@ -228,30 +235,30 @@ class MypageView extends StatelessWidget {
             ),
 
             SizedBox(height: 20),
-            // Center(
-            //     child: TextButton(
-            //         onPressed: () {
-            //           showDialog(
-            //               context: context,
-            //               builder: (BuildContext context) {
-            //                 return CustomModal(
-            //                   title: '회원탈퇴',
-            //                   content: '정말로 회원탈퇴를 하시겠습니까?',
-            //                   onConfirm: () {
-            //                     _authController.remove();
-            //                     Get.toNamed('/login');
-            //                   },
-            //                   confirmText: '확인',
-            //                 );
-            //               });
-            //         },
-            //         child: Text(
-            //           '회원탈퇴',
-            //           style: TextStyle(
-            //               color: Color(0xFFA0A0A0),
-            //               fontSize: 14,
-            //               fontWeight: FontWeight.w500),
-            //         ))),
+            Center(
+                child: TextButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CustomModal(
+                              title: '회원탈퇴',
+                              content: '정말로 회원탈퇴를 하시겠습니까?',
+                              onConfirm: () {
+                                _authController.remove();
+                                Get.toNamed('/login');
+                              },
+                              confirmText: '확인',
+                            );
+                          });
+                    },
+                    child: Text(
+                      '회원탈퇴',
+                      style: TextStyle(
+                          color: Color(0xFFA0A0A0),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500),
+                    ))),
           ],
         ),
       ),

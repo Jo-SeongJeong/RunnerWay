@@ -159,35 +159,31 @@ class AuthProvider {
   // 회원정보 수정
   Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
     try {
-      // memberImage에서 memberId를 제거하고 필요한 형식으로 데이터 수정
-      if (updateInfo.containsKey('memberImage')) {
-        updateInfo['memberImage'].remove('memberId'); // memberId 삭제
-      }
-
-      // 숫자 필드 확인 (null 체크 및 변환)
-      updateInfo['height'] =
-          updateInfo['height'] != null && updateInfo['height'].isNotEmpty
-              ? int.tryParse(updateInfo['height'])
-              : null;
-
-      updateInfo['weight'] =
-          updateInfo['weight'] != null && updateInfo['weight'].isNotEmpty
-              ? int.tryParse(updateInfo['weight'])
-              : null;
-
       log('수정 provider$updateInfo');
-
-      // 서버에 PATCH 요청 보내기
       final response = await _dioClient.dio.patch('/members', data: updateInfo);
-
+      log('여기여기 ${response.data}');
       if (response.statusCode == 200) {
+        log('히히 회원 수정 성공');
         return response.data;
       } else {
         throw Exception('회원정보수정 pro: 데이터없대');
       }
     } catch (e) {
-      log('회원수정 :$updateInfo');
+      log('회원수정 pro :$updateInfo');
       throw Exception('회원정보pro안돼: $e');
+    }
+  }
+
+  // 회원 탈퇴
+  Future<dynamic> deleteMember() async {
+    try {
+      final response = await _dioClient.dio.delete('/members');
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } catch (e) {
+      log('회원탈퇴오류: $e');
+      throw e;
     }
   }
 }

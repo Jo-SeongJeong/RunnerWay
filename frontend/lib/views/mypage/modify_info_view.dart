@@ -57,14 +57,57 @@ class ModifyInfoView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 10),
-                    Container(
-                      height: 119,
-                      width: 119,
-                      decoration: BoxDecoration(
+                    GestureDetector(
+                      onTap: () async {
+                        await _authController.pickImage();
+                      },
+                      child: Container(
+                        height: 119,
+                        width: 119,
+                        decoration: BoxDecoration(
                           color: Color(0xFFE4E4E4),
                           border:
                               Border.all(color: Color(0xFFE4E4E4), width: 2),
-                          borderRadius: BorderRadius.circular(16)),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: _authController.selectedImage.value != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.file(
+                                  _authController.selectedImage.value!,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : (_authController
+                                        .memberImage.value?.url?.isNotEmpty ==
+                                    true)
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Image.network(
+                                      _authController.memberImage.value!.url!,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Center(
+                                          child: Image.asset(
+                                            'assets/images/auth/default_profile.png',
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : Center(
+                                    child: Image.asset(
+                                      'assets/images/auth/default_profile.png',
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                      ),
                     ),
                     SizedBox(height: 30),
                     Line(),
@@ -121,7 +164,7 @@ class ModifyInfoView extends StatelessWidget {
                                     BorderSide(color: Colors.blueAccent),
                               ),
                               filled: true,
-                              hintText: '닉네임 (2~8자)',
+                              hintText: _authController.nickname.value,
                               hintStyle: TextStyle(
                                 color: Color(0xFF72777A),
                               ),
@@ -149,7 +192,9 @@ class ModifyInfoView extends StatelessWidget {
                     SizedBox(height: 7),
                     BirthModal(
                       onChanged: (selectedDate) {
-                        _authController.birthDate.value = selectedDate;
+                        _authController.birthDate.value =
+                            DateFormat('yyyy-MM-dd')
+                                .format(DateTime.parse(selectedDate));
                       },
                       hintText: _authController.birthDate.value != null
                           ? formatDate(_authController.birthDate.value)
@@ -188,117 +233,25 @@ class ModifyInfoView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 25),
-                    Row(
-                      children: [
-                        Text(
-                          '성별',
-                          style: TextStyle(
-                            color: Color(0xFF1C1516),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 25),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _authController.selectedGender.value = 'woman';
-                          },
-                          child: Obx(() => Container(
-                                width: 120,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  color: _authController.selectedGender.value ==
-                                          'woman'
-                                      ? Color(0xFF1EA6FC).withOpacity(0.1)
-                                      : Color(0xFFE3E5E5).withOpacity(0.3),
-                                  border: Border.all(
-                                    color: _authController
-                                                .selectedGender.value ==
-                                            'woman'
-                                        ? Color(0xFF1EA6FC)
-                                        : Color(0xFFE3E5E5).withOpacity(0.8),
-                                    width:
-                                        _authController.selectedGender.value ==
-                                                'woman'
-                                            ? 4.0
-                                            : 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(60),
-                                ),
-                                alignment: Alignment.center,
-                                child: Image.asset(
-                                  _authController.selectedGender.value ==
-                                          'woman'
-                                      ? 'assets/images/auth/woman_ok.png'
-                                      : 'assets/images/auth/woman_no.png',
-                                  width: 85,
-                                  height: 85,
-                                ),
-                              )),
-                        ),
-                        SizedBox(width: 30),
-                        GestureDetector(
-                          onTap: () {
-                            _authController.selectedGender.value = 'man';
-                          },
-                          child: Obx(() => Container(
-                                width: 120,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  color: _authController.selectedGender.value ==
-                                          'man'
-                                      ? Color(0xFF1EA6FC).withOpacity(0.1)
-                                      : Color(0xFFE3E5E5).withOpacity(0.3),
-                                  border: Border.all(
-                                    color: _authController
-                                                .selectedGender.value ==
-                                            'man'
-                                        ? Color(0xFF1EA6FC)
-                                        : Color(0xFFE3E5E5).withOpacity(0.8),
-                                    width:
-                                        _authController.selectedGender.value ==
-                                                'man'
-                                            ? 4.0
-                                            : 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(60),
-                                ),
-                                alignment: Alignment.center,
-                                child: Image.asset(
-                                  _authController.selectedGender.value == 'man'
-                                      ? 'assets/images/auth/man_ok.png'
-                                      : 'assets/images/auth/man_no.png',
-                                  width: 85,
-                                  height: 85,
-                                ),
-                              )),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 25),
+                    SizedBox(height: screenWidth * 0.2),
                     ElevatedButton(
-                        onPressed: () {
-                          Map<String, dynamic> updateInfo = {
-                            if (_authController.nickname.value.isNotEmpty)
-                              'nickname': _authController.nickname.value,
-                            if (_authController.birthDate.value.isNotEmpty)
-                              'birth': _authController.birthDate.value,
-                            if (_authController.height.value != null)
-                              'height': _authController.height.value,
-                            if (_authController.weight.value != null)
-                              'weight': _authController.weight.value,
-                            if (_authController.selectedGender.value != null)
-                              'gender': _authController.selectedGender.value,
-                          };
-                          _authController.patchUserInfo(updateInfo);
-                        },
-                        child: const Text('회원정보 수정')),
+                      onPressed: () {
+                        Map<String, dynamic> updateInfo = {
+                          if (_authController.nickname.value.isNotEmpty)
+                            'nickname': _authController.nickname.value,
+                          if (_authController.birthDate.value.isNotEmpty)
+                            'birth': DateFormat('yyyy-MM-dd').format(
+                                DateTime.parse(_authController
+                                    .birthDate.value)), // 여기서 형식 변환
+                          if (_authController.height.value != null)
+                            'height': _authController.height.value,
+                          if (_authController.weight.value != null)
+                            'weight': _authController.weight.value,
+                        };
+                        _authController.patchUserInfo(updateInfo);
+                      },
+                      child: const Text('회원정보 수정'),
+                    ),
                   ],
                 ),
               ),

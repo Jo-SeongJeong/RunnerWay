@@ -27,7 +27,7 @@ class AuthController extends GetxController {
 
   // 혹시 몰라 넣은 토큰
   var newToken =
-      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUwMDYsImVtYWlsIjoidG1keGtyNUBoYW5tYWlsLm5ldCIsIm5pY2tuYW1lIjoi44WH44WH44WH44WHIiwiaWF0IjoxNzI3NjcxOTg0LCJleHAiOjE3MzEyNzE5ODR9.VhgRs0aH3h-_I1mhWhkih7cFNM1ebCDHtlYh112XK3Q';
+      'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NiwiZW1haWwiOiJ0bWR4a3I1QGhhbm1haWwubmV0Iiwibmlja25hbWUiOiLslYTrh6jtlZjshLjsmpQiLCJpYXQiOjE3MjgyODU1MDcsImV4cCI6MTczMTg4NTUwN30.SKWV2z6G0M0oxNvMsT031n96RxiJoiSiV9OqmucFFXk';
 
   final AuthService _authService = AuthService();
   // 선택된 성별 및 버튼 활성화 상태
@@ -279,39 +279,47 @@ class AuthController extends GetxController {
     }
   }
 
-  // 회원탈퇴
+// 회원탈퇴
   Future<void> remove() async {
     try {
-      // TODO 회원탈퇴 하자
-      final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+      final response = await _authService.removeMember();
       await _storage.delete(key: 'ACCESS_TOKEN');
-      // final response = await _authService.removeMember(accessToken);
-      Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
     } catch (e) {
       log('회원탈퇴 실패 controller: ${e}');
-      Get.snackbar('회원탈퇴 실패 ', '회원탈퇴 중 문제가 발생했습니다.');
     }
   }
 
   // 정보수정
   Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
     try {
-      // 기존 멤버 정보 가져오기
-      log('update info : $updateInfo');
-
-      String? memberId = await _storage.read(key: 'ID');
-      if (memberId == null) {
-        throw Exception('memberId를 찾을 수 없습니다.');
-      }
+      id.value = await _storage.read(key: 'ID') ?? 'No ID found';
       updateInfo['memberImage'] = {
-        'memberId': int.parse(memberId),
-        'url': 'string', // TODO 실제 이미지 URL을 넣어야 함
-        'path': 'string', // TODO 이미지 경로 입력
+        'memberId': int.parse(id.value),
+        'url': memberImage.value?.url ?? '',
+        'path': selectedImage.value?.path ?? '',
       };
+
+      // 데이터 유효성 체크
+      updateInfo['height'] = int.tryParse(updateInfo['height'] ?? '');
+      updateInfo['weight'] = int.tryParse(updateInfo['weight'] ?? '');
+
+      // 회원 정보 수정 요청
+      log('여기여기여기');
       final response = await _authService.patchUserInfo(updateInfo);
-      log('정보수정controller');
+      log('*********');
+
+      // 응답이 null이 아닌지 확인
+      if (response != null && response['token'] != null) {
+        String newToken = response['token'];
+        await _storage.write(key: 'ACCESS_TOKEN', value: newToken);
+        log('회원 정보 수정 성공: 토큰 업데이트 완료');
+        return response;
+      } else {
+        throw Exception('회원 정보 수정 실패: ${response}');
+      }
     } catch (e) {
-      log('회원수정실패:$e');
+      log('회원 정보 수정 오류controller: $e');
+      throw Exception('회원 정보 수정 오류: $e');
     }
   }
 }

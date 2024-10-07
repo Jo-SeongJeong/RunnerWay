@@ -27,16 +27,12 @@ class UserCourseController extends GetxController {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       selectedImage.value = File(pickedFile.path);
-      log("선택된 이미지: ${selectedImage.value?.path}");
-
-      // S3에 이미지 업로드 및 URL 반환
       String? uploadedImageUrl = await s3ImageUpload.uploadImage2(
         selectedImage.value!,
-        "uploads/course_images", // S3에 업로드할 경로
+        "uploads/course_images",
       );
 
       if (uploadedImageUrl != null) {
-        // 업로드 성공 시 처리
         log("업로드된 이미지 URL: $uploadedImageUrl");
       } else {
         Get.snackbar('오류', '이미지 업로드에 실패했습니다.');

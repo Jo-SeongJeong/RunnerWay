@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Auth {
   final String email;
   final String nickname;
@@ -64,7 +66,7 @@ class Auth {
       'email': email,
       'nickname': nickname,
       'birth': birth != null
-          ? '${birth!.year}-${birth!.month.toString().padLeft(2, '0')}-${birth!.day.toString().padLeft(2, '0')}'
+          ? DateFormat('yyyy-MM-dd').format(birth!) // 올바르게 포맷 적용
           : null,
       'gender': gender,
       'height': height,
