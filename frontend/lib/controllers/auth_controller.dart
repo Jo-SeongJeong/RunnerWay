@@ -245,21 +245,21 @@ class AuthController extends GetxController {
   // 사용자 정보 불러오기
   Future<void> fetchUserInfo() async {
     try {
-      // TODO
-      // 서버에서 Map<String, dynamic> 데이터를 받음
       Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
-      log('${userInfoMap}');
       Auth userInfo = Auth.fromJson(userInfoMap);
-
-      log('회원 정보: ${userInfo}');
-      //  TODO 이미지 불러오기
       nickname.value =
           await _storage.read(key: 'NICKNAME') ?? userInfo.nickname;
       birthDate.value = userInfo.birth?.toString() ?? '';
       height.value = userInfo.height?.toString() ?? '';
       weight.value = userInfo.weight?.toString() ?? '';
-      selectedGender.value = userInfo.gender == 1 ? 'man' : 'woman';
-
+      if (userInfo.memberImage != null &&
+          userInfo.memberImage!.url != null &&
+          userInfo.memberImage!.url!.isNotEmpty) {
+        memberImage.value = userInfo.memberImage;
+      } else {
+        memberImage.value = MemberImage(url: '', path: '');
+        log('회원 이미지가 없습니다.');
+      }
       log('회원 정보 불러오기 성공: $userInfoMap');
     } catch (e) {
       log('회원 정보 불러오기controller: $e');
@@ -291,27 +291,28 @@ class AuthController extends GetxController {
 
   // 정보수정
   Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+    log('닉네임 머야?: ${nickname.value}');
+    log('키 머야?: ${height.value}');
+    log('몸무게 머야?: ${weight.value}');
     try {
       id.value = await _storage.read(key: 'ID') ?? 'No ID found';
+      updateInfo['height'] = height.value;
       updateInfo['memberImage'] = {
         'memberId': int.parse(id.value),
         'url': memberImage.value?.url ?? '',
         'path': selectedImage.value?.path ?? '',
       };
-
-      // 데이터 유효성 체크
       updateInfo['height'] = int.tryParse(updateInfo['height'] ?? '');
       updateInfo['weight'] = int.tryParse(updateInfo['weight'] ?? '');
 
       // 회원 정보 수정 요청
-      log('여기여기여기');
       final response = await _authService.patchUserInfo(updateInfo);
-      log('*********');
 
       // 응답이 null이 아닌지 확인
       if (response != null && response['token'] != null) {
         String newToken = response['token'];
         await _storage.write(key: 'ACCESS_TOKEN', value: newToken);
+        loadDecodedData();
         log('회원 정보 수정 성공: 토큰 업데이트 완료');
         return response;
       } else {

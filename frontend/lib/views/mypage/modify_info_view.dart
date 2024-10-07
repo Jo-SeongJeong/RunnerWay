@@ -21,9 +21,10 @@ class ModifyInfoView extends StatelessWidget {
       text: _authController.nickname.value,
     );
 
+    nicknameController.addListener(
+        () => {_authController.nickname.value = nicknameController.text});
+
     String formatDate(String date) {
-      log('------------------------');
-      log('date 출력 : $date');
       if (date.isEmpty) return 'YYYY-MM-DD';
       DateTime dateTime = DateTime.parse(date);
 
@@ -136,44 +137,42 @@ class ModifyInfoView extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: TextField(
-                            controller: _authController.textEditingController,
-                            onChanged: (text) {
-                              if (text.characters.length > 8) {
-                                _authController.nickname.value =
-                                    text.characters.take(8).toString();
-                              } else {
-                                _authController.nickname.value = text;
-                              }
-                              _authController.onNicknameChanged(
-                                  _authController.nickname.value);
-                            },
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 15,
-                              ),
-                              border: InputBorder.none,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(22),
-                                borderSide: BorderSide(color: Colors.black12),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(22),
-                                borderSide:
-                                    BorderSide(color: Colors.blueAccent),
-                              ),
-                              filled: true,
-                              hintText: _authController.nickname.value,
-                              hintStyle: TextStyle(
-                                color: Color(0xFF72777A),
-                              ),
-                              fillColor: Color(0xFFE3E5E5).withOpacity(0.4),
+                            child: TextField(
+                          controller: nicknameController,
+                          onChanged: (text) {
+                            if (text.characters.length > 8) {
+                              _authController.nickname.value =
+                                  text.characters.take(8).toString();
+                            } else {
+                              _authController.nickname.value = text;
+                            }
+                            _authController.onNicknameChanged(
+                                _authController.nickname.value);
+                          },
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 15,
                             ),
-                            cursorColor: Colors.blueAccent,
-                            cursorErrorColor: Colors.red,
+                            border: InputBorder.none,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(22),
+                              borderSide: BorderSide(color: Colors.black12),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(22),
+                              borderSide: BorderSide(color: Colors.blueAccent),
+                            ),
+                            filled: true,
+                            hintText: _authController.nickname.value,
+                            hintStyle: TextStyle(
+                              color: Color(0xFF72777A),
+                            ),
+                            fillColor: Color(0xFFE3E5E5).withOpacity(0.4),
                           ),
-                        )
+                          cursorColor: Colors.blueAccent,
+                          cursorErrorColor: Colors.red,
+                        ))
                       ],
                     ),
                     SizedBox(height: 25),
@@ -236,18 +235,24 @@ class ModifyInfoView extends StatelessWidget {
                     SizedBox(height: screenWidth * 0.2),
                     ElevatedButton(
                       onPressed: () {
+                        // 모든 값 초기화 및 추가
                         Map<String, dynamic> updateInfo = {
-                          if (_authController.nickname.value.isNotEmpty)
-                            'nickname': _authController.nickname.value,
-                          if (_authController.birthDate.value.isNotEmpty)
-                            'birth': DateFormat('yyyy-MM-dd').format(
-                                DateTime.parse(_authController
-                                    .birthDate.value)), // 여기서 형식 변환
-                          if (_authController.height.value != null)
-                            'height': _authController.height.value,
-                          if (_authController.weight.value != null)
-                            'weight': _authController.weight.value,
+                          'nickname': _authController.nickname.value.isNotEmpty
+                              ? _authController.nickname.value
+                              : "",
+                          'birth': _authController.birthDate.value.isNotEmpty
+                              ? DateFormat('yyyy-MM-dd').format(DateTime.parse(
+                                  _authController.birthDate.value))
+                              : "",
+                          'height': _authController.height.value.isNotEmpty
+                              ? _authController.height.value
+                              : "",
+                          'weight': _authController.weight.value.isNotEmpty
+                              ? _authController.weight.value
+                              : "",
                         };
+
+                        log('Updated Info: $updateInfo');
                         _authController.patchUserInfo(updateInfo);
                       },
                       child: const Text('회원정보 수정'),

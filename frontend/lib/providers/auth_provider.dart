@@ -161,9 +161,7 @@ class AuthProvider {
     try {
       log('수정 provider$updateInfo');
       final response = await _dioClient.dio.patch('/members', data: updateInfo);
-      log('여기여기 ${response.data}');
       if (response.statusCode == 200) {
-        log('히히 회원 수정 성공');
         return response.data;
       } else {
         throw Exception('회원정보수정 pro: 데이터없대');
