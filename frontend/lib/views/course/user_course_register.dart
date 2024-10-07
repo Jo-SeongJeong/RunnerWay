@@ -9,7 +9,7 @@ import '../../widgets/map/result_map.dart';
 import '../../widgets/review_record_item.dart';
 
 class RegisterView extends StatelessWidget {
-  RegisterView({Key? key}) : super(key: key);
+  RegisterView({super.key});
   final TextEditingController courseNameController = TextEditingController();
   final TextEditingController reviewController = TextEditingController();
   final UserCourseController userCourseController =
@@ -18,6 +18,7 @@ class RegisterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<RecordController>(() => RecordController());
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     final int recordId = int.tryParse(Get.parameters['id'] ?? '0') ?? 0;
