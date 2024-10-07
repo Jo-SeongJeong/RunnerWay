@@ -70,7 +70,7 @@ class AuthController extends GetxController {
       isLoggedIn.value = true;
     } catch (error) {
       log('카카오톡 로그인 실패 auth: $error');
-      Get.snackbar('오류', '카카오톡 로그인에 실패했습니다.');
+      // Get.snackbar('오류', '카카오톡 로그인에 실패했습니다.');
     }
   }
 
@@ -104,7 +104,7 @@ class AuthController extends GetxController {
       await checkUserEmailOnServer(email.value);
     } catch (error) {
       log('사용자 정보 요청 실패_controller: $error');
-      Get.snackbar('오류', '사용자 정보를 가져오지 못했습니다.');
+      // Get.snackbar('오류', '사용자 정보를 가져오지 못했습니다.');
     }
   }
 
@@ -132,7 +132,7 @@ class AuthController extends GetxController {
       log('${userEmail}');
     } catch (e) {
       log('회원 여부 확인 중 오류 발생 controller: $e');
-      Get.snackbar('오류', '회원 여부 확인 중 오류가 발생했습니다.');
+      // Get.snackbar('오류', '회원 여부 확인 중 오류가 발생했습니다.');
     }
   }
 
@@ -155,7 +155,7 @@ class AuthController extends GetxController {
           path: selectedImage.value!.path,
         );
       } else {
-        Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
+        // Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
       }
     }
   }
@@ -171,15 +171,15 @@ class AuthController extends GetxController {
         await _saveToken(accessToken); // 토큰 저장
         log('회원가입 성공 controller, 토큰: $accessToken');
         signUpSuccess.value = true;
-        Get.snackbar('성공', '선호태그 입력 페이지로 이동합니다.');
+        // Get.snackbar('성공', '선호태그 입력 페이지로 이동합니다.');
         loadDecodedData();
       } else {
-        Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
+        // Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
       }
     } catch (e) {
       signUpSuccess.value = false;
       log('회원가입 중 오류 발생 controller: $e');
-      Get.snackbar('오류', '회원가입에 실패했습니다.');
+      // Get.snackbar('오류', '회원가입에 실패했습니다.');
     }
   }
 
@@ -275,7 +275,7 @@ class AuthController extends GetxController {
       Get.toNamed('/login');
     } catch (e) {
       log('로그아웃 실패 controller: ${e}');
-      Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
+      // Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
     }
   }
 
@@ -286,10 +286,10 @@ class AuthController extends GetxController {
       final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
       await _storage.delete(key: 'ACCESS_TOKEN');
       // final response = await _authService.removeMember(accessToken);
-      Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
+      // Get.snackbar('회원탈퇴 성공 ', '회원탈퇴 중 문제가 발생했습니다.');
     } catch (e) {
       log('회원탈퇴 실패 controller: ${e}');
-      Get.snackbar('회원탈퇴 실패 ', '회원탈퇴 중 문제가 발생했습니다.');
+      // Get.snackbar('회원탈퇴 실패 ', '회원탈퇴 중 문제가 발생했습니다.');
     }
   }
 
