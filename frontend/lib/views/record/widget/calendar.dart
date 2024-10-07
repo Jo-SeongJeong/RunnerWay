@@ -16,6 +16,7 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<RecordController>(() => RecordController());
     final RecordController recordController = Get.find<RecordController>();
 
     // 월 변경 함수 (디바운스 적용)
@@ -107,7 +108,7 @@ class Calendar extends StatelessWidget {
 
                   // stampDays에 해당하는 날짜인지 확인
                   if (recordController.stampDays.any((stampDay) =>
-                  stampDay.year == simpleDay.year &&
+                      stampDay.year == simpleDay.year &&
                       stampDay.month == simpleDay.month &&
                       stampDay.day == simpleDay.day)) {
                     return Center(
@@ -135,7 +136,7 @@ class Calendar extends StatelessWidget {
 
                   // 오늘 날짜에 stampDays가 있으면 스탬프 표시
                   if (recordController.stampDays.any((stampDay) =>
-                  stampDay.year == simpleDay.year &&
+                      stampDay.year == simpleDay.year &&
                       stampDay.month == simpleDay.month &&
                       stampDay.day == simpleDay.day)) {
                     return Center(
@@ -160,7 +161,6 @@ class Calendar extends StatelessWidget {
                   );
                 },
               ),
-
               calendarStyle: CalendarStyle(
                 outsideDaysVisible: false,
                 todayTextStyle: TextStyle(

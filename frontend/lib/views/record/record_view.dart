@@ -32,7 +32,8 @@ class RecordView extends StatelessWidget {
               builder: (context, constraints) {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
                     child: Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,7 +61,7 @@ class RecordView extends StatelessWidget {
                           SizedBox(height: 20),
 
                           Obx(
-                                () {
+                            () {
                               return Row(
                                 children: [
                                   SizedBox(
@@ -74,7 +75,8 @@ class RecordView extends StatelessWidget {
                                     width: 10,
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '러닝 키로수',
@@ -104,12 +106,13 @@ class RecordView extends StatelessWidget {
                           SizedBox(height: 20),
 
                           Obx(
-                                () {
+                            () {
                               return Row(
                                 children: [
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           '${_recordController.monthRecords.value?.averageFace.truncate()}\' ${((_recordController.monthRecords.value?.averageFace ?? 0) * 100 % 100).toInt()}\"',
@@ -131,7 +134,8 @@ class RecordView extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           '${_recordController.monthRecords.value?.totalScore}',
@@ -153,7 +157,8 @@ class RecordView extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           '${_recordController.monthRecords.value?.totalCalorie.toInt()}',
@@ -188,7 +193,8 @@ class RecordView extends StatelessWidget {
                           // 클릭 날짜
                           // 클릭된 날짜에 따른 결과
                           Obx(() {
-                            final selectedDate = _recordController.selectedDate.value;
+                            final selectedDate =
+                                _recordController.selectedDate.value;
                             if (selectedDate != null) {
                               return Column(
                                 children: [
@@ -216,10 +222,11 @@ class RecordView extends StatelessWidget {
                                   ),
                                   SizedBox(height: 10),
                                   // 기록에 따른 RunningCard 표시
-                                  if (_recordController.isDayRecordLoading.value)
+                                  if (_recordController
+                                      .isDayRecordLoading.value)
                                     CircularProgressIndicator()
                                   else if (_recordController.dayRecords.isEmpty)
-                                  // 기록 empty state 처리
+                                    // 기록 empty state 처리
                                     Container(
                                       padding: EdgeInsets.symmetric(
                                         vertical: 10,
@@ -232,14 +239,15 @@ class RecordView extends StatelessWidget {
                                         ..._recordController.dayRecords
                                             .map(
                                               (record) => RunningCard(
-                                            recordId: record.recordId,
-                                            courseId: record.courseId,
-                                            courseName: record.courseName,
-                                            runningDistance: record.runningDistance,
-                                            score: record.score,
-                                            averageFace: record.averageFace,
-                                          ),
-                                        )
+                                                recordId: record.recordId,
+                                                courseId: record.courseId,
+                                                courseName: record.courseName,
+                                                runningDistance:
+                                                    record.runningDistance,
+                                                score: record.score,
+                                                averageFace: record.averageFace,
+                                              ),
+                                            )
                                             .toList(),
                                         // 여기서 SizedBox를 추가합니다.
                                         SizedBox(height: 80),
