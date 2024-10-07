@@ -37,7 +37,17 @@ class ReviewWriteView extends StatelessWidget {
               ),
         ],
       ),
-      body: Obx(() => Column(
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          // 로딩 중일 때 CircularProgressIndicator 표시
+          return Center(
+            child: CircularProgressIndicator(
+              color: Color(0xff1C1516),
+            ),
+          );
+        } else {
+          // 로딩이 완료되면 실제 컨텐츠 표시
+          return Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
@@ -131,7 +141,9 @@ class ReviewWriteView extends StatelessWidget {
                 ),
               ),
             ],
-          )),
+          );
+        }
+      }),
     );
   }
 }

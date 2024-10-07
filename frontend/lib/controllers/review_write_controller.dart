@@ -25,6 +25,7 @@ class RunningReviewController extends GetxController {
   // RunningReviewModel 인스턴스를 Rxn으로 관리하여 null 가능성도 포함
   var reviewModel = Rxn<RunningReviewModel>();
   var name = ''.obs;
+  var isLoading = false.obs;
 
   final Rx<File?> selectedImage = Rx<File?>(null);
 
@@ -32,7 +33,10 @@ class RunningReviewController extends GetxController {
   void onInit() {
     super.onInit();
 
-    initializeReview();
+    isLoading(true); // 초기 로딩 상태로 설정
+    initializeReview().then((_) {
+      isLoading(false); // 로딩 완료 후 상태 변경
+    });
     commentController.text = reviewModel.value?.comment ?? '';
   }
 
@@ -133,7 +137,7 @@ class RunningReviewController extends GetxController {
         final response = await _service.submitReview(reviewModel.value!);
         log('${response.data["recordId"]}');
 
-        Get.snackbar('Success', 'Review submitted successfully');
+        // Get.snackbar('Success', 'Review submitted successfully');
 
         try {
           final tempRecordId = '${response.data["recordId"]}';
@@ -142,18 +146,18 @@ class RunningReviewController extends GetxController {
           log('Running session ended. Data saved as: $tempRecordId.json');
         } catch (e) {
           log('Error ending running session: $e');
-          Get.snackbar(
-            'Error',
-            'Failed to save running record',
-            snackPosition: SnackPosition.BOTTOM,
-            duration: Duration(seconds: 3),
-          );
+          // Get.snackbar(
+          //   'Error',
+          //   'Failed to save running record',
+          //   snackPosition: SnackPosition.BOTTOM,
+          //   duration: Duration(seconds: 3),
+          // );
         }
 
         Get.toNamed('/record/detail/${response.data["recordId"]}');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to submit review: $e');
+      // Get.snackbar('Error', 'Failed to submit review: $e');
       log('Error: $e');
     }
   }
