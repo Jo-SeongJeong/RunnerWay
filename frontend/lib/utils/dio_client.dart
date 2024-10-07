@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/utils/env.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class DioClient {
@@ -10,7 +11,7 @@ class DioClient {
   DioClient() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'https://j11b304.p.ssafy.io/api/',
+        baseUrl: '${Env.baseUrl}',
         connectTimeout: const Duration(seconds: 20),
         receiveTimeout: const Duration(seconds: 20),
         followRedirects: false,
