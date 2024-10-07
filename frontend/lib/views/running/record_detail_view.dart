@@ -63,14 +63,16 @@ class RecordDetailView extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        height: screenHeight * 0.2,
+                        height: screenHeight * 0.3,
                         child: record.url != null && record.url!.isNotEmpty
                             ? Image.network(
+                                height: screenHeight * 0.3,
+                                width: screenWidth,
                                 record.url!,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Container(
-                                    height: screenHeight * 0.2,
+                                    height: screenHeight * 0.3,
                                     child: Center(
                                       child: Image.asset(
                                         'assets/images/main/course_default.png',
@@ -83,7 +85,7 @@ class RecordDetailView extends StatelessWidget {
                                 },
                               )
                             : Container(
-                                height: screenHeight * 0.2,
+                                height: screenHeight * 0.3,
                                 child: Center(
                                   child: Image.asset(
                                     'assets/images/main/course_default.png',
@@ -180,7 +182,7 @@ class RecordDetailView extends StatelessWidget {
                 ),
                 AbsorbPointer(
                   absorbing: true,
-                  child: SizedBox(height: 300, child: const RecordMap()),
+                  // child: SizedBox(height: 300, child: const RecordMap()),
                 ),
                 SizedBox(height: 80),
               ],
@@ -219,6 +221,7 @@ class RecordDetailView extends StatelessWidget {
 
   void _showEditReviewModal(BuildContext context, Record record) {
     final RecordController recordController = Get.find<RecordController>();
+    final double screenHeight = MediaQuery.of(context).size.height;
     TextEditingController _reviewController = TextEditingController(
       text: record.comment ?? '',
     );
@@ -232,10 +235,10 @@ class RecordDetailView extends StatelessWidget {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: SizedBox(
-            height: 250, // TODO 모달 높이 _ 반응형으로 추후 변경
+            height: screenHeight * 0.35,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: Colors.white, // 배경색
+                color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.0),
                   topRight: Radius.circular(20.0),
@@ -260,7 +263,7 @@ class RecordDetailView extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: TextField(
                           controller: _reviewController,
-                          maxLines: 5, // 최대 5줄까지 입력 가능하게 둠
+                          maxLines: 5,
                           maxLength: 200,
                           style: TextStyle(
                             color: Color(0xFF72777A),

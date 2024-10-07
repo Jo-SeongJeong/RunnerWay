@@ -431,7 +431,7 @@ class RunningController extends GetxController {
       final recordId = await _runningService.endRunningSession();
       Get.toNamed('/running-result', arguments: recordId);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to end running session');
+      // Get.snackbar('Error', 'Failed to end running session');
     }
   }
 
@@ -481,12 +481,12 @@ class RunningController extends GetxController {
       varid = '0';
     } catch (e) {
       dev.log('Error ending running session: $e');
-      Get.snackbar(
-        'Error',
-        'Failed to save running record',
-        snackPosition: SnackPosition.BOTTOM,
-        duration: Duration(seconds: 3),
-      );
+      // Get.snackbar(
+      //   'Error',
+      //   'Failed to save running record',
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   duration: Duration(seconds: 3),
+      // );
     }
   }
 

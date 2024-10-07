@@ -82,8 +82,6 @@ class RecordService {
     try {
       final response = await _repository.patchRecord(updateData);
       log('service: ${response.toString()}');
-      // int? id = int.tryParse(Get.parameters['id'] ?? '1');
-      // Record updatedRecord = response.copyWith(recordId: id);
       return response;
     } catch (e) {
       throw Exception('기록수정오류service: $e');
