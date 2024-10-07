@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/record.dart';
+import 'package:frontend/views/record/widget/record_map.dart';
 import 'package:get/get.dart';
 import '../../controllers/record_controller.dart';
 import '../../widgets/map/result_map.dart';
@@ -181,7 +182,7 @@ class RecordDetailView extends StatelessWidget {
                 ),
                 AbsorbPointer(
                   absorbing: true,
-                  // child: SizedBox(height: 300, child: const ResultMap()),
+                  // child: SizedBox(height: 300, child: const RecordMap()),
                 ),
                 SizedBox(height: 80),
               ],

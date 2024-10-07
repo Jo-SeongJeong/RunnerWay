@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:frontend/models/record_analyze.dart';
 import 'package:frontend/repositories/record_repository.dart';
 import 'package:frontend/models/record.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 class RecordService {
   final RecordRepository _repository = RecordRepository();
@@ -80,6 +85,40 @@ class RecordService {
       return response;
     } catch (e) {
       throw Exception('기록수정오류service: $e');
+    }
+  }
+
+  Future<Polyline?> loadPresetPath(int recordId) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      // recordId에 따라 파일 경로 동적 설정
+      final filePath = '${directory.path}/preset_path_$recordId.json';
+      final file = File(filePath);
+
+      // 파일이 존재할 경우 데이터 읽기
+      if (await file.exists()) {
+        final jsonString = await file.readAsString();
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+
+        // JSON 데이터를 LatLng 리스트로 변환
+        List<LatLng> presetPath = jsonList
+            .map((point) => LatLng(point['latitude'], point['longitude']))
+            .toList();
+
+        // Polyline 생성하여 반환
+        return Polyline(
+          polylineId: PolylineId('presetPath_$recordId'),
+          color: Colors.green, // 기존 경로의 색상 지정
+          width: 5,
+          points: presetPath,
+        );
+      } else {
+        print('Preset path file does not exist for recordId $recordId.');
+        return null;
+      }
+    } catch (e) {
+      print('Error loading preset path for recordId $recordId: $e');
+      return null;
     }
   }
 }

@@ -67,103 +67,105 @@ class RunningThingsView extends StatelessWidget {
       // appBar: AppBar(
       //   title: const Text('Running Screen'),
       // ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // ElevatedButton(
-            //   onPressed: () => _navigateToLocation(), // 위치 페이지로 이동
-            //   child: const Text('Go to Location'),
-            // ),
-            // ElevatedButton(
-            //   onPressed: () => _navigateToGeoLocation(), // 위치 페이지로 이동
-            //   child: const Text('Go to GeoLocation'),
-            // ),
-            // ElevatedButton(
-            //   onPressed: () => _navigateToMap(), // 맵 페이지로 이동
-            //   child: const Text('Go to Map'),
-            // ),
-            // ElevatedButton(
-            //   onPressed: () => _navigateToLine(), // 라인 페이지로 이동
-            //   child: const Text('Go to Line'),
-            // ),
-            ElevatedButton(
-              onPressed: () => _navigateToRusultMap(),
-              // Navigates to the Polyline page
-              child: const Text('Go to ResultMap'),
-            ),
-            ElevatedButton(
-              onPressed: () => _navigateToRunningMap(),
-              // Navigates to the Polyline page
-              child: const Text('Go to RunningMap'),
-            ),
-            // ElevatedButton(
-            //   onPressed: () => _navigateToRankingListView(),
-            //   // Navigates to the RankingList page
-            //   child: const Text('Go to RankingList'),
-            // ),
-            ElevatedButton(
-              onPressed: () => _navigateToReviewDetailView(),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to ReviewDetail'),
-            ),
-            ElevatedButton(
-              onPressed: () => _navigateToReviewWriteView(),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to ReviewWrite'),
-            ),
-            ElevatedButton(
-              onPressed: () => Get.to(() => JwtDecodeView()),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to JWTDecode'),
-            ),
-            ElevatedButton(
-              onPressed: () => Get.toNamed('/freecourserunning'),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to Free Course Running'),
-            ),
-            ElevatedButton(
-              onPressed: () => Get.to(() => OfficialCourseRunningView()),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to Official Course Running'),
-            ),
-            ElevatedButton(
-              onPressed: () => Get.to(() => CompetitionCourseRunningView()),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to Competition Course Running'),
-            ),
-            ElevatedButton(
-              onPressed: () =>
-                  Get.toNamed('/running/free/0/0', parameters: {'varid': '0'}),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to view의 free course'),
-            ),
-            ElevatedButton(
-              onPressed: () => Get.toNamed('/running/official/1/0'),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to view의 official course'),
-            ),
-            ElevatedButton(
-              onPressed: () => Get.toNamed('/running/official/2/2'),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to view의 user course 대결'),
-            ),
-            ElevatedButton(
-              onPressed: () => Get.toNamed('/running/myself/2/2'),
-              // Navigates to the RunningDetail page
-              child: const Text('Go to view의 내 코스에서 나와 대결'),
-            ),
-            ElevatedButton(
-              onPressed: () => Get.toNamed('/main'),
-              // Navigates to the RunningDetail page
-              child: const Text('메인 뷰'),
-            ),
-            ElevatedButton(
-              onPressed: () => Get.toNamed('/login'),
-              // Navigates to the RunningDetail page
-              child: const Text('로그인'),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () => _navigateToLocation(), // 위치 페이지로 이동
+                child: const Text('Go to Location'),
+              ),
+              ElevatedButton(
+                onPressed: () => _navigateToGeoLocation(), // 위치 페이지로 이동
+                child: const Text('Go to GeoLocation'),
+              ),
+              ElevatedButton(
+                onPressed: () => _navigateToMap(), // 맵 페이지로 이동
+                child: const Text('Go to Map'),
+              ),
+              ElevatedButton(
+                onPressed: () => _navigateToLine(), // 라인 페이지로 이동
+                child: const Text('Go to Line'),
+              ),
+              ElevatedButton(
+                onPressed: () => _navigateToRusultMap(),
+                // Navigates to the Polyline page
+                child: const Text('Go to ResultMap'),
+              ),
+              ElevatedButton(
+                onPressed: () => _navigateToRunningMap(),
+                // Navigates to the Polyline page
+                child: const Text('Go to RunningMap'),
+              ),
+              // ElevatedButton(
+              //   onPressed: () => _navigateToRankingListView(),
+              //   // Navigates to the RankingList page
+              //   child: const Text('Go to RankingList'),
+              // ),
+              ElevatedButton(
+                onPressed: () => _navigateToReviewDetailView(),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to ReviewDetail'),
+              ),
+              ElevatedButton(
+                onPressed: () => _navigateToReviewWriteView(),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to ReviewWrite'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.to(() => JwtDecodeView()),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to JWTDecode'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.toNamed('/freecourserunning'),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to Free Course Running'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.to(() => OfficialCourseRunningView()),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to Official Course Running'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.to(() => CompetitionCourseRunningView()),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to Competition Course Running'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.toNamed('/running/free/0/0',
+                    parameters: {'varid': '0'}),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to view의 free course'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.toNamed('/running/official/1/0'),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to view의 official course'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.toNamed('/running/official/2/2'),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to view의 user course 대결'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.toNamed('/running/myself/2/2'),
+                // Navigates to the RunningDetail page
+                child: const Text('Go to view의 내 코스에서 나와 대결'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.toNamed('/main'),
+                // Navigates to the RunningDetail page
+                child: const Text('메인 뷰'),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.toNamed('/login'),
+                // Navigates to the RunningDetail page
+                child: const Text('로그인'),
+              ),
+            ],
+          ),
         ),
       ),
     );
