@@ -170,7 +170,6 @@ class AuthController extends GetxController {
         memberImage.value = MemberImage(
           memberId: null,
           url: uploadedImageUrl,
-          path: selectedImage.value!.path,
         );
       } else {
         // Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
@@ -275,7 +274,7 @@ class AuthController extends GetxController {
           userInfo.memberImage!.url!.isNotEmpty) {
         memberImage.value = userInfo.memberImage;
       } else {
-        memberImage.value = MemberImage(url: '', path: '');
+        memberImage.value = MemberImage(url: '');
         log('회원 이미지가 없습니다.');
       }
       log('회원 정보 불러오기 성공: $userInfoMap');
@@ -316,7 +315,6 @@ class AuthController extends GetxController {
       updateInfo['memberImage'] = {
         'memberId': int.parse(id.value),
         'url': memberImage.value?.url ?? '',
-        'path': selectedImage.value?.path ?? '',
       };
       updateInfo['height'] = int.tryParse(updateInfo['height'] ?? '');
       updateInfo['weight'] = int.tryParse(updateInfo['weight'] ?? '');
