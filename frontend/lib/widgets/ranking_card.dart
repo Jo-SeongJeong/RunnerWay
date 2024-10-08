@@ -88,15 +88,12 @@ class RankingCard extends StatelessWidget {
                     name,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      time,
-                      style: TextStyle(
-                        color: Color(0xff6C7072),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
+                  Text(
+                    time,
+                    style: TextStyle(
+                      color: Color(0xff6C7072),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ],

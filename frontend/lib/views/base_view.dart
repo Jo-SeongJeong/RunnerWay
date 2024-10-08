@@ -14,9 +14,16 @@ class BaseView extends StatelessWidget {
           Positioned.fill(
             child: child,
           ),
+
+          // 하단바 (UnderBar)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: UnderBar(),
+          ),
         ],
       ),
-      bottomNavigationBar: UnderBar(),
     );
   }
 }
