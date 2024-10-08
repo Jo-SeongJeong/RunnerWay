@@ -121,9 +121,8 @@ class AuthController extends GetxController {
 
       // 서버에서 받은 응답이 accessToken인 경우(기존 회원)
       else if (response['token'] != null) {
-        // accessToken 저장
         await _saveToken(response['token']);
-        // 기존 회원이라면 선호 코스 등록 여부 확인 t / f
+        loadDecodedData();
 
         checkFavoriteTag();
       } else {
