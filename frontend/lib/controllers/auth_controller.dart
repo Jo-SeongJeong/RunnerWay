@@ -35,6 +35,25 @@ class AuthController extends GetxController {
   var isButtonActive = false.obs;
   RxBool isEditable = false.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    _checkToken();
+  }
+
+  // 토큰 여부 확인
+  Future<void> _checkToken() async {
+    String? token = await _storage.read(key: 'ACCESS_TOKEN');
+
+    if (token == null || token.isEmpty) {
+      log('토큰이 존재하지 않습니다.');
+      isLoggedIn.value = false;
+    } else {
+      log('토큰이 존재합니다: $token');
+      isLoggedIn.value = true;
+    }
+  }
+
   // 닉네임 변경
   void onNicknameChanged(String value) {
     nickname.value = value;
@@ -121,9 +140,8 @@ class AuthController extends GetxController {
 
       // 서버에서 받은 응답이 accessToken인 경우(기존 회원)
       else if (response['token'] != null) {
-        // accessToken 저장
         await _saveToken(response['token']);
-        // 기존 회원이라면 선호 코스 등록 여부 확인 t / f
+        loadDecodedData();
 
         checkFavoriteTag();
       } else {
@@ -269,7 +287,7 @@ class AuthController extends GetxController {
   // 로그아웃
   Future<void> logout() async {
     try {
-      await _storage.delete(key: 'ACCESS_TOKEN');
+      await _storage.deleteAll();
       isLoggedIn.value = false;
       log('로그아웃 성공 controller');
       Get.toNamed('/login');
@@ -283,7 +301,8 @@ class AuthController extends GetxController {
   Future<void> remove() async {
     try {
       final response = await _authService.removeMember();
-      await _storage.delete(key: 'ACCESS_TOKEN');
+      isLoggedIn.value = false;
+      await _storage.deleteAll();
     } catch (e) {
       log('회원탈퇴 실패 controller: ${e}');
     }
