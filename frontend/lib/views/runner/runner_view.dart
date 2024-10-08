@@ -91,7 +91,7 @@ class RunnerView extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index == runnerController.runnerCourses.length) {
                         return SizedBox(
-                          height: 100,
+                          height: 80,
                         );
                       }
                       return CourseCard(
