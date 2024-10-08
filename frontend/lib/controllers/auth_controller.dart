@@ -35,6 +35,25 @@ class AuthController extends GetxController {
   var isButtonActive = false.obs;
   RxBool isEditable = false.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    _checkToken();
+  }
+
+  // 토큰 여부 확인
+  Future<void> _checkToken() async {
+    String? token = await _storage.read(key: 'ACCESS_TOKEN');
+
+    if (token == null || token.isEmpty) {
+      log('토큰이 존재하지 않습니다.');
+      isLoggedIn.value = false;
+    } else {
+      log('토큰이 존재합니다: $token');
+      isLoggedIn.value = true;
+    }
+  }
+
   // 닉네임 변경
   void onNicknameChanged(String value) {
     nickname.value = value;
