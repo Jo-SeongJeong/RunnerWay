@@ -123,7 +123,6 @@ class AuthController extends GetxController {
       else if (response['token'] != null) {
         // accessToken 저장
         await _saveToken(response['token']);
-        // 기존 회원이라면 선호 코스 등록 여부 확인 t / f
 
         checkFavoriteTag();
       } else {
@@ -171,7 +170,6 @@ class AuthController extends GetxController {
         await _saveToken(accessToken); // 토큰 저장
         log('회원가입 성공 controller, 토큰: $accessToken');
         signUpSuccess.value = true;
-        // Get.snackbar('성공', '선호태그 입력 페이지로 이동합니다.');
         loadDecodedData();
       } else {
         // Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
@@ -275,7 +273,7 @@ class AuthController extends GetxController {
       Get.toNamed('/login');
     } catch (e) {
       log('로그아웃 실패 controller: ${e}');
-      // Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
+      Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
     }
   }
 

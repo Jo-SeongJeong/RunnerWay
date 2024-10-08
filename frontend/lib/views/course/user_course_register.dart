@@ -145,13 +145,20 @@ class RegisterView extends StatelessWidget {
                                           label: '운동 거리',
                                         ),
                                         ReviewRecordItem(
-                                          value: recordController
-                                              .recordDetail.value!.courseId,
+                                          value: (record.finishDate != null &&
+                                                  record.startDate != null)
+                                              ? DateTime.parse(
+                                                      record.finishDate!)
+                                                  .difference(DateTime.parse(
+                                                      record.startDate!))
+                                                  .inSeconds
+                                              : 0,
                                           label: '운동 시간',
                                         ),
                                         ReviewRecordItem(
-                                          value: recordController
-                                              .recordDetail.value!.courseId,
+                                          value: recordController.courseDetail
+                                                  .value?.averageSlope ??
+                                              0.0,
                                           label: '러닝 경사도',
                                         ),
                                         ReviewRecordItem(
@@ -189,7 +196,6 @@ class RegisterView extends StatelessWidget {
                       recordController.recordDetail.value != null
                   ? () async {
                       final record = recordController.recordDetail.value!;
-                      log('$record');
 
                       userCourseController.addUserCourse({
                         'name': courseNameController.text,
@@ -198,7 +204,11 @@ class RegisterView extends StatelessWidget {
                         'content': reviewController.text.isNotEmpty
                             ? reviewController.text
                             : '리뷰 없음',
-                        'averageTime': record.startDate ?? '',
+                        'averageTime': (record.finishDate != null &&
+                                record.startDate != null)
+                            ? _calculateTimeDifferenceWithDate(
+                                record.startDate!, record.finishDate!)
+                            : '2024-10-08T00:00:00',
                         'courseLength': record.runningDistance,
                         'courseType': 'user',
                         'averageCalorie': record.calorie ?? 0.0,
@@ -230,4 +240,18 @@ class RegisterView extends StatelessWidget {
           )),
     );
   }
+}
+
+// 시간에 날짜도 추가하는 메서드
+String _calculateTimeDifferenceWithDate(String startDate, String finishDate) {
+  final duration =
+      DateTime.parse(finishDate).difference(DateTime.parse(startDate));
+  String twoDigits(int n) => n.toString().padLeft(2, '0');
+  final parsedStartDate = DateTime.parse(startDate);
+  final datePart =
+      "${parsedStartDate.year}-${twoDigits(parsedStartDate.month)}-${twoDigits(parsedStartDate.day)}";
+  final hours = twoDigits(duration.inHours);
+  final minutes = twoDigits(duration.inMinutes.remainder(60));
+  final seconds = twoDigits(duration.inSeconds.remainder(60));
+  return "$datePart" + "T$hours:$minutes:$seconds";
 }
