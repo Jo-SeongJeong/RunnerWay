@@ -18,7 +18,7 @@ class RegisterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut<RecordController>(() => RecordController());
+    // Get.lazyPut<RecordController>(() => RecordController());
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     final int recordId = int.tryParse(Get.parameters['id'] ?? '0') ?? 0;
