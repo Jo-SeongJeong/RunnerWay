@@ -16,7 +16,7 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut<RecordController>(() => RecordController());
+    // Get.lazyPut<RecordController>(() => RecordController());
     final RecordController recordController = Get.find<RecordController>();
 
     // 월 변경 함수 (디바운스 적용)
