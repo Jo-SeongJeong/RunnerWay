@@ -4,7 +4,7 @@ class Auth {
   final String email;
   final String nickname;
   final DateTime? birth;
-  final int? gender; // 0 또는 1로 구분
+  final int? gender;
   final int? height;
   final int? weight;
   final MemberImage? memberImage;
