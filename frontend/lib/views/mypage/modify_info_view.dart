@@ -233,30 +233,30 @@ class ModifyInfoView extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: screenWidth * 0.2),
-                    ElevatedButton(
-                      onPressed: () {
-                        // 모든 값 초기화 및 추가
-                        Map<String, dynamic> updateInfo = {
-                          'nickname': _authController.nickname.value.isNotEmpty
-                              ? _authController.nickname.value
-                              : "",
-                          'birth': _authController.birthDate.value.isNotEmpty
-                              ? DateFormat('yyyy-MM-dd').format(DateTime.parse(
-                                  _authController.birthDate.value))
-                              : "",
-                          'height': _authController.height.value.isNotEmpty
-                              ? _authController.height.value
-                              : "",
-                          'weight': _authController.weight.value.isNotEmpty
-                              ? _authController.weight.value
-                              : "",
-                        };
-
-                        log('Updated Info: $updateInfo');
-                        _authController.patchUserInfo(updateInfo);
-                      },
-                      child: const Text('회원정보 수정'),
-                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     // 모든 값 초기화 및 추가
+                    //     Map<String, dynamic> updateInfo = {
+                    //       'nickname': _authController.nickname.value.isNotEmpty
+                    //           ? _authController.nickname.value
+                    //           : "",
+                    //       'birth': _authController.birthDate.value.isNotEmpty
+                    //           ? DateFormat('yyyy-MM-dd').format(DateTime.parse(
+                    //               _authController.birthDate.value))
+                    //           : "",
+                    //       'height': _authController.height.value.isNotEmpty
+                    //           ? _authController.height.value
+                    //           : "",
+                    //       'weight': _authController.weight.value.isNotEmpty
+                    //           ? _authController.weight.value
+                    //           : "",
+                    //     };
+                    //
+                    //     log('Updated Info: $updateInfo');
+                    //     _authController.patchUserInfo(updateInfo);
+                    //   },
+                    //   child: const Text('회원정보 수정'),
+                    // ),
                   ],
                 ),
               ),
