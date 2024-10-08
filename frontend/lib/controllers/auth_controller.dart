@@ -168,7 +168,6 @@ class AuthController extends GetxController {
         memberImage.value = MemberImage(
           memberId: null,
           url: uploadedImageUrl,
-          path: selectedImage.value!.path,
         );
         log('이미지 업로드 성공:$uploadedImageUrl');
       } else {
@@ -274,7 +273,7 @@ class AuthController extends GetxController {
           userInfo.memberImage!.url!.isNotEmpty) {
         memberImage.value = userInfo.memberImage;
       } else {
-        memberImage.value = MemberImage(url: '', path: '');
+        memberImage.value = MemberImage(url: '');
         log('회원 이미지가 없습니다.');
       }
       log('회원 정보 불러오기 성공: $userInfoMap');

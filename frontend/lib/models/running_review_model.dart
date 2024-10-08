@@ -78,9 +78,8 @@ class RunningReviewModel {
       'finishDate': formatDate(finishDate),
       'lat': lat,
       'lng': lng,
-      'personalImage': personalImage != null
-          ? {'url': personalImage?.url ?? '', 'path': personalImage?.path ?? ''}
-          : null,
+      'personalImage':
+          personalImage != null ? {'url': personalImage?.url ?? ''} : null,
     };
   }
 
