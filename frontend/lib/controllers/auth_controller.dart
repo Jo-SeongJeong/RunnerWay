@@ -287,7 +287,7 @@ class AuthController extends GetxController {
   // 로그아웃
   Future<void> logout() async {
     try {
-      await _storage.delete(key: 'ACCESS_TOKEN');
+      await _storage.deleteAll();
       isLoggedIn.value = false;
       log('로그아웃 성공 controller');
       Get.toNamed('/login');
@@ -301,7 +301,8 @@ class AuthController extends GetxController {
   Future<void> remove() async {
     try {
       final response = await _authService.removeMember();
-      await _storage.delete(key: 'ACCESS_TOKEN');
+      isLoggedIn.value = false;
+      await _storage.deleteAll();
     } catch (e) {
       log('회원탈퇴 실패 controller: ${e}');
     }
