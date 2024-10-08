@@ -87,8 +87,13 @@ class RunnerView extends StatelessWidget {
 
                   return ListView.builder(
                     controller: _scrollController,
-                    itemCount: runnerController.runnerCourses.length,
+                    itemCount: runnerController.runnerCourses.length + 1,
                     itemBuilder: (context, index) {
+                      if (index == runnerController.runnerCourses.length) {
+                        return SizedBox(
+                          height: 80,
+                        );
+                      }
                       return CourseCard(
                         course: runnerController.runnerCourses[index],
                       );
@@ -96,9 +101,6 @@ class RunnerView extends StatelessWidget {
                   );
                 },
               ),
-            ),
-            SizedBox(
-              height: 80,
             ),
           ],
         ),
