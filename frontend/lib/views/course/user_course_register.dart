@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/user_course_controller.dart';
+import 'package:frontend/views/running/widgets/record_map.dart';
 import 'package:get/get.dart';
 import '../../controllers/record_controller.dart';
 import '../../widgets/button/wide_button.dart';
@@ -178,7 +179,7 @@ class RegisterView extends StatelessWidget {
                                       absorbing: true,
                                       child: SizedBox(
                                         height: 300,
-                                        child: const ResultMap(),
+                                        child: RecordMap(height: 250),
                                       ),
                                     ),
                                   ],

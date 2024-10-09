@@ -32,7 +32,7 @@ class RecordController extends GetxController {
   var selectedDate = Rxn<DateTime>(); // 선택된 날짜
   var focusedDate = Rxn<DateTime>(); // 포커스된 날짜
 
-  var pointOnMap = <LatLng>[].obs;
+  var coursePoints = <LatLng>[].obs;
   var polyline = <Polyline>{}.obs;
 
   @override
@@ -131,6 +131,8 @@ class RecordController extends GetxController {
 
         // 기존 Polyline을 업데이트하는 로직
         var loadedPolyline = await _recordService.loadPresetPath(recordId);
+        var loadedPolyline2 = await _recordService.loadPresetPath2(recordId);
+        coursePoints.value = loadedPolyline2;
         if (loadedPolyline != null) {
           polyline.clear(); // 기존 폴리라인 삭제 (필요한 경우)
           polyline.addAll({loadedPolyline}); // 새 폴리라인 추가
