@@ -69,6 +69,8 @@ class RunningProvider {
       log('response: ${response}');
       if (response.statusCode == 200) {
         return response.data;
+      } else if (response.statusCode == 422) {
+        return '';
       } else {
         throw Exception('랭킹 등록 확인 중 문제 발생');
       }

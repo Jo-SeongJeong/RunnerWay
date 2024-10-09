@@ -31,7 +31,6 @@ class RunningService extends GetxService {
     return Geolocator.getPositionStream(
       locationSettings: const LocationSettings(
         accuracy: LocationAccuracy.bestForNavigation,
-        distanceFilter: 1,
       ),
     );
   }

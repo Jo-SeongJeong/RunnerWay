@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/views/running/widget/custom_ranking_modal.dart';
 import 'package:frontend/widgets/modal/custom_modal.dart';
@@ -74,14 +76,17 @@ class RunningView extends StatelessWidget {
                   ],
                 ),
                 OverlayWidget(controller: controller),
-                Obx(() {
-                  if (!controller.isRun.value) {
-                    Future.delayed(Duration.zero, () {
-                      _showCustomModalWhenArrive(context);
-                    });
-                  }
-                  return const SizedBox.shrink();
-                }),
+                if (!controller.isRun.value &&
+                    !controller.isModalShown.value) ...[
+                  Builder(
+                    builder: (BuildContext context) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _showCustomModalWhenArrive(context);
+                      });
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ],
               ],
             ),
           );
@@ -296,6 +301,7 @@ class RunningView extends StatelessWidget {
   }
 
   Future<void> _showCustomModalWhenArrive(BuildContext context) async {
+    await Future.delayed(Duration.zero);
     final RunningController controller = Get.find<RunningController>();
 
     String title = '';
@@ -331,6 +337,7 @@ class RunningView extends StatelessWidget {
                   onConfirm: () {
                     Navigator.of(context).pop(); // 모달 닫기
                     controller.endRunning2(); // 러닝 종료
+                    controller.isModalShown.value = true;
                     Get.toNamed('/writereview');
                   },
                 );
@@ -363,6 +370,7 @@ class RunningView extends StatelessWidget {
                   onConfirm: () {
                     Navigator.of(context).pop(); // 모달 닫기
                     controller.endRunning2(); // 러닝 종료
+                    controller.isModalShown.value = true;
                     Get.toNamed('/writereview');
                   },
                 );
@@ -384,6 +392,7 @@ class RunningView extends StatelessWidget {
             onConfirm: () {
               Navigator.of(context).pop(); // 모달 닫기
               controller.endRunning2(); // 러닝 종료
+              controller.isModalShown.value = true;
               Get.toNamed('/writereview');
             },
           );
