@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:frontend/controllers/course_controller.dart';
 import 'package:frontend/controllers/running_controller.dart';

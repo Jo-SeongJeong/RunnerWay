@@ -9,9 +9,10 @@ import '../../widgets/review_info_item.dart';
 import 'package:frontend/controllers/review_write_controller.dart';
 
 class ReviewWriteView extends StatelessWidget {
-  final RunningReviewController controller = Get.put(RunningReviewController());
-
   ReviewWriteView({super.key});
+
+  final RunningReviewController controller =
+      Get.put(RunningReviewController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +33,7 @@ class ReviewWriteView extends StatelessWidget {
               padding: const EdgeInsets.only(right: 16),
               child: RegisterButton(
                 onItemTapped: (int _) => controller.onRegisterTapped(),
-              )
-              // TODO
-              // int로 반환값 있어서 위에 코드로 변경
-              // child: RegisterButton(onItemTapped: controller.onRegisterTapped),
-              ),
+              )),
         ],
       ),
       body: Obx(() {
