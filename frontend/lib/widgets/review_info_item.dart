@@ -43,10 +43,6 @@ class LocationInfo extends StatelessWidget {
                   maxLines: 1,
                 );
               }),
-              // child: Text(
-              //   address,
-              //   style: TextStyle(fontSize: 14, color: Color(0xffA0A0A0)),
-              // ),
             ),
             SizedBox(width: 8),
             Text(

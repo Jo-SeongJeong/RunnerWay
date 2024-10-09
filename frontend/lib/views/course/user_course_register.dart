@@ -122,6 +122,7 @@ class RegisterView extends StatelessWidget {
                               OutlineInputBorder(borderSide: BorderSide.none),
                         ),
                         cursorColor: Colors.blueAccent,
+                        maxLength: 500,
                       ),
                       SizedBox(height: 50),
                       recordController.isLoading.isTrue
