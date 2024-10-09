@@ -64,6 +64,7 @@ class _BirthModalState extends State<BirthModal> {
                 child: CupertinoDatePicker(
                   mode: CupertinoDatePickerMode.date,
                   initialDateTime: DateTime.now(),
+                  dateOrder: DatePickerDateOrder.ymd,
                   onDateTimeChanged: (DateTime dateTime) {
                     tempPickedDate = dateTime;
                   },
@@ -83,7 +84,6 @@ class _BirthModalState extends State<BirthModal> {
       _controller.text = formattedDate;
       widget.onChanged(formattedDate);
     } else {
-      // 사용자가 날짜를 선택하지 않고 완료 버튼을 누를 경우 현재 날짜 설정하지 않고 필드를 비워 둠
       _controller.clear();
       widget.onChanged("");
     }
