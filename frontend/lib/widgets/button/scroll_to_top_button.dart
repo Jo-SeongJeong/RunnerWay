@@ -15,7 +15,7 @@ class ScrollToTopButton extends StatelessWidget {
             child: ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(
-                  Colors.white,
+                  Colors.black,
                 ),
                 elevation: WidgetStateProperty.all(8),
                 shape: WidgetStateProperty.all(
@@ -39,7 +39,7 @@ class ScrollToTopButton extends StatelessWidget {
               },
               child: Icon(
                 Icons.arrow_upward,
-                color: Color(0xff1EA6FC),
+                color: Colors.white,
               ),
             ),
           )
