@@ -203,7 +203,7 @@ class AuthController extends GetxController {
     try {
       final isAvailable = await _authService.checkNicknameDuplicate(nickname);
       if (isAvailable) {
-        // Get.snackbar('오류', '이미 사용 중인 닉네임입니다.');
+        Get.snackbar('오류', '이미 사용 중인 닉네임입니다.');
         return true;
       } else {
         // Get.snackbar('성공', '사용 가능한 닉네임입니다.');
@@ -268,6 +268,7 @@ class AuthController extends GetxController {
       birthDate.value = userInfo.birth?.toString() ?? '';
       height.value = userInfo.height?.toString() ?? '';
       weight.value = userInfo.weight?.toString() ?? '';
+      selectedGender.value = userInfo.gender?.toString() ?? '';
       if (userInfo.memberImage != null &&
           userInfo.memberImage!.url != null &&
           userInfo.memberImage!.url!.isNotEmpty) {

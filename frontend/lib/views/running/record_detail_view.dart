@@ -175,6 +175,19 @@ class RecordDetailView extends StatelessWidget {
                           ),
                         ],
                       ),
+                      if (record.runningDistance != null &&
+                          record.runningDistance! < 0.1)
+                        SizedBox(
+                          height: 20,
+                        ),
+                      Row(
+                        children: [
+                          Text(
+                            '유저 코스 등록은 100m 이상 코스인 경우 가능합니다.',
+                            style: TextStyle(color: Colors.deepOrange),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -191,31 +204,37 @@ class RecordDetailView extends StatelessWidget {
           );
         }),
       ),
-      floatingActionButton: Obx(() => Visibility(
-            visible: recordController.recordDetail.value?.courseId == 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width - 20,
-                child: FloatingActionButton.extended(
-                  onPressed: () {
-                    Get.toNamed('/register/$recordId');
-                  },
-                  label: Text(
-                    '유저 코스 등록',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  icon: Container(),
-                  backgroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0)),
+      floatingActionButton: Obx(() {
+        final record = recordController.recordDetail.value;
+
+        return Visibility(
+          visible: record != null &&
+              record.runningDistance != null &&
+              record.runningDistance! >= 0.1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width - 20,
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  Get.toNamed('/register/$recordId');
+                },
+                label: Text(
+                  '유저 코스 등록',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
                 ),
+                icon: Container(),
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
               ),
             ),
-          )),
+          ),
+        );
+      }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -265,8 +284,7 @@ class RecordDetailView extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: TextField(
                           controller: _reviewController,
-                          maxLines: 5,
-                          maxLength: 200,
+                          maxLength: 300,
                           style: TextStyle(
                             color: Color(0xFF72777A),
                           ),

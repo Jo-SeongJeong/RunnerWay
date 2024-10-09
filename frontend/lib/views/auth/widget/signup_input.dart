@@ -69,11 +69,13 @@ class SignupInput extends StatelessWidget {
                       color: Color(0xFF72777A),
                     ),
                     fillColor: Color(0xFFE3E5E5).withOpacity(0.4),
+                    counterText: '',
                   ),
                   cursorColor: Colors.blueAccent,
                   onTap: () {
                     Scrollable.ensureVisible(context);
                   },
+                  maxLength: 3,
                 ),
               ),
               Padding(

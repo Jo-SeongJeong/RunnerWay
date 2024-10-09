@@ -75,7 +75,7 @@ class Course {
           ? (json['averageDownhill'] as num).toDouble()
           : null,
       memberId: json['memberId'],
-      memberNickname: json['nickname'],
+      memberNickname: json['memberNickname'],
       registDate: json['registDate'] != null
           ? DateTime.parse(json['registDate'])
           : null,
