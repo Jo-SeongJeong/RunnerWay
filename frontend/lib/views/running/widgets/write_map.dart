@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
 
 class WriteMap extends StatefulWidget {
-  const WriteMap({Key? key}) : super(key: key);
+  const WriteMap({super.key});
 
   @override
   State<WriteMap> createState() => _WriteMap();
