@@ -4,7 +4,7 @@ class Auth {
   final String email;
   final String nickname;
   final DateTime? birth;
-  final int? gender; // 0 또는 1로 구분
+  final int? gender;
   final int? height;
   final int? weight;
   final MemberImage? memberImage;
@@ -81,12 +81,10 @@ class Auth {
 class MemberImage {
   final int? memberId;
   final String? url;
-  final String? path;
 
   MemberImage({
     this.memberId,
     this.url,
-    this.path,
   });
 
   // JSON 변환을 위한 fromJson 메서드
@@ -94,7 +92,6 @@ class MemberImage {
     return MemberImage(
       memberId: json['memberId'],
       url: json['url'],
-      path: json['path'],
     );
   }
 
@@ -103,7 +100,6 @@ class MemberImage {
     return {
       'memberId': memberId,
       'url': url,
-      'path': path,
     };
   }
 }

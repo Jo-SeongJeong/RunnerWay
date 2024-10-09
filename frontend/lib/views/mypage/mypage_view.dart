@@ -2,6 +2,7 @@ import 'package:frontend/controllers/auth_controller.dart';
 import 'package:frontend/controllers/jwt_controller.dart';
 import 'package:frontend/controllers/user_course_controller.dart';
 import 'package:frontend/views/base_view.dart';
+import 'package:frontend/views/auth/signup_view2.dart';
 import 'package:frontend/views/mypage/modify_info_view.dart';
 import 'package:frontend/widgets/line.dart';
 import 'package:get/get.dart';
@@ -24,6 +25,7 @@ class MypageView extends StatelessWidget {
         child: Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: Text(
@@ -253,6 +255,14 @@ class MypageView extends StatelessWidget {
                         fontWeight: FontWeight.w500),
                   ))
             ]),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/signup2'),
+              child: const Text('회원태그'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/signup'),
+              child: const Text('회원가입'),
+            ),
           ],
         ),
       ),

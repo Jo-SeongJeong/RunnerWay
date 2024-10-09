@@ -68,7 +68,7 @@ class RunningReviewController extends GetxController {
       finishDate: DateTime.now().copyWith(millisecond: 0, microsecond: 0),
       lat: runningController.startPoint?.latitude ?? 0.0,
       lng: runningController.startPoint?.longitude ?? 0.0,
-      personalImage: PersonalImage(url: '', path: ''),
+      personalImage: PersonalImage(url: ''),
     );
 
     log('최종 값?: ${reviewModel}');
@@ -121,7 +121,6 @@ class RunningReviewController extends GetxController {
         reviewModel.value = reviewModel.value?.copyWith(
           personalImage: PersonalImage(
             url: uploadedImageUrl,
-            path: selectedImage.value!.path,
           ),
         );
         reviewModel.refresh(); // 상태를 반영하기 위해 refresh 호출

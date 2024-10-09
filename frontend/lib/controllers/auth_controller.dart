@@ -64,16 +64,13 @@ class AuthController extends GetxController {
   Future<void> loginWithKakao() async {
     try {
       // 기본 카카오 로그인
-      log('카카오 로그인 진입1');
       bool isInstalled = await isKakaoTalkInstalled();
       log('isInstalled : $isInstalled');
       log('${UserApi.instance.toString()}');
       OAuthToken token = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
-      log('카카오 로그인 진입3');
 
-      log('카카오 로그인 성공: ${token.accessToken}');
       // 토큰을 스토리지에 저장
       await _saveToken(token.accessToken);
 
@@ -140,6 +137,7 @@ class AuthController extends GetxController {
 
       // 서버에서 받은 응답이 accessToken인 경우(기존 회원)
       else if (response['token'] != null) {
+        // accessToken 저장
         await _saveToken(response['token']);
         loadDecodedData();
 
@@ -170,15 +168,15 @@ class AuthController extends GetxController {
         memberImage.value = MemberImage(
           memberId: null,
           url: uploadedImageUrl,
-          path: selectedImage.value!.path,
         );
+        log('이미지 업로드 성공:$uploadedImageUrl');
       } else {
+        log('이미지실패');
         // Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
       }
     }
   }
 
-// 회원가입 성공 여부를 상태로 저장하는 Observable 변수 추가
   var signUpSuccess = false.obs;
 
   // 회원가입
@@ -186,18 +184,17 @@ class AuthController extends GetxController {
     try {
       String? accessToken = await _authService.signupKakao(authData);
       if (accessToken != null) {
-        await _saveToken(accessToken); // 토큰 저장
+        await _saveToken(accessToken);
         log('회원가입 성공 controller, 토큰: $accessToken');
         signUpSuccess.value = true;
-        // Get.snackbar('성공', '선호태그 입력 페이지로 이동합니다.');
         loadDecodedData();
       } else {
-        // Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
+        Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
       }
     } catch (e) {
       signUpSuccess.value = false;
       log('회원가입 중 오류 발생 controller: $e');
-      // Get.snackbar('오류', '회원가입에 실패했습니다.');
+      Get.snackbar('오류', '회원가입에 실패했습니다.');
     }
   }
 
@@ -206,13 +203,14 @@ class AuthController extends GetxController {
     try {
       final isAvailable = await _authService.checkNicknameDuplicate(nickname);
       if (isAvailable) {
-        Get.snackbar('오류', '이미 사용 중인 닉네임입니다.');
+        // Get.snackbar('오류', '이미 사용 중인 닉네임입니다.');
         return true;
       } else {
-        Get.snackbar('성공', '사용 가능한 닉네임입니다.');
+        // Get.snackbar('성공', '사용 가능한 닉네임입니다.');
         return false;
       }
     } catch (e) {
+      // Get.snackbar('오류', '닉네임 오류');
       log('닉네임 체크 중 오류 발생 service: $e');
       return false;
     }
@@ -275,7 +273,7 @@ class AuthController extends GetxController {
           userInfo.memberImage!.url!.isNotEmpty) {
         memberImage.value = userInfo.memberImage;
       } else {
-        memberImage.value = MemberImage(url: '', path: '');
+        memberImage.value = MemberImage(url: '');
         log('회원 이미지가 없습니다.');
       }
       log('회원 정보 불러오기 성공: $userInfoMap');
@@ -293,7 +291,7 @@ class AuthController extends GetxController {
       Get.toNamed('/login');
     } catch (e) {
       log('로그아웃 실패 controller: ${e}');
-      // Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
+      Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
     }
   }
 
@@ -308,35 +306,35 @@ class AuthController extends GetxController {
     }
   }
 
-  // 정보수정
-  Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
-    try {
-      id.value = await _storage.read(key: 'ID') ?? 'No ID found';
-      updateInfo['height'] = height.value;
-      updateInfo['memberImage'] = {
-        'memberId': int.parse(id.value),
-        'url': memberImage.value?.url ?? '',
-        'path': selectedImage.value?.path ?? '',
-      };
-      updateInfo['height'] = int.tryParse(updateInfo['height'] ?? '');
-      updateInfo['weight'] = int.tryParse(updateInfo['weight'] ?? '');
-
-      // 회원 정보 수정 요청
-      final response = await _authService.patchUserInfo(updateInfo);
-
-      // 응답이 null이 아닌지 확인
-      if (response != null && response['token'] != null) {
-        String newToken = response['token'];
-        await _storage.write(key: 'ACCESS_TOKEN', value: newToken);
-        loadDecodedData();
-        log('회원 정보 수정 성공: 토큰 업데이트 완료');
-        return response;
-      } else {
-        throw Exception('회원 정보 수정 실패: ${response}');
-      }
-    } catch (e) {
-      log('회원 정보 수정 오류controller: $e');
-      throw Exception('회원 정보 수정 오류: $e');
-    }
-  }
+  // // 정보수정
+  // Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
+  //   try {
+  //     id.value = await _storage.read(key: 'ID') ?? 'No ID found';
+  //     updateInfo['height'] = height.value;
+  //     updateInfo['memberImage'] = {
+  //       'memberId': int.parse(id.value),
+  //       'url': memberImage.value?.url ?? '',
+  //       'path': selectedImage.value?.path ?? '',
+  //     };
+  //     updateInfo['height'] = int.tryParse(updateInfo['height'] ?? '');
+  //     updateInfo['weight'] = int.tryParse(updateInfo['weight'] ?? '');
+  //
+  //     // 회원 정보 수정 요청
+  //     final response = await _authService.patchUserInfo(updateInfo);
+  //
+  //     // 응답이 null이 아닌지 확인
+  //     if (response != null && response['token'] != null) {
+  //       String newToken = response['token'];
+  //       await _storage.write(key: 'ACCESS_TOKEN', value: newToken);
+  //       loadDecodedData();
+  //       log('회원 정보 수정 성공: 토큰 업데이트 완료');
+  //       return response;
+  //     } else {
+  //       throw Exception('회원 정보 수정 실패: ${response}');
+  //     }
+  //   } catch (e) {
+  //     log('회원 정보 수정 오류controller: $e');
+  //     throw Exception('회원 정보 수정 오류: $e');
+  //   }
+  // }
 }

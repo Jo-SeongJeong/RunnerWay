@@ -45,12 +45,10 @@ class MemberDto {
 class MemberImage {
   final int memberId;
   final String url;
-  final String path;
 
   MemberImage({
     required this.memberId,
     required this.url,
-    required this.path,
   });
 
   // JSON 데이터를 파싱하여 MemberImage 객체 생성
@@ -58,7 +56,6 @@ class MemberImage {
     return MemberImage(
       memberId: json['memberId'],
       url: json['url'],
-      path: json['path'],
     );
   }
 }
