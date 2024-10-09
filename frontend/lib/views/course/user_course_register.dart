@@ -124,6 +124,7 @@ class RegisterView extends StatelessWidget {
                         ),
                         cursorColor: Colors.blueAccent,
                         maxLength: 300,
+                        maxLines: null,
                       ),
                       SizedBox(height: 50),
                       recordController.isLoading.isTrue
