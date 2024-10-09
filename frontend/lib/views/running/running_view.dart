@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/views/running/widget/custom_ranking_modal.dart';
 import 'package:frontend/widgets/modal/custom_modal.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -299,33 +300,96 @@ class RunningView extends StatelessWidget {
 
     String title = '';
     String content = '';
-    if (controller.isCompetitionMode.value) {
-      title = '${controller.typeKorean.value} 대결 러닝';
-      if (controller.value.value.elapsedTime <
-          controller.competitionRecords.last.elapsedTime) {
-        content = '${controller.typeKorean.value} 대결 러닝을 승리하셨습니다';
+    if (controller.type != '자유') {
+      if (controller.isCompetitionMode.value) {
+        title = '${controller.typeKorean.value} 대결 러닝';
+        if (controller.value.value.elapsedTime <
+            controller.competitionRecords.last.elapsedTime) {
+          content = '${controller.typeKorean.value} 대결 러닝을 승리하셨습니다';
+        } else {
+          content = '${controller.typeKorean.value} 대결 러닝을 패배하셨습니다';
+        }
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Obx(() {
+              if (controller.ranking.isEmpty) {
+                return const Dialog(
+                  child: SizedBox(
+                    height: 100,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
+              } else {
+                return CustomRankingModal(
+                  title: title,
+                  content: content,
+                  rankingList: controller.ranking, // 랭킹 데이터 전달
+                  onConfirm: () {
+                    Navigator.of(context).pop(); // 모달 닫기
+                    controller.endRunning2(); // 러닝 종료
+                    Get.toNamed('/writereview');
+                  },
+                );
+              }
+            });
+          },
+        );
       } else {
-        content = '${controller.typeKorean.value} 대결 러닝을 패배하셨습니다';
+        title = '${controller.typeKorean.value} 러닝';
+        content = '${controller.typeKorean.value} 러닝을 완료하셨습니다';
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Obx(() {
+              if (controller.ranking.isEmpty) {
+                return const Dialog(
+                  child: SizedBox(
+                    height: 100,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
+              } else {
+                return CustomRankingModal(
+                  title: title,
+                  content: content,
+                  rankingList: controller.ranking, // 랭킹 데이터 전달
+                  onConfirm: () {
+                    Navigator.of(context).pop(); // 모달 닫기
+                    controller.endRunning2(); // 러닝 종료
+                    Get.toNamed('/writereview');
+                  },
+                );
+              }
+            });
+          },
+        );
       }
     } else {
       title = '${controller.typeKorean.value} 러닝';
       content = '${controller.typeKorean.value} 러닝을 완료하셨습니다';
-    }
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomModal(
-          title: title,
-          content: content,
-          onConfirm: () {
-            Navigator.of(context).pop(); // 모달 닫기
-            controller.endRunning2();
-            Get.toNamed('/writereview');
-          },
-        );
-      },
-    );
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomModal(
+            title: title,
+            content: content,
+            onConfirm: () {
+              Navigator.of(context).pop(); // 모달 닫기
+              controller.endRunning2(); // 러닝 종료
+              Get.toNamed('/writereview');
+            },
+          );
+        },
+      );
+    }
   }
 }
 

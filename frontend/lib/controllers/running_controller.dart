@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/course_controller.dart';
+import 'package:frontend/models/ranking.dart';
 import 'package:frontend/models/ranking_upload_model.dart';
 import 'package:frontend/services/course_service.dart';
 import 'package:frontend/utils/s3_image_upload.dart';
@@ -56,6 +57,8 @@ class RunningController extends GetxController {
   LatLng? _destinationPoint; // 도착지점 좌표를 저장하는 변수
   LatLng startPoint = LatLng(0.0, 0.0); // 시작 위치
 
+  var ranking = <Ranking>[].obs;
+
   RunningController() {
     _runningService = RunningService();
     _fileService = FileService();
@@ -103,7 +106,6 @@ class RunningController extends GetxController {
     await _setInitialLocation();
     getRunTypeText();
     isLoading(false);
-    await _playTTS("러닝을 시작합니다. 현재 위치에서 출발하세요.");
   }
 
   // TODO
@@ -134,6 +136,7 @@ class RunningController extends GetxController {
     }
     _startLocationUpdates();
     _startTimer();
+    await _playTTS("러닝을 시작합니다. 현재 위치에서 출발하세요.");
   }
 
   void getRunTypeText() {
@@ -442,27 +445,36 @@ class RunningController extends GetxController {
     final score =
         value.value.elapsedTime.toString().split('.').first.padLeft(8, "0");
 
-    // 대결 여부 확인 후
-    if (varid != '0') {
-      //대결에 따른 결과 페이지로 이동 시켜야 해
-    }
     dev.log('최종 시간: ${score}');
-    // 랭킹 등록 가능여부 판단 해야 함
-    final response = await _runningService.getRegistRanking(
-        int.parse(courseid ?? '0'), score);
-    dev.log('랭커 등록 여부: ${response}');
 
-    if (response) {
-      // s3에 업로드
-      final directory = await getApplicationDocumentsDirectory();
-      final File tmpFile = File('${directory.path}/tmp.json');
-      final url = await S3ImageUpload().uploadRankingLog(tmpFile);
-      dev.log('url: ${url}');
-      RankingUploadModel model = RankingUploadModel(
-          courseId: int.parse(courseid ?? '0'), score: score, logPath: url);
-      // 랭킹 등록
-      final response = await _runningService.registRanking(model);
-      dev.log('랭킹 등록 결과값: ${response}');
+    // 랭킹 등록 가능여부 판단 해야 함
+    if (courseid != '0') {
+      final response = await _runningService.getRegistRanking(
+          int.parse(courseid ?? '0'), score);
+      dev.log('랭커 등록 여부: ${response}');
+
+      if (response) {
+        // s3에 업로드
+        final directory = await getApplicationDocumentsDirectory();
+        final File tmpFile = File('${directory.path}/tmp.json');
+        final url = await S3ImageUpload().uploadRankingLog(tmpFile);
+        dev.log('url: ${url}');
+        RankingUploadModel model = RankingUploadModel(
+            courseId: int.parse(courseid ?? '0'), score: score, logPath: url);
+        // 랭킹 등록
+        final response = await _runningService.registRanking(model);
+        dev.log('랭킹 등록 결과값: ${response}');
+
+        final fetchedCourseRanking =
+            await CourseService().getCourseRanking(int.parse(courseid ?? '0'));
+        ranking.assignAll(fetchedCourseRanking);
+        dev.log('${ranking}');
+      }
+
+      // 공식 유저 코스 시
+      if (varid != '0') {
+        //대결에 따른 결과 페이지로 이동 시켜야 해
+      }
     }
   }
 
