@@ -2,13 +2,14 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/widgets/modal/custom_modal.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:get/get.dart';
 import '../models/auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:frontend/utils/s3_image_upload.dart'; // S3 업로드 기능 사용
+import 'package:frontend/utils/s3_image_upload.dart';
 
 class AuthController extends GetxController {
   var id = ''.obs;
@@ -189,12 +190,12 @@ class AuthController extends GetxController {
         signUpSuccess.value = true;
         loadDecodedData();
       } else {
-        Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
+        // Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
       }
     } catch (e) {
       signUpSuccess.value = false;
       log('회원가입 중 오류 발생 controller: $e');
-      Get.snackbar('오류', '회원가입에 실패했습니다.');
+      // Get.snackbar('오류', '회원가입에 실패했습니다.');
     }
   }
 

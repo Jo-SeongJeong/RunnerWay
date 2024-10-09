@@ -7,6 +7,7 @@ import 'package:frontend/views/auth/widget/signup_input.dart';
 import 'package:frontend/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:frontend/models/auth.dart';
+import 'package:frontend/widgets/modal/custom_modal.dart';
 
 class SignUpView extends StatelessWidget {
   final String email;
@@ -273,7 +274,16 @@ class SignUpView extends StatelessWidget {
                   bool isNicknameCheck = await _authController
                       .checkNickname(_authController.nickname.value);
                   if (isNicknameCheck) {
-                    Get.snackbar('죄송', '이미 사용중인 닉네임입니다');
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomModal(
+                            title: '중복 닉네임',
+                            content: '닉네임이 존재합니다.',
+                            onConfirm: () {},
+                            confirmText: '확인',
+                          );
+                        });
                   } else {
                     int? height = _authController.height.value.isNotEmpty
                         ? int.tryParse(_authController.height.value)
