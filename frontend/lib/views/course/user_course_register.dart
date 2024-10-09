@@ -238,7 +238,7 @@ class RegisterView extends StatelessWidget {
                                   'path/to/image',
                         },
                       });
-                      Get.toNamed('/runner-pick');
+                      Get.toNamed('/runner');
                     }
                   : null,
             ),
