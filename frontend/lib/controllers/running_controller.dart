@@ -36,6 +36,7 @@ class RunningController extends GetxController {
   var isOfficialRun = false.obs;
   var isCompetitionMode = false.obs;
   var isRun = true.obs;
+  var isCanStart = true.obs;
   List<RunningRecord> competitionRecords = [];
   int competitionRecordIndex = 0;
   Timer? competitionTimer;
@@ -167,19 +168,9 @@ class RunningController extends GetxController {
       // 현재 위치와 경로 시작점의 거리 계산
       double distanceToStart =
           _runningService.calculateDistance(startPoint, startLocation);
-      if (distanceToStart > 50.0) {
+      if (distanceToStart > 10.0) {
         // 50m 이내가 아닌 경우 사용자에게 알림 처리
-        Get.back();
-
-        // TODO
-        // snackbar 안 떠서 어케 하지
-        Get.snackbar(
-          '알림',
-          '현재 위치가 경로의 시작점과 너무 멉니다. 경로 시작점에 가까워지세요.',
-          snackPosition: SnackPosition.TOP,
-          duration: Duration(seconds: 5),
-        );
-        Get.back();
+        isCanStart.value = false;
       } else {
         isRun.value = true; // 10m 이내면 러닝을 시작할 수 있음
       }

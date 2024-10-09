@@ -19,64 +19,72 @@ class RunningView extends StatelessWidget {
           ),
         );
       } else {
-        return Scaffold(
-          body: Stack(
-            children: [
-              Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: GoogleMap(
-                      polylines: controller.value.value.polyline,
-                      myLocationEnabled: true,
-                      onMapCreated: (GoogleMapController mapController) {
-                        controller.onMapCreated(mapController);
-                      },
-                      initialCameraPosition: CameraPosition(
-                        target:
-                            controller.value.value.mapCenter ?? LatLng(0, 0),
-                        zoom: 17,
-                      ),
-                      markers: controller.value.value.markers,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: _buildRunStatus(controller), // 대결 상태 표시
-                          ),
+        // isCanStart가 false일 때 다이얼로그 호출
+        if (!controller.isCanStart.value) {
+          Future.delayed(Duration.zero, () {
+            _showStopLocationModal(context);
+          });
+          return const Scaffold();
+        } else {
+          return Scaffold(
+            body: Stack(
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: GoogleMap(
+                        polylines: controller.value.value.polyline,
+                        myLocationEnabled: true,
+                        onMapCreated: (GoogleMapController mapController) {
+                          controller.onMapCreated(mapController);
+                        },
+                        initialCameraPosition: CameraPosition(
+                          target:
+                              controller.value.value.mapCenter ?? LatLng(0, 0),
+                          zoom: 17,
                         ),
-                        const SizedBox(height: 10),
-                        Obx(() => _buildSingleTimer(controller)),
-                        const SizedBox(height: 10),
-                        _buildDistanceAndPace(controller),
-                        const SizedBox(height: 10),
-                        _buildLegend(controller),
-                        const SizedBox(height: 20),
-                        _buildEndRunningButton(controller),
-                      ],
+                        markers: controller.value.value.markers,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              OverlayWidget(controller: controller),
-              Obx(() {
-                if (!controller.isRun.value) {
-                  Future.delayed(Duration.zero, () {
-                    _showCustomModalWhenArrive(context);
-                  });
-                }
-                return const SizedBox.shrink();
-              }),
-            ],
-          ),
-        );
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      color: Colors.white,
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: _buildRunStatus(controller), // 대결 상태 표시
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Obx(() => _buildSingleTimer(controller)),
+                          const SizedBox(height: 10),
+                          _buildDistanceAndPace(controller),
+                          const SizedBox(height: 10),
+                          _buildLegend(controller),
+                          const SizedBox(height: 20),
+                          _buildEndRunningButton(controller),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                OverlayWidget(controller: controller),
+                Obx(() {
+                  if (!controller.isRun.value) {
+                    Future.delayed(Duration.zero, () {
+                      _showCustomModalWhenArrive(context);
+                    });
+                  }
+                  return const SizedBox.shrink();
+                }),
+              ],
+            ),
+          );
+        }
       }
     });
   }
@@ -270,6 +278,22 @@ class RunningView extends StatelessWidget {
     );
   }
 
+  void _showStopLocationModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomModal(
+          title: '출발지 이동',
+          content: '시작 지점 10m 이내로 이동해주세요',
+          onConfirm: () {
+            Get.back();
+            Get.back();
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _showCustomModalWhenArrive(BuildContext context) async {
     final RunningController controller = Get.find<RunningController>();
 
@@ -331,7 +355,7 @@ class _OverlayWidgetState extends State<OverlayWidget> {
       await Future.delayed(Duration(seconds: 1));
     }
     // 카운트다운이 끝나면 러닝을 시작
-    widget.controller.startRun2();
+    if (widget.controller.isCanStart.value) widget.controller.startRun2();
   }
 
   @override
