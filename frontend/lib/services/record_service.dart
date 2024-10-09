@@ -121,4 +121,36 @@ class RecordService {
       return null;
     }
   }
+
+  Future<List<LatLng>> loadPresetPath2(int recordId) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      // recordId에 따라 파일 경로 동적 설정
+      final filePath = '${directory.path}/$recordId.json';
+      final file = File(filePath);
+
+      log('파일 있는지?: ${file}');
+
+      // 파일이 존재할 경우 데이터 읽기
+      if (await file.exists()) {
+        final jsonString = await file.readAsString();
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+
+        log('${jsonString}');
+        log('${jsonList}');
+
+        // JSON 데이터를 LatLng 리스트로 변환
+        return jsonList
+            .map((point) => LatLng(
+                point['latitude'] as double, point['longitude'] as double))
+            .toList();
+      } else {
+        print('Preset path file does not exist for recordId $recordId.');
+        return [];
+      }
+    } catch (e) {
+      print('Error loading preset path for recordId $recordId: $e');
+      return [];
+    }
+  }
 }

@@ -54,6 +54,7 @@ class UserCourseController extends GetxController {
       // 디코드해서 memberId 추출
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       String memberId = decodedToken['id'].toString();
+      log('Decoded memberId: $memberId');
 
       // 유효한 recordId 가져오기
       final recordId = recordController.recordDetail.value?.recordId ?? 0;
@@ -67,7 +68,15 @@ class UserCourseController extends GetxController {
       log('usercousrse컨트롤러 data: $userCourseRegistRequestDto');
 
       // 유저 코스 등록 메서드 호출
-      await _userCourseService.addUserCourse(userCourseRegistRequestDto);
+      final response =
+          await _userCourseService.addUserCourse(userCourseRegistRequestDto);
+
+      if (response != null) {
+        final response2 =
+            await _userCourseService.uploadJson(response, recordId.toString());
+      }
+
+      // Get.snackbar('성공', '유저 코스 추가가 완료되었습니다.');
     } catch (e) {
       errorMessage('유저 코스 추가 중 오류 발생 controller: $e');
       log(errorMessage.value);
