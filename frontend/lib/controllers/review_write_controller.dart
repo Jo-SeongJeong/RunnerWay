@@ -61,7 +61,7 @@ class RunningReviewController extends GetxController {
       calorie: calculateCalorie(),
       averagePace: averagePace,
       comment: '',
-      address: address,
+      address: courseController.course.value?.address ?? address,
       startDate: DateTime.now()
           .subtract(runningController.value.value.elapsedTime)
           .copyWith(millisecond: 0, microsecond: 0),
