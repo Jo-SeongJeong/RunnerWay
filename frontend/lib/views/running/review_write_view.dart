@@ -15,6 +15,8 @@ class ReviewWriteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -61,26 +63,36 @@ class ReviewWriteView extends StatelessWidget {
                           children: [
                             LocationInfo(
                               title: controller.name.value,
-                              address: controller.reviewModel.value!.address,
+                              address: (controller.reviewModel.value!.address ==
+                                          null ||
+                                      controller
+                                          .reviewModel.value!.address.isEmpty)
+                                  ? '주소 정보 없음'
+                                  : controller.reviewModel.value!.address,
                               time: controller.reviewModel.value!.startDate,
                             ),
                             const SizedBox(height: 20),
                             GestureDetector(
-                              onTap: controller.pickImage,
-                              child: controller.selectedImage.value != null
-                                  ? Image.file(
-                                      controller.selectedImage.value!,
-                                      fit: BoxFit.cover,
-                                      height: 200,
-                                      width: double.infinity,
-                                    )
-                                  : Image.asset(
-                                      'assets/images/review_default_image.png',
-                                      fit: BoxFit.cover,
-                                      height: 200,
-                                      width: double.infinity,
-                                    ),
-                            ),
+                                onTap: controller.pickImage,
+                                child: Container(
+                                  height: screenHeight * 0.3,
+                                  width: screenWidth,
+                                  child: controller.selectedImage.value != null
+                                      ? Image.file(
+                                          controller.selectedImage.value!,
+                                          fit: BoxFit.cover,
+                                          height: 200,
+                                          width: double.infinity,
+                                        )
+                                      : Center(
+                                          child: Image.asset(
+                                            'assets/images/main/course_default.png',
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                )),
                             const SizedBox(height: 28),
                             const Text(
                               '러닝 리뷰',
@@ -93,10 +105,16 @@ class ReviewWriteView extends StatelessWidget {
                             TextField(
                               maxLines: null,
                               decoration: const InputDecoration(
-                                hintText: '리뷰를 작성해주세요...',
-                                border: OutlineInputBorder(),
+                                hintText: '리뷰를 작성해주세요',
+                                filled: true,
+                                fillColor: Color(0xFFE3E5E5),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none),
                               ),
                               maxLength: 300,
+                              cursorColor: Colors.blueAccent,
                               onChanged: controller.updateContent,
                               controller: controller.commentController,
                             ),
