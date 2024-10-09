@@ -217,7 +217,9 @@ class MypageView extends StatelessWidget {
                           )),
                       SizedBox(height: 10),
                       Obx(() => Text(
-                            '${_authController.selectedGender.value}',
+                            _authController.selectedGender.value == 1
+                                ? '남성'
+                                : '여성',
                             style: const TextStyle(
                               color: Color(0xFFA0A0A0),
                               fontSize: 15,
