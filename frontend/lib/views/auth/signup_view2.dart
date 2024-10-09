@@ -24,7 +24,7 @@ class _SignUpView2State extends State<SignUpView2> {
     false,
     false
   ];
-  List<String> favoriteTag = []; // 선택된 태그의 text 값을 저장하는 리스트
+  List<String> favoriteTag = [];
   bool isAnyTagSelected = false;
 
   void handleTagTapped(int index, String tagName) {
@@ -43,10 +43,8 @@ class _SignUpView2State extends State<SignUpView2> {
   }
 
   Future<void> submitFavoriteTags() async {
-    // favoriteTag 리스트를 그대로 전송
-    log('보낼 데이터: $favoriteTag'); // 요청 데이터 확인용 로그
     try {
-      await _authController.sendFavoriteTag(favoriteTag); // List<String> 전송
+      await _authController.sendFavoriteTag(favoriteTag);
     } catch (e) {
       log('태그 전송 중 오류 발생: $e');
     }
@@ -127,7 +125,7 @@ class _SignUpView2State extends State<SignUpView2> {
                         children: [
                           FavoriteCourses(
                             text: '오르막길이 많은',
-                            imagePath: 'assets/images/auth/mountain.png',
+                            imagePath: 'assets/images/auth/uphill.png',
                             onItemTapped: (text) {
                               handleTagTapped(0, text);
                             },
@@ -135,7 +133,7 @@ class _SignUpView2State extends State<SignUpView2> {
                           SizedBox(width: 10),
                           FavoriteCourses(
                             text: '내리막길이 많은',
-                            imagePath: 'assets/images/auth/man_no.png',
+                            imagePath: 'assets/images/auth/downhill.png',
                             onItemTapped: (text) {
                               handleTagTapped(1, text);
                             },
@@ -150,7 +148,7 @@ class _SignUpView2State extends State<SignUpView2> {
                         children: [
                           FavoriteCourses(
                             text: '평지 중심 코스',
-                            imagePath: 'assets/images/auth/man_ok.png',
+                            imagePath: 'assets/images/auth/road.png',
                             onItemTapped: (text) {
                               handleTagTapped(2, text);
                             },
@@ -158,7 +156,7 @@ class _SignUpView2State extends State<SignUpView2> {
                           SizedBox(width: 10),
                           FavoriteCourses(
                             text: '강가 근처 코스',
-                            imagePath: 'assets/images/auth/man_ok.png',
+                            imagePath: 'assets/images/auth/creek.png',
                             onItemTapped: (text) {
                               handleTagTapped(3, text);
                             },
@@ -181,7 +179,7 @@ class _SignUpView2State extends State<SignUpView2> {
                           SizedBox(width: 10),
                           FavoriteCourses(
                             text: '해안가 근처 코스',
-                            imagePath: 'assets/images/auth/man_ok.png',
+                            imagePath: 'assets/images/auth/ocean.png',
                             onItemTapped: (text) {
                               handleTagTapped(5, text);
                             },
@@ -196,7 +194,7 @@ class _SignUpView2State extends State<SignUpView2> {
                         children: [
                           FavoriteCourses(
                             text: '자전거 도로와 함께하는',
-                            imagePath: 'assets/images/auth/man_ok.png',
+                            imagePath: 'assets/images/auth/bicycle.png',
                             onItemTapped: (text) {
                               handleTagTapped(6, text);
                             },

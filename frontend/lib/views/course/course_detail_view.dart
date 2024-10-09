@@ -21,7 +21,7 @@ class CourseDetailView extends StatelessWidget {
     return BaseView(
       child: SingleChildScrollView(
         // 뷰의 내용이 하단바에 가리지 않도록 padding 설정
-        padding: EdgeInsets.only(bottom: 120),
+        padding: EdgeInsets.only(bottom: 80),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

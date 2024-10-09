@@ -1,12 +1,10 @@
 class CourseImage {
   final int courseId;
   final String url;
-  final String path;
 
   CourseImage({
     required this.courseId,
     required this.url,
-    required this.path,
   });
 
   // JSON 데이터를 파싱하여 CourseImage 객체 생성
@@ -14,7 +12,6 @@ class CourseImage {
     return CourseImage(
       courseId: json['courseId'],
       url: json['url'],
-      path: json['path'],
     );
   }
 
@@ -23,7 +20,6 @@ class CourseImage {
     return {
       'courseId': courseId,
       'url': url,
-      'path': path,
     };
   }
 }

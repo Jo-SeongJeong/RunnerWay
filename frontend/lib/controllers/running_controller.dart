@@ -90,6 +90,7 @@ class RunningController extends GetxController {
       await _checkIfStartLocationIsValid(); // 경로의 시작 위치 확인
       dev.log('Official running mode initialized with courseid: $courseid');
     } else if (type == 'user') {
+      isOfficialRun.value = true;
       await loadSavedPath();
       await _checkIfStartLocationIsValid(); // 경로의 시작 위치 확인
       dev.log('User running mode initialized with courseid: $courseid');

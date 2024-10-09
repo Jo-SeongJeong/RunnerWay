@@ -225,11 +225,15 @@ class RecordView extends StatelessWidget {
                                 else if (_recordController.dayRecords.isEmpty)
                                   // 기록 empty state 처리
                                   Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 10,
-                                    ),
-                                    child: Empty(mainContent: '기록이 없습니다'),
-                                  )
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 10,
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Empty(mainContent: '기록이 없습니다'),
+                                          SizedBox(height: 80),
+                                        ],
+                                      ))
                                 else
                                   Column(
                                     children: [
