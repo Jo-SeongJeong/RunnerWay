@@ -76,7 +76,7 @@ class LoginView extends StatelessWidget {
                 Text(
                   '3초만에 시작하기!',
                   style: TextStyle(
-                    color: Color(0xFFA0A0A0),
+                    color: Color(0xFFA0A0A0).withOpacity(0.6),
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
                   ),
@@ -90,8 +90,8 @@ class LoginView extends StatelessWidget {
                     print('카카오 로그인 클릭');
                   },
                   child: Container(
-                    width: 45,
-                    height: 45,
+                    width: 60,
+                    height: 60,
                     child: Image.asset('assets/images/auth/kakao.png'),
                   ),
                 ),
