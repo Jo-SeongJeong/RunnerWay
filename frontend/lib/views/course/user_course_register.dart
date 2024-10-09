@@ -51,7 +51,7 @@ class RegisterView extends StatelessWidget {
                               value.isNotEmpty;
                         },
                         decoration: InputDecoration(
-                          labelText: '코스 이름을 입력해주세요',
+                          hintText: '코스 이름을 입력해주세요',
                           border: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.black)),
                           enabledBorder: UnderlineInputBorder(
@@ -118,7 +118,10 @@ class RegisterView extends StatelessWidget {
                           fillColor: Colors.grey.shade100,
                           enabledBorder:
                               OutlineInputBorder(borderSide: BorderSide.none),
+                          focusedBorder:
+                              OutlineInputBorder(borderSide: BorderSide.none),
                         ),
+                        cursorColor: Colors.blueAccent,
                       ),
                       SizedBox(height: 50),
                       recordController.isLoading.isTrue
@@ -169,6 +172,7 @@ class RegisterView extends StatelessWidget {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 30),
                                     AbsorbPointer(
                                       absorbing: true,
                                       child: SizedBox(
