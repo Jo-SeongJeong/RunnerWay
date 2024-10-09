@@ -54,22 +54,41 @@ class RunningReviewController extends GetxController {
 
     String address = await loadAddress();
 
-    reviewModel.value = RunningReviewModel(
-      courseId: courseController.course.value?.courseId ?? 0,
-      score: runningController.value.value.elapsedTime.inSeconds,
-      runningDistance: runningController.value.value.totalDistance,
-      calorie: calculateCalorie(),
-      averagePace: averagePace,
-      comment: '',
-      address: courseController.course.value?.address ?? address,
-      startDate: DateTime.now()
-          .subtract(runningController.value.value.elapsedTime)
-          .copyWith(millisecond: 0, microsecond: 0),
-      finishDate: DateTime.now().copyWith(millisecond: 0, microsecond: 0),
-      lat: runningController.startPoint?.latitude ?? 0.0,
-      lng: runningController.startPoint?.longitude ?? 0.0,
-      personalImage: PersonalImage(url: ''),
-    );
+    if (runningController.type == '자유') {
+      reviewModel.value = RunningReviewModel(
+        courseId: 0,
+        score: runningController.value.value.elapsedTime.inSeconds,
+        runningDistance: runningController.value.value.totalDistance,
+        calorie: calculateCalorie(),
+        averagePace: averagePace,
+        comment: '',
+        address: address,
+        startDate: DateTime.now()
+            .subtract(runningController.value.value.elapsedTime)
+            .copyWith(millisecond: 0, microsecond: 0),
+        finishDate: DateTime.now().copyWith(millisecond: 0, microsecond: 0),
+        lat: runningController.startPoint?.latitude ?? 0.0,
+        lng: runningController.startPoint?.longitude ?? 0.0,
+        personalImage: PersonalImage(url: ''),
+      );
+    } else {
+      reviewModel.value = RunningReviewModel(
+        courseId: courseController.course.value?.courseId ?? 0,
+        score: runningController.value.value.elapsedTime.inSeconds,
+        runningDistance: runningController.value.value.totalDistance,
+        calorie: calculateCalorie(),
+        averagePace: averagePace,
+        comment: '',
+        address: courseController.course.value?.address ?? address,
+        startDate: DateTime.now()
+            .subtract(runningController.value.value.elapsedTime)
+            .copyWith(millisecond: 0, microsecond: 0),
+        finishDate: DateTime.now().copyWith(millisecond: 0, microsecond: 0),
+        lat: runningController.startPoint?.latitude ?? 0.0,
+        lng: runningController.startPoint?.longitude ?? 0.0,
+        personalImage: PersonalImage(url: ''),
+      );
+    }
 
     log('최종 값?: ${reviewModel}');
 
@@ -131,6 +150,7 @@ class RunningReviewController extends GetxController {
 
   // 리뷰 등록 메서드
   Future<void> onRegisterTapped() async {
+    log('모델: ${reviewModel.value}');
     try {
       if (reviewModel.value != null) {
         final response = await _service.submitReview(reviewModel.value!);
