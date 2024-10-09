@@ -175,19 +175,19 @@ class RecordDetailView extends StatelessWidget {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       if (record.runningDistance != null &&
                           record.runningDistance! < 0.1)
-                        SizedBox(
-                          height: 20,
+                        Row(
+                          children: [
+                            Text(
+                              '유저 코스 등록은 100m 이상 코스인 경우 가능합니다.',
+                              style: TextStyle(color: Colors.deepOrange),
+                            ),
+                          ],
                         ),
-                      Row(
-                        children: [
-                          Text(
-                            '유저 코스 등록은 100m 이상 코스인 경우 가능합니다.',
-                            style: TextStyle(color: Colors.deepOrange),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),
