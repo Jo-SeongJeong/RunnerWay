@@ -35,11 +35,20 @@ class LocationInfo extends StatelessWidget {
             ),
             SizedBox(width: 5),
             Expanded(
-              child: Text(
-                address,
-                style: TextStyle(fontSize: 14, color: Color(0xffA0A0A0)),
-              ),
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Text(
+                  address,
+                  style: TextStyle(color: Color(0xffA0A0A0)),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                );
+              }),
+              // child: Text(
+              //   address,
+              //   style: TextStyle(fontSize: 14, color: Color(0xffA0A0A0)),
+              // ),
             ),
+            SizedBox(width: 8),
             Text(
               DateFormat('yyyy-MM-dd HH:mm:ss').format(time),
               style: TextStyle(
