@@ -171,7 +171,7 @@ class _SignUpView2State extends State<SignUpView2> {
                         children: [
                           FavoriteCourses(
                             text: '접근성이 좋은',
-                            imagePath: 'assets/images/auth/man_ok.png',
+                            imagePath: 'assets/images/auth/city.png',
                             onItemTapped: (text) {
                               handleTagTapped(4, text);
                             },
@@ -179,7 +179,7 @@ class _SignUpView2State extends State<SignUpView2> {
                           SizedBox(width: 10),
                           FavoriteCourses(
                             text: '해안가 근처 코스',
-                            imagePath: 'assets/images/auth/ocean.png',
+                            imagePath: 'assets/images/auth/beach.png',
                             onItemTapped: (text) {
                               handleTagTapped(5, text);
                             },
@@ -202,7 +202,7 @@ class _SignUpView2State extends State<SignUpView2> {
                           SizedBox(width: 10),
                           FavoriteCourses(
                             text: '사람 적은',
-                            imagePath: 'assets/images/auth/man_ok.png',
+                            imagePath: 'assets/images/auth/less.png',
                             onItemTapped: (text) {
                               handleTagTapped(7, text);
                             },

@@ -120,6 +120,7 @@ class SignUpView extends StatelessWidget {
                         ),
                         fillColor: Color(0xFFE3E5E5).withOpacity(0.4),
                       ),
+                      maxLength: 8,
                       cursorColor: Colors.blueAccent,
                       cursorErrorColor: Colors.red,
                     ),
