@@ -96,6 +96,7 @@ class ReviewWriteView extends StatelessWidget {
                                 hintText: '리뷰를 작성해주세요...',
                                 border: OutlineInputBorder(),
                               ),
+                              maxLength: 300,
                               onChanged: controller.updateContent,
                               controller: controller.commentController,
                             ),

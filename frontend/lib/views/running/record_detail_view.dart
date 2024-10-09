@@ -265,7 +265,7 @@ class RecordDetailView extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: TextField(
                           controller: _reviewController,
-                          maxLength: 500,
+                          maxLength: 300,
                           style: TextStyle(
                             color: Color(0xFF72777A),
                           ),
