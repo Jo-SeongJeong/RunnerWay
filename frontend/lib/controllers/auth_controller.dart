@@ -32,7 +32,7 @@ class AuthController extends GetxController {
 
   final AuthService _authService = AuthService();
   // 선택된 성별 및 버튼 활성화 상태
-  var selectedGender = ''.obs;
+  var selectedGender = Rxn<int>();
   var isButtonActive = false.obs;
   RxBool isEditable = false.obs;
 
@@ -269,7 +269,7 @@ class AuthController extends GetxController {
       birthDate.value = userInfo.birth?.toString() ?? '';
       height.value = userInfo.height?.toString() ?? '';
       weight.value = userInfo.weight?.toString() ?? '';
-      selectedGender.value = userInfo.gender?.toString() ?? '';
+      selectedGender.value = userInfo.gender;
       if (userInfo.memberImage != null &&
           userInfo.memberImage!.url != null &&
           userInfo.memberImage!.url!.isNotEmpty) {

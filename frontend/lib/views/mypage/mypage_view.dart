@@ -107,19 +107,6 @@ class MypageView extends StatelessWidget {
                     '개인 상세 정보',
                     style: TextStyle(fontSize: 16, color: Color(0xFF1EA6FC)),
                   ),
-                  // TextButton(
-                  //     style: TextButton.styleFrom(
-                  //         foregroundColor: Color(0xFF1EA6FC)),
-                  //     onPressed: () {
-                  //       Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //               builder: (context) => ModifyInfoView()));
-                  //     },
-                  //     child: const Text(
-                  //       '회원 정보 수정',
-                  //       style: TextStyle(fontSize: 12),
-                  //     )),
                 ],
               ),
             ),
@@ -188,6 +175,8 @@ class MypageView extends StatelessWidget {
                           } catch (e) {
                             formattedBirthDate = 'Invalid Date';
                           }
+                        } else {
+                          formattedBirthDate = '-';
                         }
 
                         return Text(
@@ -201,7 +190,9 @@ class MypageView extends StatelessWidget {
                       }),
                       SizedBox(height: 10),
                       Obx(() => Text(
-                            '${_authController.height.value} cm',
+                            _authController.height.value.isEmpty
+                                ? '- cm'
+                                : '${_authController.height.value} cm',
                             style: const TextStyle(
                               color: Color(0xFFA0A0A0),
                               fontSize: 15,
@@ -210,7 +201,9 @@ class MypageView extends StatelessWidget {
                           )),
                       SizedBox(height: 10),
                       Obx(() => Text(
-                            '${_authController.weight.value} kg',
+                            _authController.weight.value.isEmpty
+                                ? '- kg'
+                                : '${_authController.weight.value} kg',
                             style: const TextStyle(
                               color: Color(0xFFA0A0A0),
                               fontSize: 15,
@@ -218,47 +211,35 @@ class MypageView extends StatelessWidget {
                             ),
                           )),
                       SizedBox(height: 10),
-                      Obx(() => Text(
-                            _authController.selectedGender.value == 1
-                                ? '남성'
-                                : '여성',
+                      Obx(() {
+                        if (_authController.selectedGender.value == 0) {
+                          return Text(
+                            '여성',
                             style: const TextStyle(
                               color: Color(0xFFA0A0A0),
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
-                          )),
+                          );
+                        } else if (_authController.selectedGender.value == 1) {
+                          return Text(
+                            '남성',
+                            style: const TextStyle(
+                              color: Color(0xFFA0A0A0),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          );
+                        } else {
+                          return Text('-');
+                        }
+                      }),
                     ],
                   ),
                 ),
               ],
             ),
             SizedBox(height: 10),
-            // Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            //   TextButton(
-            //       onPressed: () {
-            //         showDialog(
-            //             context: context,
-            //             builder: (BuildContext context) {
-            //               return CustomModal(
-            //                 title: '회원탈퇴',
-            //                 content: '정말로 회원탈퇴를 하시겠습니까?',
-            //                 onConfirm: () {
-            //                   _authController.remove();
-            //                   Get.toNamed('/login');
-            //                 },
-            //                 confirmText: '확인',
-            //               );
-            //             });
-            //       },
-            //       child: Text(
-            //         '회원탈퇴',
-            //         style: TextStyle(
-            //             color: Color(0xFFA0A0A0).withOpacity(0.6),
-            //             fontSize: 14,
-            //             fontWeight: FontWeight.w500),
-            //       )),
-            // ]),
           ],
         ),
       ),
