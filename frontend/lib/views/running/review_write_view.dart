@@ -25,6 +25,11 @@ class ReviewWriteView extends StatelessWidget {
           '러닝 기록 작성',
           style: TextStyle(fontSize: 20, color: Colors.black),
         ),
+        leading: IconButton(
+            onPressed: () {
+              Get.toNamed('/runner');
+            },
+            icon: Icon(Icons.arrow_back)),
         backgroundColor: Colors.white,
         toolbarHeight: 56,
         actions: <Widget>[
