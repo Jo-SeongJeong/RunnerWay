@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/course_controller.dart';
 import 'package:frontend/models/course.dart';
@@ -124,20 +125,23 @@ class CourseCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: course.courseImage?.url != null &&
                       course.courseImage!.url.isNotEmpty
-                  ? Image.network(
-                      course.courseImage!.url,
+                  ? CachedNetworkImage(
+                      imageUrl: course.courseImage!.url,
                       width: 90,
                       height: 90,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTree) {
-                        // 이미지 로드 중 에러 발생 시 기본 이미지 표시
-                        return Image.asset(
-                          'assets/images/main/course_default.png',
-                          width: 90,
-                          height: 90,
-                          fit: BoxFit.cover,
-                        );
-                      },
+                      placeholder: (context, url) => Container(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ),
+                      ), // 로딩 중
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/main/course_default.png',
+                        width: 90,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      ),
                     )
                   : Image.asset(
                       'assets/images/main/course_default.png',
@@ -233,7 +237,8 @@ class CourseCard extends StatelessWidget {
                                       color: Color(0xffA0A0A0),
                                       fontSize: 14,
                                     ),
-                                    overflow: TextOverflow.ellipsis, // 너무 길면 "..."으로 표시
+                                    overflow: TextOverflow
+                                        .ellipsis, // 너무 길면 "..."으로 표시
                                     maxLines: 1, // 한 줄로만 표시
                                   );
                                 },

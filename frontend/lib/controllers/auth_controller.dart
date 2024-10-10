@@ -2,13 +2,14 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/widgets/modal/custom_modal.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:get/get.dart';
 import '../models/auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:frontend/utils/s3_image_upload.dart'; // S3 업로드 기능 사용
+import 'package:frontend/utils/s3_image_upload.dart';
 
 class AuthController extends GetxController {
   var id = ''.obs;
@@ -189,12 +190,12 @@ class AuthController extends GetxController {
         signUpSuccess.value = true;
         loadDecodedData();
       } else {
-        Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
+        // Get.snackbar('오류', '회원가입 중 오류가 발생했습니다.');
       }
     } catch (e) {
       signUpSuccess.value = false;
       log('회원가입 중 오류 발생 controller: $e');
-      Get.snackbar('오류', '회원가입에 실패했습니다.');
+      // Get.snackbar('오류', '회원가입에 실패했습니다.');
     }
   }
 
@@ -203,7 +204,7 @@ class AuthController extends GetxController {
     try {
       final isAvailable = await _authService.checkNicknameDuplicate(nickname);
       if (isAvailable) {
-        // Get.snackbar('오류', '이미 사용 중인 닉네임입니다.');
+        Get.snackbar('오류', '이미 사용 중인 닉네임입니다.');
         return true;
       } else {
         // Get.snackbar('성공', '사용 가능한 닉네임입니다.');
@@ -268,6 +269,7 @@ class AuthController extends GetxController {
       birthDate.value = userInfo.birth?.toString() ?? '';
       height.value = userInfo.height?.toString() ?? '';
       weight.value = userInfo.weight?.toString() ?? '';
+      selectedGender.value = userInfo.gender?.toString() ?? '';
       if (userInfo.memberImage != null &&
           userInfo.memberImage!.url != null &&
           userInfo.memberImage!.url!.isNotEmpty) {
@@ -295,7 +297,7 @@ class AuthController extends GetxController {
     }
   }
 
-// 회원탈퇴
+  // 회원탈퇴
   Future<void> remove() async {
     try {
       final response = await _authService.removeMember();
@@ -305,36 +307,4 @@ class AuthController extends GetxController {
       log('회원탈퇴 실패 controller: ${e}');
     }
   }
-
-  // // 정보수정
-  // Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
-  //   try {
-  //     id.value = await _storage.read(key: 'ID') ?? 'No ID found';
-  //     updateInfo['height'] = height.value;
-  //     updateInfo['memberImage'] = {
-  //       'memberId': int.parse(id.value),
-  //       'url': memberImage.value?.url ?? '',
-  //       'path': selectedImage.value?.path ?? '',
-  //     };
-  //     updateInfo['height'] = int.tryParse(updateInfo['height'] ?? '');
-  //     updateInfo['weight'] = int.tryParse(updateInfo['weight'] ?? '');
-  //
-  //     // 회원 정보 수정 요청
-  //     final response = await _authService.patchUserInfo(updateInfo);
-  //
-  //     // 응답이 null이 아닌지 확인
-  //     if (response != null && response['token'] != null) {
-  //       String newToken = response['token'];
-  //       await _storage.write(key: 'ACCESS_TOKEN', value: newToken);
-  //       loadDecodedData();
-  //       log('회원 정보 수정 성공: 토큰 업데이트 완료');
-  //       return response;
-  //     } else {
-  //       throw Exception('회원 정보 수정 실패: ${response}');
-  //     }
-  //   } catch (e) {
-  //     log('회원 정보 수정 오류controller: $e');
-  //     throw Exception('회원 정보 수정 오류: $e');
-  //   }
-  // }
 }
