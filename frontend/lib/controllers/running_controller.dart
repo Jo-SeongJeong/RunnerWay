@@ -77,6 +77,18 @@ class RunningController extends GetxController {
     courseid = Get.parameters['courseid'];
     varid = Get.parameters['varid'];
 
+    value.update((val) {
+      val?.myCurrentLocation = LatLng(0.0, 0.0); // 초기값으로 설정
+      val?.mapCenter = LatLng(0.0, 0.0); // 초기 중심 좌표 설정
+      val?.currentSpeed = 0.0; // 초기 속도 설정
+      val?.currentPace = '0:00'; // 초기 페이스 설정
+      val?.totalDistance = 0.0; // 초기 총 거리 설정
+      val?.elapsedTime = Duration.zero; // 경과 시간 초기화
+      val?.pointOnMap = []; // 지도상의 경로 초기화
+      val?.polyline.clear(); // 폴리라인 초기화
+      val?.markers = {}; // 마커 초기화
+    });
+
     initialize();
   }
 
