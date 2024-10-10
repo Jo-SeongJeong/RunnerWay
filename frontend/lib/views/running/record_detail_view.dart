@@ -26,59 +26,82 @@ class RecordDetailView extends StatelessWidget {
 
     recordController.fetchRecordDetail(recordId);
 
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text('', style: TextStyle(fontSize: 20, color: Colors.black)),
-        leading: IconButton(
-            onPressed: () {
-              Get.toNamed('/record');
-            },
-            icon: Icon(Icons.arrow_back)),
-        backgroundColor: Colors.white,
-        toolbarHeight: 56,
-      ),
-      body: Container(
-        child: Obx(() {
-          if (recordController.isLoading.isTrue) {
-            return Center(child: CircularProgressIndicator());
+    return PopScope(
+        onPopInvokedWithResult: (popType, result) async {
+          if (popType) {
+            Get.offNamed('/runner');
           }
+          Get.delete<RecordController>();
+          // Get.delete<RunningController>();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            scrolledUnderElevation: 0,
+            centerTitle: true,
+            title:
+                Text('', style: TextStyle(fontSize: 20, color: Colors.black)),
+            leading: IconButton(
+                onPressed: () {
+                  Get.toNamed('/record');
+                },
+                icon: Icon(Icons.arrow_back)),
+            backgroundColor: Colors.white,
+            toolbarHeight: 56,
+          ),
+          body: Container(
+            child: Obx(() {
+              if (recordController.isLoading.isTrue) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-          if (recordController.recordDetail.value == null) {
-            return Center(child: Text('기록없음'));
-          }
+              if (recordController.recordDetail.value == null) {
+                return Center(child: Text('기록없음'));
+              }
 
-          final record = recordController.recordDetail.value!;
+              final record = recordController.recordDetail.value!;
 
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: LocationInfo(
-                    title: record.courseName,
-                    address: (record.address == null || record.address!.isEmpty)
-                        ? '주소 정보 없음'
-                        : record.address!,
-                    time: DateTime.parse(record.startDate ?? ''),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  child: Column(
-                    children: [
-                      Container(
-                        height: screenHeight * 0.25,
-                        child: record.url != null && record.url!.isNotEmpty
-                            ? Image.network(
-                                height: 100,
-                                width: screenWidth,
-                                record.url!,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: LocationInfo(
+                        title: record.courseName,
+                        address:
+                            (record.address == null || record.address!.isEmpty)
+                                ? '주소 정보 없음'
+                                : record.address!,
+                        time: DateTime.parse(record.startDate ?? ''),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: screenHeight * 0.25,
+                            child: record.url != null && record.url!.isNotEmpty
+                                ? Image.network(
+                                    height: 100,
+                                    width: screenWidth,
+                                    record.url!,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        height: screenHeight * 0.3,
+                                        child: Center(
+                                          child: Image.asset(
+                                            'assets/images/main/course_default.png',
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : Container(
                                     height: screenHeight * 0.3,
                                     child: Center(
                                       child: Image.asset(
@@ -88,168 +111,156 @@ class RecordDetailView extends StatelessWidget {
                                         fit: BoxFit.cover,
                                       ),
                                     ),
-                                  );
-                                },
-                              )
-                            : Container(
-                                height: screenHeight * 0.3,
-                                child: Center(
-                                  child: Image.asset(
-                                    'assets/images/main/course_default.png',
-                                    width: 80,
-                                    height: 80,
-                                    fit: BoxFit.cover,
                                   ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 28),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                '러닝 리뷰',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 28),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                ),
+                                onPressed: () {
+                                  _showEditReviewModal(context, record);
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
                           Text(
-                            '러닝 리뷰',
+                            (record.comment?.isNotEmpty ?? false)
+                                ? record.comment!
+                                : '등록된 글이 없습니다.',
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              color: Color(0xffA0A0A0),
                             ),
                           ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.edit,
-                              size: 20,
+                          SizedBox(height: 50),
+                          Text(
+                            '기록 상세',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
                             ),
-                            onPressed: () {
-                              _showEditReviewModal(context, record);
-                            },
                           ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ReviewRecordItem(
+                                value: (record.runningDistance! * 100)
+                                        .floorToDouble() /
+                                    100,
+                                label: '운동 거리',
+                              ),
+                              ReviewRecordItem(
+                                value: (record.finishDate != null &&
+                                        record.startDate != null)
+                                    ? DateTime.parse(record.finishDate!)
+                                        .difference(
+                                            DateTime.parse(record.startDate!))
+                                        .inSeconds
+                                    : 0,
+                                label: '운동 시간',
+                              ),
+                              ReviewRecordItem(
+                                value: recordController
+                                        .courseDetail.value?.averageSlope ??
+                                    0.0,
+                                label: '러닝 경사도',
+                              ),
+                              ReviewRecordItem(
+                                value: record.calorie ?? 0.0,
+                                label: '소모 칼로리',
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          if (record.runningDistance != null &&
+                              record.runningDistance! < 0.1)
+                            Row(
+                              children: [
+                                Text(
+                                  '유저 코스 등록은 100m 이상 코스인 경우 가능합니다.',
+                                  style: TextStyle(color: Colors.deepOrange),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
-                      SizedBox(height: 5),
-                      Text(
-                        (record.comment?.isNotEmpty ?? false)
-                            ? record.comment!
-                            : '등록된 글이 없습니다.',
-                        style: TextStyle(
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    AbsorbPointer(
+                      absorbing: true,
+                      child: SizedBox(
+                          height: 300,
+                          child: const RecordMap(
+                            height: 250,
+                          )),
+                    ),
+                    SizedBox(height: 80),
+                  ],
+                ),
+              );
+            }),
+          ),
+          floatingActionButton: Obx(() {
+            final record = recordController.recordDetail.value;
+
+            return Visibility(
+              visible: record != null &&
+                  record.runningDistance != null &&
+                  record.runningDistance! >= 0.1 &&
+                  record.courseId == 0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width - 20,
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      Get.toNamed('/register/$recordId');
+                    },
+                    label: Text(
+                      '유저 코스 등록',
+                      style: TextStyle(
+                          color: Colors.white,
                           fontSize: 16,
-                          color: Color(0xffA0A0A0),
-                        ),
-                      ),
-                      SizedBox(height: 50),
-                      Text(
-                        '기록 상세',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ReviewRecordItem(
-                            value: (record.runningDistance! * 100)
-                                    .floorToDouble() /
-                                100,
-                            label: '운동 거리',
-                          ),
-                          ReviewRecordItem(
-                            value: (record.finishDate != null &&
-                                    record.startDate != null)
-                                ? DateTime.parse(record.finishDate!)
-                                    .difference(
-                                        DateTime.parse(record.startDate!))
-                                    .inSeconds
-                                : 0,
-                            label: '운동 시간',
-                          ),
-                          ReviewRecordItem(
-                            value: recordController
-                                    .courseDetail.value?.averageSlope ??
-                                0.0,
-                            label: '러닝 경사도',
-                          ),
-                          ReviewRecordItem(
-                            value: record.calorie ?? 0.0,
-                            label: '소모 칼로리',
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      if (record.runningDistance != null &&
-                          record.runningDistance! < 0.1)
-                        Row(
-                          children: [
-                            Text(
-                              '유저 코스 등록은 100m 이상 코스인 경우 가능합니다.',
-                              style: TextStyle(color: Colors.deepOrange),
-                            ),
-                          ],
-                        ),
-                    ],
+                          fontWeight: FontWeight.w500),
+                    ),
+                    icon: Container(),
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                AbsorbPointer(
-                  absorbing: true,
-                  child: SizedBox(
-                      height: 300,
-                      child: const RecordMap(
-                        height: 250,
-                      )),
-                ),
-                SizedBox(height: 80),
-              ],
-            ),
-          );
-        }),
-      ),
-      floatingActionButton: Obx(() {
-        final record = recordController.recordDetail.value;
-
-        return Visibility(
-          visible: record != null &&
-              record.runningDistance != null &&
-              record.runningDistance! >= 0.1 &&
-              record.courseId == 0,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width - 20,
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  Get.toNamed('/register/$recordId');
-                },
-                label: Text(
-                  '유저 코스 등록',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                icon: Container(),
-                backgroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
               ),
-            ),
-          ),
-        );
-      }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+            );
+          }),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+        ));
   }
 
   void _showEditReviewModal(BuildContext context, Record record) {
