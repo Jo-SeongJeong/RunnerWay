@@ -60,6 +60,9 @@ class RunningController extends GetxController {
   var ranking = <Ranking>[].obs;
   var isModalShown = false.obs;
 
+  LatLng? _lastTtsPosition; // 마지막으로 TTS 알림이 발생한 위치
+  final int ttsDistanceThreshold = 100;
+
   RunningController() {
     _runningService = RunningService();
     _fileService = FileService();
@@ -136,7 +139,7 @@ class RunningController extends GetxController {
     }
     _startLocationUpdates();
     _startTimer();
-    await _playTTS("러닝을 시작합니다. 현재 위치에서 출발하세요.");
+    await _playTTS("러닝을 시작합니다. 출발해주세요.");
   }
 
   void getRunTypeText() {
@@ -234,6 +237,10 @@ class RunningController extends GetxController {
       val?.mapCenter = newLocation;
 
       _updateRealTimePolyline();
+
+      if (isCompetitionMode.value) {
+        _checkAndNotifyDistanceToCompetitor(newLocation);
+      }
     });
 
     _checkIfArrivedAtDestination(newLocation);
@@ -526,5 +533,59 @@ class RunningController extends GetxController {
     } catch (e) {
       dev.log('TTS 재생 실패: $e');
     }
+  }
+
+  Future<void> _checkAndNotifyDistanceToCompetitor(
+      LatLng currentLocation) async {
+    if (_nextRecord != null) {
+      // 현재 위치와 상대방 위치 간의 거리 계산
+      double distanceToCompetitor = _runningService.calculateDistance(
+          currentLocation,
+          LatLng(_nextRecord!.latitude, _nextRecord!.longitude));
+
+      // 상대방의 총 이동 거리를 기록 사이에서 계산
+      double competitorTotalDistance = _calculateTotalDistanceForCompetitor();
+
+      // 나의 총 이동 거리
+      double myTotalDistance = value.value.totalDistance;
+
+      dev.log('상대방과의 거리: ${distanceToCompetitor} m');
+      dev.log('내가 이동한 거리: ${myTotalDistance} m');
+      dev.log('상대방이 이동한 거리: ${competitorTotalDistance} m');
+
+      // 상대방과 앞서거나 뒤처짐 판단
+      String positionStatus;
+      if (myTotalDistance > competitorTotalDistance) {
+        positionStatus = '앞서고 있습니다';
+      } else {
+        positionStatus = '뒤처지고 있습니다';
+      }
+
+      // 100m 이상 이동했을 때 TTS 알림
+      if (_lastTtsPosition == null ||
+          _runningService.calculateDistance(
+                  _lastTtsPosition!, currentLocation) >=
+              ttsDistanceThreshold) {
+        await _playTTS(
+            "현재 상대방과 ${distanceToCompetitor.toStringAsFixed(0)}미터 떨어져 있으며, ${positionStatus}.");
+        _lastTtsPosition = currentLocation;
+      }
+    }
+  }
+
+// 상대방의 총 이동 거리를 계산하는 함수 추가
+  double _calculateTotalDistanceForCompetitor() {
+    double totalDistance = 0.0;
+
+    for (int i = 0; i < competitionRecordIndex - 1; i++) {
+      LatLng start = LatLng(
+          competitionRecords[i].latitude, competitionRecords[i].longitude);
+      LatLng end = LatLng(competitionRecords[i + 1].latitude,
+          competitionRecords[i + 1].longitude);
+
+      totalDistance += _runningService.calculateDistance(start, end);
+    }
+
+    return totalDistance;
   }
 }
