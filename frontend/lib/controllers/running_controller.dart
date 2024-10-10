@@ -172,7 +172,7 @@ class RunningController extends GetxController {
       // 현재 위치와 경로 시작점의 거리 계산
       double distanceToStart =
           _runningService.calculateDistance(startPoint, startLocation);
-      if (distanceToStart > 10.0) {
+      if (distanceToStart > 20.0) {
         // 10m 이내가 아닌 경우 사용자에게 알림 처리
         isCanStart.value = false;
       } else {
@@ -334,7 +334,7 @@ class RunningController extends GetxController {
       double distanceToDestination = _runningService.calculateDistance(
           currentLocation, _destinationPoint!);
 
-      if (distanceToDestination <= 10.0) {
+      if (distanceToDestination <= 20.0) {
         // 10m 이내 도착 시 러닝 종료
         dev.log('도착지점에 도착했습니다. 러닝을 종료합니다.');
         endRunning2();
