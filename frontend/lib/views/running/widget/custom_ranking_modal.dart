@@ -21,13 +21,17 @@ class CustomRankingModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
+    final int maxItems = 5;
+    final int itemCount = rankingList.length;
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
-        height: screenHeight * 0.7,
+        height: itemCount > maxItems
+            ? screenHeight * 0.7
+            : screenHeight * 0.35 + (itemCount * 50),
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
           vertical: 16,
