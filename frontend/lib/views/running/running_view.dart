@@ -12,11 +12,18 @@ class RunningView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('설마 여기야?');
-    // Get.delete<RunningController>();
     final RunningController controller = Get.put(RunningController());
+    // controller.onInit();
+    // print('설마 여기야?');
+    // Get.delete<RunningController>();
 
-    return Obx(() {
+    return PopScope(
+        onPopInvokedWithResult: (bool didPop, dynamic result) async {
+      if (didPop) {
+        Get.delete<RunningController>();
+        Get.toNamed('/main');
+      }
+    }, child: Obx(() {
       if (controller.isLoading.value) {
         return const Scaffold(
           body: Center(
@@ -94,7 +101,7 @@ class RunningView extends StatelessWidget {
           );
         }
       }
-    });
+    }));
   }
 
   Widget _buildSingleTimer(RunningController controller) {

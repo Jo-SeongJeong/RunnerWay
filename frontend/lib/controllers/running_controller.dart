@@ -61,7 +61,7 @@ class RunningController extends GetxController {
   var isModalShown = false.obs;
 
   LatLng? _lastTtsPosition; // 마지막으로 TTS 알림이 발생한 위치
-  final int ttsDistanceThreshold = 100;
+  final int ttsDistanceThreshold = 50;
 
   RunningController() {
     _runningService = RunningService();
@@ -70,7 +70,6 @@ class RunningController extends GetxController {
 
   @override
   void onInit() {
-    print('여기냐?');
     super.onInit();
 
     // route에서 파라미터 가져오기
@@ -94,7 +93,6 @@ class RunningController extends GetxController {
   }
 
   Future<void> initialize() async {
-    print('아니면 여기?');
     dev.log('초기화 시작');
     await _fileService.resetJson();
     if (varid != '0') {
@@ -164,7 +162,9 @@ class RunningController extends GetxController {
     }
     _startLocationUpdates();
     _startTimer();
-    if (isRun.value && !isModalShown.value)
+    if (isRun.value &&
+        !isModalShown.value &&
+        Get.currentRoute.startsWith('/running'))
       await _playTTS("러닝을 시작합니다. 출발해주세요.");
   }
 

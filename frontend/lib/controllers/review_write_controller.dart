@@ -188,6 +188,8 @@ class RunningReviewController extends GetxController {
           // );
         }
 
+        Get.delete<RunningReviewController>();
+        Get.delete<RunningController>();
         Get.toNamed('/record/detail/${response.data["recordId"]}');
       }
     } catch (e) {

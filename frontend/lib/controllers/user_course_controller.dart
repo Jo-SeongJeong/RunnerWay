@@ -21,9 +21,11 @@ class UserCourseController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
   var isButtonActive = false.obs;
+  var isImageUploading = false.obs;
 
   // 이미지 선택 함수
   Future<void> pickImage() async {
+    isImageUploading.value = true;
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       selectedImage.value = File(pickedFile.path);
@@ -38,6 +40,7 @@ class UserCourseController extends GetxController {
         // Get.snackbar('오류', '이미지 업로드에 실패했습니다.');
       }
     }
+    isImageUploading.value = false;
   }
 
   // 유저 코스 등록

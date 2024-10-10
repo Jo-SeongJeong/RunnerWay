@@ -18,10 +18,12 @@ class ReviewWriteView extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return PopScope(
-        onPopInvokedWithResult: (bool didPop, dynamic result) {
-          if (didPop) {
-            Get.toNamed('/runner');
+        onPopInvokedWithResult: (popType, result) async {
+          if (popType) {
+            Get.offNamed('/runner');
           }
+          Get.delete<RunningReviewController>();
+          Get.delete<RunningController>();
         },
         child: Scaffold(
           appBar: AppBar(
@@ -33,7 +35,9 @@ class ReviewWriteView extends StatelessWidget {
             ),
             leading: IconButton(
                 onPressed: () {
-                  Get.toNamed('/runner');
+                  Get.toNamed('/main');
+                  Get.delete<RunningReviewController>();
+                  Get.delete<RunningController>();
                 },
                 icon: Icon(Icons.arrow_back)),
             backgroundColor: Colors.white,
@@ -54,7 +58,7 @@ class ReviewWriteView extends StatelessWidget {
                     );
                   } else {
                     return GestureDetector(
-                        onTap: () => controller.onRegisterTapped(),
+                        onTap: () => (controller.onRegisterTapped(),),
                         child: RegisterButton(
                           onItemTapped: (int _) =>
                               controller.onRegisterTapped(),
