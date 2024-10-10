@@ -26,6 +26,7 @@ class MypageView extends StatelessWidget {
         automaticallyImplyLeading: false,
         scrolledUnderElevation: 0,
         centerTitle: true,
+        foregroundColor: Colors.white,
         title: Text(
           '마이페이지',
           style: TextStyle(fontSize: 20, color: Colors.black),
