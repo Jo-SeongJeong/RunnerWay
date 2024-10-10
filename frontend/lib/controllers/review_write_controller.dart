@@ -102,7 +102,7 @@ class RunningReviewController extends GetxController {
   // 리뷰 내용 업데이트 (간단하게 comment만 업데이트)
   void updateContent(String value) {
     reviewModel.value = reviewModel.value?.copyWith(comment: value);
-    reviewModel.refresh(); // 상태를 반영하기 위해 refresh 호출
+    // reviewModel.refresh(); // 상태를 반영하기 위해 refresh 호출
   }
 
   double calculateAveragePaceInMinutesAndSeconds(
