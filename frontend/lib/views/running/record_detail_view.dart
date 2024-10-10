@@ -18,7 +18,7 @@ class RecordDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    // Get.lazyPut<RecordController>(() => RecordController());
+    Get.lazyPut<RecordController>(() => RecordController());
     final RecordController recordController = Get.find<RecordController>();
 
     log('parameter : ${Get.parameters['id']}');

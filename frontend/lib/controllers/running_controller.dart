@@ -58,6 +58,7 @@ class RunningController extends GetxController {
   LatLng startPoint = LatLng(0.0, 0.0); // 시작 위치
 
   var ranking = <Ranking>[].obs;
+  var isModalShown = false.obs;
 
   RunningController() {
     _runningService = RunningService();
@@ -108,8 +109,7 @@ class RunningController extends GetxController {
     isLoading(false);
   }
 
-  // TODO
-  // main인 running_view에서 사용하지 않고 예전 코드임
+  // TODO main인 running_view에서 사용하지 않고 예전 코드임
   Future<void> startRun(
       {bool isOfficial = false, bool isCompetition = false}) async {
     isOfficialRun.value = isOfficial;
@@ -160,8 +160,6 @@ class RunningController extends GetxController {
     dev.log('현재 위치: ${startPoint}');
   }
 
-  // TODO
-  // 시작 위치 판단해서 시작 못하게 하지만 3이라는 숫자 보고 뒤로가게 해 둠
   Future<void> _checkIfStartLocationIsValid() async {
     dev.log('시작 위치: ${_departurePoint}');
 
@@ -172,7 +170,7 @@ class RunningController extends GetxController {
       double distanceToStart =
           _runningService.calculateDistance(startPoint, startLocation);
       if (distanceToStart > 10.0) {
-        // 50m 이내가 아닌 경우 사용자에게 알림 처리
+        // 10m 이내가 아닌 경우 사용자에게 알림 처리
         isCanStart.value = false;
       } else {
         isRun.value = true; // 10m 이내면 러닝을 시작할 수 있음
@@ -203,7 +201,7 @@ class RunningController extends GetxController {
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(position.latitude, position.longitude),
-          zoom: 18,
+          zoom: 19.5,
         ),
       ),
     );
@@ -271,11 +269,9 @@ class RunningController extends GetxController {
     });
   }
 
-  // TODO
-  // view 시작 시 method 순서 변경해서 load하게 해야 함
+  // TODO view 시작 시 method 순서 변경해서 load하게 해야 함
   Future<void> loadSavedPath() async {
-    // TODO
-    // 서비스로 이동 시켜야 함
+    // TODO 서비스로 이동 시켜야 함
     if (isOfficialRun.value) {
       // if (type == 'official') {
       List<LatLng> savedPath = await _courseService
@@ -306,8 +302,7 @@ class RunningController extends GetxController {
   }
 
   Future<void> loadCompetitionRecords() async {
-    // TODO
-    // 자유 코스에서 대결일 경우 내 로그에서 데이터 가져오게 해야 함
+    // TODO 자유 코스에서 대결일 경우 내 로그에서 데이터 가져오게 해야 함
 
     competitionRecords = await _runningService
         .readSavedRunningRecordLog(int.parse(varid ?? '0'));
@@ -464,12 +459,11 @@ class RunningController extends GetxController {
         // 랭킹 등록
         final response = await _runningService.registRanking(model);
         dev.log('랭킹 등록 결과값: ${response}');
-
-        final fetchedCourseRanking =
-            await CourseService().getCourseRanking(int.parse(courseid ?? '0'));
-        ranking.assignAll(fetchedCourseRanking);
-        dev.log('${ranking}');
       }
+      final fetchedCourseRanking =
+          await CourseService().getCourseRanking(int.parse(courseid ?? '0'));
+      ranking.assignAll(fetchedCourseRanking);
+      dev.log('${ranking}');
 
       // 공식 유저 코스 시
       if (varid != '0') {

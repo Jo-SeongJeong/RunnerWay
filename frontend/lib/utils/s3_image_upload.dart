@@ -115,7 +115,6 @@ class S3ImageUpload {
   }
 
   Future<dynamic> uploadRankingLog(File log) async {
-    // TODO rankingid.json으로 변경 해야 함
     try {
       String fileName = '${DateTime.now().microsecondsSinceEpoch}';
       String url =
