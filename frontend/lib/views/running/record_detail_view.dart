@@ -156,7 +156,9 @@ class RecordDetailView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ReviewRecordItem(
-                            value: record.runningDistance ?? 0.0,
+                            value: (record.runningDistance! * 100)
+                                    .floorToDouble() /
+                                100,
                             label: '운동 거리',
                           ),
                           ReviewRecordItem(

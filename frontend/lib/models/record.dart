@@ -49,8 +49,8 @@ class Record {
           json['calorie'] != null ? (json['calorie'] as num).toDouble() : null,
       url: json['url'] as String?,
       address: json['address'] as String?,
-      lat: json['lat'] != null ? (json['lat'] as num).toDouble() : null, // 추가
-      lng: json['lng'] != null ? (json['lng'] as num).toDouble() : null, // 추가
+      lat: json['lat'] != null ? (json['lat'] as num).toDouble() : null,
+      lng: json['lng'] != null ? (json['lng'] as num).toDouble() : null,
     );
   }
 
