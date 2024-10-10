@@ -558,7 +558,7 @@ class RunningController extends GetxController {
       if (myTotalDistance > competitorTotalDistance) {
         positionStatus = '앞서고 있습니다';
       } else {
-        positionStatus = '뒤처지고 있습니다';
+        positionStatus = '뒤처지고 있습니다. 힘내세요!';
       }
 
       // 100m 이상 이동했을 때 TTS 알림
@@ -567,7 +567,7 @@ class RunningController extends GetxController {
                   _lastTtsPosition!, currentLocation) >=
               ttsDistanceThreshold) {
         await _playTTS(
-            "현재 상대방과 ${distanceToCompetitor.toStringAsFixed(0)}미터 떨어져 있으며, ${positionStatus}.");
+            "현재 상대방 보다 ${distanceToCompetitor.toStringAsFixed(0)}미터 ${positionStatus}.");
         _lastTtsPosition = currentLocation;
       }
     }
