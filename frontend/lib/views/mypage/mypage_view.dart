@@ -26,6 +26,7 @@ class MypageView extends StatelessWidget {
         automaticallyImplyLeading: false,
         scrolledUnderElevation: 0,
         centerTitle: true,
+        foregroundColor: Colors.white,
         title: Text(
           '마이페이지',
           style: TextStyle(fontSize: 20, color: Colors.black),
@@ -78,19 +79,22 @@ class MypageView extends StatelessWidget {
                     ),
                   )),
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 7),
             Center(
               child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Color((0xFFA0A0A0)),
-                    side: BorderSide(color: Color(0xFFA0A0A0)),
-                    minimumSize: Size(77, 30),
-                    maximumSize: Size(100, 40),
-                  ),
+                      foregroundColor: Color((0xFFA0A0A0)),
+                      side: BorderSide(color: Color(0xFFA0A0A0)),
+                      minimumSize: Size(screenWidth * 0.23, 32),
+                      maximumSize: Size(screenWidth * 0.4, 40),
+                      padding: EdgeInsets.only(left: 15, right: 15)),
                   onPressed: () {
                     _authController.logout();
                   },
-                  child: Text("로그아웃")),
+                  child: Text(
+                    "로그아웃",
+                    style: TextStyle(fontSize: 13),
+                  )),
             ),
             Line(),
             SizedBox(height: 15),
@@ -254,11 +258,6 @@ class MypageView extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w500),
                   )),
-              ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed('/signup');
-                  },
-                  child: Text('회원가입'))
             ]),
           ],
         ),

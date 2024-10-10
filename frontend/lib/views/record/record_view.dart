@@ -37,27 +37,20 @@ class RecordView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            CustomBackButton(),
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '러닝 기록',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 48,
-                            ),
-                          ],
+                        Center(
+                          child: Text(
+                            '러닝 기록',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black),
+                          ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(
+                          width: 48,
+                        ),
+
+                        SizedBox(height: 25),
 
                         Obx(
                           () {
