@@ -61,7 +61,7 @@ class RunningController extends GetxController {
   var isModalShown = false.obs;
 
   LatLng? _lastTtsPosition; // 마지막으로 TTS 알림이 발생한 위치
-  final int ttsDistanceThreshold = 100;
+  final int ttsDistanceThreshold = 50;
 
   RunningController() {
     _runningService = RunningService();
