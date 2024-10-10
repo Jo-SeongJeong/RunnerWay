@@ -18,10 +18,12 @@ class ReviewWriteView extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return PopScope(
-        onPopInvokedWithResult: (bool didPop, dynamic result) {
+        onPopInvokedWithResult: (bool didPop, dynamic result) async {
           if (didPop) {
             Get.toNamed('/runner');
           }
+          Get.delete<RunningReviewController>();
+          Get.delete<RunningController>();
         },
         child: Scaffold(
           appBar: AppBar(
@@ -33,7 +35,9 @@ class ReviewWriteView extends StatelessWidget {
             ),
             leading: IconButton(
                 onPressed: () {
-                  Get.toNamed('/runner');
+                  Get.toNamed('/main');
+                  Get.delete<RunningReviewController>();
+                  Get.delete<RunningController>();
                 },
                 icon: Icon(Icons.arrow_back)),
             backgroundColor: Colors.white,
