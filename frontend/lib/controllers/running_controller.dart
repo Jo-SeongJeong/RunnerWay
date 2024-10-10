@@ -348,7 +348,7 @@ class RunningController extends GetxController {
 
       if (distanceToDestination <= 20.0) {
         // 10m 이내 도착 시 러닝 종료
-        dev.log('도착지점에 도착했습니다. 러닝을 종료합니다.');
+        if (!isModalShown.value) _playTTS("러닝을 종료합니다.");
         endRunning2();
         isRun.value = false;
       }
@@ -490,7 +490,7 @@ class RunningController extends GetxController {
       }
     }
 
-    await _playTTS("러닝을 종료합니다.");
+    if (!isModalShown.value) await _playTTS("러닝을 종료합니다.");
   }
 
   Future<void> endRunningByButton() async {
@@ -514,7 +514,7 @@ class RunningController extends GetxController {
       //   duration: Duration(seconds: 3),
       // );
     }
-    await _playTTS("러닝을 종료합니다.");
+    if (!isModalShown.value) await _playTTS("러닝을 종료합니다.");
   }
 
   Duration get currentCompetitionTime {
