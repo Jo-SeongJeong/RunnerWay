@@ -514,6 +514,7 @@ class RunningController extends GetxController {
       //   duration: Duration(seconds: 3),
       // );
     }
+    await _playTTS("러닝을 종료합니다.");
   }
 
   Duration get currentCompetitionTime {
