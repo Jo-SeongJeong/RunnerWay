@@ -19,17 +19,16 @@ class MainController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    locationController.getCurrentLocation();
-    // courses.
-    //초기에 filteredCourses를 courses로 세팅
-    ever(locationController.currentPosition, (_) {
-      log('main view 위치 정보 : ${locationController.currentPosition}');
-      fetchOfficialCourses();
-
-      log('filteredCourses: $filteredCourses');
+    // 위치 정보를 기다린 후 fetchOfficialCourses 호출
+    locationController.getCurrentLocation().then((_) {
+      if (locationController.currentPosition.value != null) {
+        fetchOfficialCourses();
+      } else {
+        log('위치 정보를 가져오지 못했습니다.');
+      }
     });
 
-    // MainController에만 필터가 적용되도록 콜백 설정
+    // 필터 적용 콜백 설정
     filterController.onMainFilterUpdated = _applyFiltersToCourses;
   }
 
