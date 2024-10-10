@@ -71,7 +71,7 @@ class RunningReviewModel {
       'score': formatScore(score),
       'runningDistance': runningDistance,
       'calorie': calorie,
-      'averagePace': averagePace,
+      'averageFace': averagePace,
       'comment': comment,
       'address': address,
       'startDate': formatDate(startDate),

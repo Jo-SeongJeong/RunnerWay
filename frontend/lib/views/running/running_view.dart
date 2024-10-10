@@ -12,6 +12,7 @@ class RunningView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.delete<RunningController>();
     final RunningController controller = Get.put(RunningController());
 
     return Obx(() {
@@ -290,7 +291,7 @@ class RunningView extends StatelessWidget {
       builder: (BuildContext context) {
         return CustomModal(
           title: '출발지 이동',
-          content: '시작 지점 10m 이내로 이동해주세요',
+          content: '시작 지점 20m 이내로 이동해주세요',
           onConfirm: () {
             Get.back();
             Get.back();
