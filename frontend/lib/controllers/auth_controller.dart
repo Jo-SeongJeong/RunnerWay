@@ -297,7 +297,7 @@ class AuthController extends GetxController {
     }
   }
 
-// 회원탈퇴
+  // 회원탈퇴
   Future<void> remove() async {
     try {
       final response = await _authService.removeMember();
@@ -307,36 +307,4 @@ class AuthController extends GetxController {
       log('회원탈퇴 실패 controller: ${e}');
     }
   }
-
-  // // 정보수정
-  // Future<dynamic> patchUserInfo(Map<String, dynamic> updateInfo) async {
-  //   try {
-  //     id.value = await _storage.read(key: 'ID') ?? 'No ID found';
-  //     updateInfo['height'] = height.value;
-  //     updateInfo['memberImage'] = {
-  //       'memberId': int.parse(id.value),
-  //       'url': memberImage.value?.url ?? '',
-  //       'path': selectedImage.value?.path ?? '',
-  //     };
-  //     updateInfo['height'] = int.tryParse(updateInfo['height'] ?? '');
-  //     updateInfo['weight'] = int.tryParse(updateInfo['weight'] ?? '');
-  //
-  //     // 회원 정보 수정 요청
-  //     final response = await _authService.patchUserInfo(updateInfo);
-  //
-  //     // 응답이 null이 아닌지 확인
-  //     if (response != null && response['token'] != null) {
-  //       String newToken = response['token'];
-  //       await _storage.write(key: 'ACCESS_TOKEN', value: newToken);
-  //       loadDecodedData();
-  //       log('회원 정보 수정 성공: 토큰 업데이트 완료');
-  //       return response;
-  //     } else {
-  //       throw Exception('회원 정보 수정 실패: ${response}');
-  //     }
-  //   } catch (e) {
-  //     log('회원 정보 수정 오류controller: $e');
-  //     throw Exception('회원 정보 수정 오류: $e');
-  //   }
-  // }
 }

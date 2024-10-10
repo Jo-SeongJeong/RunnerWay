@@ -65,10 +65,10 @@ class RecordDetailView extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        height: screenHeight * 0.3,
+                        height: screenHeight * 0.25,
                         child: record.url != null && record.url!.isNotEmpty
                             ? Image.network(
-                                height: screenHeight * 0.3,
+                                height: 100,
                                 width: screenWidth,
                                 record.url!,
                                 fit: BoxFit.cover,
@@ -215,7 +215,8 @@ class RecordDetailView extends StatelessWidget {
         return Visibility(
           visible: record != null &&
               record.runningDistance != null &&
-              record.runningDistance! >= 0.1,
+              record.runningDistance! >= 0.1 &&
+              record.courseId == 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: SizedBox(

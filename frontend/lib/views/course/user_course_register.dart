@@ -65,47 +65,68 @@ class RegisterView extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       GestureDetector(
-                        onTap: () async {
-                          await userCourseController.pickImage();
-                        },
-                        child: Container(
-                          height: screenHeight * 0.3,
-                          width: screenWidth,
-                          child:
-                              userCourseController.selectedImage.value != null
-                                  ? Image.file(
-                                      userCourseController.selectedImage.value!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : record.url != null && record.url!.isNotEmpty
-                                      ? Image.network(
-                                          record.url!,
-                                          fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Center(
-                                              child: Image.asset(
-                                                'assets/images/main/course_default.png',
-                                                width: 80,
-                                                height: 80,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            );
-                                          },
-                                        )
-                                      : Center(
-                                          child: Image.asset(
-                                            'assets/images/main/course_default.png',
-                                            width: 80,
-                                            height: 80,
+                          onTap: () async {
+                            await userCourseController.pickImage();
+                          },
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: screenHeight * 0.3,
+                                width: screenWidth,
+                                child: userCourseController
+                                            .selectedImage.value !=
+                                        null
+                                    ? Image.file(
+                                        userCourseController
+                                            .selectedImage.value!,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : record.url != null &&
+                                            record.url!.isNotEmpty
+                                        ? Image.network(
+                                            record.url!,
                                             fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Center(
+                                                child: Image.asset(
+                                                  'assets/images/main/course_default.png',
+                                                  width: 80,
+                                                  height: 80,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : Center(
+                                            child: Image.asset(
+                                              'assets/images/main/course_default.png',
+                                              width: 80,
+                                              height: 80,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                        ),
-                        ),
-                      ),
+                              ),
+                              if (userCourseController.selectedImage.value ==
+                                  null)
+                                Positioned(
+                                  bottom: screenHeight * 0.1,
+                                  right: screenWidth / 2 - 83,
+                                  child: CircleAvatar(
+                                    radius: 12,
+                                    backgroundColor: Color(0xFF1EA6FC),
+                                    child: Icon(
+                                      Icons.add,
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
                       SizedBox(height: 28),
                       Text(
-                        '러닝 리뷰',
+                        '코스 설명',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
