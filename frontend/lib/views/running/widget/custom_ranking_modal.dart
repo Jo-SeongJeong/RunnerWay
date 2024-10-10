@@ -31,7 +31,7 @@ class CustomRankingModal extends StatelessWidget {
       child: Container(
         height: itemCount > maxItems
             ? screenHeight * 0.7
-            : screenHeight * 0.35 + (itemCount * 50),
+            : screenHeight * 0.4 + (itemCount * 50),
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
           vertical: 16,
