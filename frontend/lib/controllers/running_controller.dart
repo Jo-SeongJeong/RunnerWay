@@ -490,7 +490,7 @@ class RunningController extends GetxController {
       }
     }
 
-    await _playTTS("러닝을 종료합니다.");
+    if (!isModalShown.value) await _playTTS("러닝을 종료합니다.");
   }
 
   Future<void> endRunningByButton() async {
@@ -514,7 +514,7 @@ class RunningController extends GetxController {
       //   duration: Duration(seconds: 3),
       // );
     }
-    await _playTTS("러닝을 종료합니다.");
+    if (!isModalShown.value) await _playTTS("러닝을 종료합니다.");
   }
 
   Duration get currentCompetitionTime {
