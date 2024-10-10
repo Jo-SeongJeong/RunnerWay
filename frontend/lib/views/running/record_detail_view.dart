@@ -29,7 +29,7 @@ class RecordDetailView extends StatelessWidget {
     return PopScope(
         onPopInvokedWithResult: (popType, result) async {
           if (popType) {
-            Get.offNamed('/runner');
+            Get.offNamed('/record');
           }
           Get.delete<RecordController>();
           // Get.delete<RunningController>();

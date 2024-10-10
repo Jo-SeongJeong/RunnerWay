@@ -294,7 +294,7 @@ class RegisterView extends StatelessWidget {
                                   'path/to/image',
                             },
                           });
-                          Get.offNamed('/runner');
+                          Get.offNamed('/record');
                         }
                       : null,
                 ),
