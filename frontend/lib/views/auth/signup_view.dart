@@ -210,23 +210,20 @@ class SignUpView extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      _authController.selectedGender.value = 'woman';
+                      _authController.selectedGender.value = 0;
                     },
                     child: Obx(() => Container(
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
-                            color:
-                                _authController.selectedGender.value == 'woman'
-                                    ? Color(0xFF1EA6FC).withOpacity(0.1)
-                                    : Color(0xFFE3E5E5).withOpacity(0.3),
+                            color: _authController.selectedGender.value == 0
+                                ? Color(0xFF1EA6FC).withOpacity(0.1)
+                                : Color(0xFFE3E5E5).withOpacity(0.3),
                             border: Border.all(
-                              color: _authController.selectedGender.value ==
-                                      'woman'
+                              color: _authController.selectedGender.value == 0
                                   ? Color(0xFF1EA6FC)
                                   : Color(0xFFE3E5E5).withOpacity(0.8),
-                              width: _authController.selectedGender.value ==
-                                      'woman'
+                              width: _authController.selectedGender.value == 0
                                   ? 4.0
                                   : 1.0,
                             ),
@@ -234,7 +231,7 @@ class SignUpView extends StatelessWidget {
                           ),
                           alignment: Alignment.center,
                           child: Image.asset(
-                            _authController.selectedGender.value == 'woman'
+                            _authController.selectedGender.value == 0
                                 ? 'assets/images/auth/woman_ok.png'
                                 : 'assets/images/auth/woman_no.png',
                             width: 85,
@@ -245,30 +242,28 @@ class SignUpView extends StatelessWidget {
                   SizedBox(width: 30),
                   GestureDetector(
                     onTap: () {
-                      _authController.selectedGender.value = 'man';
+                      _authController.selectedGender.value = 1;
                     },
                     child: Obx(() => Container(
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
-                            color: _authController.selectedGender.value == 'man'
+                            color: _authController.selectedGender.value == 1
                                 ? Color(0xFF1EA6FC).withOpacity(0.1)
                                 : Color(0xFFE3E5E5).withOpacity(0.3),
                             border: Border.all(
-                              color:
-                                  _authController.selectedGender.value == 'man'
-                                      ? Color(0xFF1EA6FC)
-                                      : Color(0xFFE3E5E5).withOpacity(0.8),
-                              width:
-                                  _authController.selectedGender.value == 'man'
-                                      ? 4.0
-                                      : 1.0,
+                              color: _authController.selectedGender.value == 1
+                                  ? Color(0xFF1EA6FC)
+                                  : Color(0xFFE3E5E5).withOpacity(0.8),
+                              width: _authController.selectedGender.value == 1
+                                  ? 4.0
+                                  : 1.0,
                             ),
                             borderRadius: BorderRadius.circular(60),
                           ),
                           alignment: Alignment.center,
                           child: Image.asset(
-                            _authController.selectedGender.value == 'man'
+                            _authController.selectedGender == 1
                                 ? 'assets/images/auth/man_ok.png'
                                 : 'assets/images/auth/man_no.png',
                             width: 85,
@@ -319,9 +314,7 @@ class SignUpView extends StatelessWidget {
                             DateTime.tryParse(_authController.birthDate.value),
                         height: height,
                         weight: weight,
-                        gender: _authController.selectedGender.value == 'man'
-                            ? 1
-                            : 0,
+                        gender: _authController.selectedGender.value,
                         joinType: 'kakao',
                         memberImage: _authController.memberImage.value,
                       ),
