@@ -477,6 +477,8 @@ class RunningController extends GetxController {
         //대결에 따른 결과 페이지로 이동 시켜야 해
       }
     }
+
+    await _playTTS("러닝을 종료합니다.");
   }
 
   Future<void> endRunningByButton() async {
