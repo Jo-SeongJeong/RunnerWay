@@ -29,6 +29,7 @@ class RunningReviewController extends GetxController {
   var isLoading = false.obs;
 
   final Rx<File?> selectedImage = Rx<File?>(null);
+  var isImageUploading = false.obs;
 
   @override
   void onInit() {
@@ -125,6 +126,7 @@ class RunningReviewController extends GetxController {
 
   // 이미지 선택 및 업로드 (간단하게 처리)
   Future<void> pickImage() async {
+    isImageUploading.value = true;
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -145,8 +147,10 @@ class RunningReviewController extends GetxController {
         );
         reviewModel.refresh(); // 상태를 반영하기 위해 refresh 호출
         log('Success Image uploaded successfully: $uploadedImageUrl');
+        print('Success Image uploaded successfully: $uploadedImageUrl');
       }
     }
+    isImageUploading.value = false;
   }
 
   // 리뷰 등록 메서드

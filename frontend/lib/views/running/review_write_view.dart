@@ -11,8 +11,7 @@ import 'package:frontend/controllers/review_write_controller.dart';
 class ReviewWriteView extends StatelessWidget {
   ReviewWriteView({super.key});
 
-  final RunningReviewController controller =
-      Get.put(RunningReviewController(), permanent: true);
+  final RunningReviewController controller = Get.put(RunningReviewController());
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +29,27 @@ class ReviewWriteView extends StatelessWidget {
         toolbarHeight: 56,
         actions: <Widget>[
           Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: RegisterButton(
-                onItemTapped: (int _) => controller.onRegisterTapped(),
-              )),
+            padding: const EdgeInsets.only(right: 16),
+            child: Obx(() {
+              if (controller.isImageUploading.value) {
+                return Center(
+                  child: Text(
+                    '이미지 업로드 중',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                    ),
+                  ),
+                );
+              } else {
+                return GestureDetector(
+                    onTap: () => controller.onRegisterTapped(),
+                    child: RegisterButton(
+                      onItemTapped: (int _) => controller.onRegisterTapped(),
+                    ));
+              }
+            }),
+          ),
         ],
       ),
       body: Obx(() {
