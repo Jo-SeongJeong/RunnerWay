@@ -105,7 +105,7 @@ class MypageView extends StatelessWidget {
                 children: [
                   Text(
                     '개인 상세 정보',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF1C1516)),
+                    style: TextStyle(fontSize: 16, color: Color(0xFF1EA6FC)),
                   ),
                   // TextButton(
                   //     style: TextButton.styleFrom(
@@ -234,31 +234,31 @@ class MypageView extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              TextButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CustomModal(
-                            title: '회원탈퇴',
-                            content: '정말로 회원탈퇴를 하시겠습니까?',
-                            onConfirm: () {
-                              _authController.remove();
-                              Get.toNamed('/login');
-                            },
-                            confirmText: '확인',
-                          );
-                        });
-                  },
-                  child: Text(
-                    '회원탈퇴',
-                    style: TextStyle(
-                        color: Color(0xFFA0A0A0).withOpacity(0.6),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  )),
-            ]),
+            // Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            //   TextButton(
+            //       onPressed: () {
+            //         showDialog(
+            //             context: context,
+            //             builder: (BuildContext context) {
+            //               return CustomModal(
+            //                 title: '회원탈퇴',
+            //                 content: '정말로 회원탈퇴를 하시겠습니까?',
+            //                 onConfirm: () {
+            //                   _authController.remove();
+            //                   Get.toNamed('/login');
+            //                 },
+            //                 confirmText: '확인',
+            //               );
+            //             });
+            //       },
+            //       child: Text(
+            //         '회원탈퇴',
+            //         style: TextStyle(
+            //             color: Color(0xFFA0A0A0).withOpacity(0.6),
+            //             fontSize: 14,
+            //             fontWeight: FontWeight.w500),
+            //       )),
+            // ]),
           ],
         ),
       ),
