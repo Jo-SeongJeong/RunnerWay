@@ -46,15 +46,15 @@ class RunningReviewController extends GetxController {
   Future<void> initializeReview() async {
     log('review 작성 초기화 시작');
 
+    String address = await loadAddress();
+
     double totalDistance =
         runningController.value.value.totalDistance; // 전체 거리 (킬로미터)
     int totalTime =
         runningController.value.value.elapsedTime.inSeconds; // 전체 시간 (초)
 
-    double averagePace =
-        calculateAveragePace(totalTime, totalDistance); // 평균 페이스 계산
-
-    String address = await loadAddress();
+    double averagePace = calculateAveragePaceInMinutesAndSeconds(
+        totalTime, totalDistance); // 평균 페이스 계산
 
     if (runningController.type == '자유') {
       reviewModel.value = RunningReviewModel(
@@ -105,11 +105,21 @@ class RunningReviewController extends GetxController {
     reviewModel.refresh(); // 상태를 반영하기 위해 refresh 호출
   }
 
-  double calculateAveragePace(
+  double calculateAveragePaceInMinutesAndSeconds(
       int totalTimeInSeconds, double totalDistanceInKm) {
     if (totalDistanceInKm == 0) return 0.0; // 거리가 0이면 0으로 반환
     double totalTimeInMinutes = totalTimeInSeconds / 60.0;
-    return totalTimeInMinutes / totalDistanceInKm; // 분/킬로미터
+
+    // 평균 페이스 (분/킬로미터)
+    double paceInMinutes = totalTimeInMinutes / totalDistanceInKm;
+
+    // 소수점 부분을 초로 변환
+    int minutes = paceInMinutes.floor(); // 분
+    double fractionalPart = paceInMinutes - minutes; // 소수점 부분
+    int seconds = (fractionalPart * 60).round(); // 초로 변환
+
+    // 분과 초를 다시 double로 합쳐서 반환 (ex: 5분 30초는 5.50으로)
+    return minutes + (seconds / 100.0);
   }
 
   Future<String> loadAddress() async {

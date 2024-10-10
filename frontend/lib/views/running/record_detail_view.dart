@@ -31,6 +31,11 @@ class RecordDetailView extends StatelessWidget {
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: Text('', style: TextStyle(fontSize: 20, color: Colors.black)),
+        leading: IconButton(
+            onPressed: () {
+              Get.toNamed('/record');
+            },
+            icon: Icon(Icons.arrow_back)),
         backgroundColor: Colors.white,
         toolbarHeight: 56,
       ),

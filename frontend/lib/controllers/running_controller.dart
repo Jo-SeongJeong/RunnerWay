@@ -77,6 +77,18 @@ class RunningController extends GetxController {
     courseid = Get.parameters['courseid'];
     varid = Get.parameters['varid'];
 
+    value.update((val) {
+      val?.myCurrentLocation = LatLng(0.0, 0.0); // 초기값으로 설정
+      val?.mapCenter = LatLng(0.0, 0.0); // 초기 중심 좌표 설정
+      val?.currentSpeed = 0.0; // 초기 속도 설정
+      val?.currentPace = '0:00'; // 초기 페이스 설정
+      val?.totalDistance = 0.0; // 초기 총 거리 설정
+      val?.elapsedTime = Duration.zero; // 경과 시간 초기화
+      val?.pointOnMap = []; // 지도상의 경로 초기화
+      val?.polyline.clear(); // 폴리라인 초기화
+      val?.markers = {}; // 마커 초기화
+    });
+
     initialize();
   }
 
@@ -172,7 +184,7 @@ class RunningController extends GetxController {
       // 현재 위치와 경로 시작점의 거리 계산
       double distanceToStart =
           _runningService.calculateDistance(startPoint, startLocation);
-      if (distanceToStart > 10.0) {
+      if (distanceToStart > 20.0) {
         // 10m 이내가 아닌 경우 사용자에게 알림 처리
         isCanStart.value = false;
       } else {
@@ -334,7 +346,7 @@ class RunningController extends GetxController {
       double distanceToDestination = _runningService.calculateDistance(
           currentLocation, _destinationPoint!);
 
-      if (distanceToDestination <= 10.0) {
+      if (distanceToDestination <= 20.0) {
         // 10m 이내 도착 시 러닝 종료
         dev.log('도착지점에 도착했습니다. 러닝을 종료합니다.');
         endRunning2();
@@ -477,6 +489,8 @@ class RunningController extends GetxController {
         //대결에 따른 결과 페이지로 이동 시켜야 해
       }
     }
+
+    await _playTTS("러닝을 종료합니다.");
   }
 
   Future<void> endRunningByButton() async {
@@ -500,6 +514,7 @@ class RunningController extends GetxController {
       //   duration: Duration(seconds: 3),
       // );
     }
+    await _playTTS("러닝을 종료합니다.");
   }
 
   Duration get currentCompetitionTime {
@@ -558,7 +573,7 @@ class RunningController extends GetxController {
       if (myTotalDistance > competitorTotalDistance) {
         positionStatus = '앞서고 있습니다';
       } else {
-        positionStatus = '뒤처지고 있습니다';
+        positionStatus = '뒤처지고 있습니다. 힘내세요!';
       }
 
       // 100m 이상 이동했을 때 TTS 알림
@@ -567,7 +582,7 @@ class RunningController extends GetxController {
                   _lastTtsPosition!, currentLocation) >=
               ttsDistanceThreshold) {
         await _playTTS(
-            "현재 상대방과 ${distanceToCompetitor.toStringAsFixed(0)}미터 떨어져 있으며, ${positionStatus}.");
+            "현재 상대방 보다 ${distanceToCompetitor.toStringAsFixed(0)}미터 ${positionStatus}.");
         _lastTtsPosition = currentLocation;
       }
     }
