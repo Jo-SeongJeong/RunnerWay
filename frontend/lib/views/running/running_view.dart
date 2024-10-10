@@ -12,6 +12,7 @@ class RunningView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.delete<RunningController>();
     final RunningController controller = Get.put(RunningController());
 
     return Obx(() {
