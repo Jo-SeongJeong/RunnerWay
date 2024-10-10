@@ -151,7 +151,8 @@ class RunningController extends GetxController {
     }
     _startLocationUpdates();
     _startTimer();
-    await _playTTS("러닝을 시작합니다. 출발해주세요.");
+    if (isRun.value && !isModalShown.value)
+      await _playTTS("러닝을 시작합니다. 출발해주세요.");
   }
 
   void getRunTypeText() {
