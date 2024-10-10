@@ -55,7 +55,7 @@ class MemberImage {
   factory MemberImage.fromJson(Map<String, dynamic> json) {
     return MemberImage(
       memberId: json['memberId'],
-      url: json['url'],
+      url: json['url'] ?? '',
     );
   }
 }

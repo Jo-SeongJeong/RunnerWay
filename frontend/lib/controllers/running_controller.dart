@@ -70,6 +70,7 @@ class RunningController extends GetxController {
 
   @override
   void onInit() {
+    print('여기냐?');
     super.onInit();
 
     // route에서 파라미터 가져오기
@@ -93,6 +94,7 @@ class RunningController extends GetxController {
   }
 
   Future<void> initialize() async {
+    print('아니면 여기?');
     dev.log('초기화 시작');
     await _fileService.resetJson();
     if (varid != '0') {
@@ -138,6 +140,17 @@ class RunningController extends GetxController {
   }
 
   Future<void> startRun2() async {
+    value.update((val) {
+      val?.myCurrentLocation = LatLng(0.0, 0.0); // 초기값으로 설정
+      val?.mapCenter = LatLng(0.0, 0.0); // 초기 중심 좌표 설정
+      val?.currentSpeed = 0.0; // 초기 속도 설정
+      val?.currentPace = '0:00'; // 초기 페이스 설정
+      val?.totalDistance = 0.0; // 초기 총 거리 설정
+      val?.elapsedTime = Duration.zero; // 경과 시간 초기화
+      val?.pointOnMap = []; // 지도상의 경로 초기화
+      val?.polyline.clear(); // 폴리라인 초기화
+      val?.markers = {}; // 마커 초기화
+    });
     if (isOfficialRun.value) {
       await loadSavedPath();
     }
@@ -151,7 +164,8 @@ class RunningController extends GetxController {
     }
     _startLocationUpdates();
     _startTimer();
-    await _playTTS("러닝을 시작합니다. 출발해주세요.");
+    if (isRun.value && !isModalShown.value)
+      await _playTTS("러닝을 시작합니다. 출발해주세요.");
   }
 
   void getRunTypeText() {
@@ -348,7 +362,7 @@ class RunningController extends GetxController {
 
       if (distanceToDestination <= 20.0) {
         // 10m 이내 도착 시 러닝 종료
-        dev.log('도착지점에 도착했습니다. 러닝을 종료합니다.');
+        if (!isModalShown.value) _playTTS("러닝을 종료합니다.");
         endRunning2();
         isRun.value = false;
       }
@@ -490,7 +504,7 @@ class RunningController extends GetxController {
       }
     }
 
-    await _playTTS("러닝을 종료합니다.");
+    if (!isModalShown.value) await _playTTS("러닝을 종료합니다.");
   }
 
   Future<void> endRunningByButton() async {
@@ -514,7 +528,7 @@ class RunningController extends GetxController {
       //   duration: Duration(seconds: 3),
       // );
     }
-    await _playTTS("러닝을 종료합니다.");
+    if (!isModalShown.value) await _playTTS("러닝을 종료합니다.");
   }
 
   Duration get currentCompetitionTime {
