@@ -253,7 +253,12 @@ class MypageView extends StatelessWidget {
                         color: Color(0xFFA0A0A0).withOpacity(0.6),
                         fontSize: 14,
                         fontWeight: FontWeight.w500),
-                  ))
+                  )),
+              ElevatedButton(
+                  onPressed: () {
+                    Get.toNamed('/signup');
+                  },
+                  child: Text('회원가입'))
             ]),
           ],
         ),

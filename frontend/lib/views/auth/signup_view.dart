@@ -44,25 +44,44 @@ class SignUpView extends StatelessWidget {
                   GestureDetector(
                     onTap: _authController.pickImage,
                     child: Obx(
-                      () => ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: _authController.selectedImage.value != null
-                            ? Image.file(
-                                _authController.selectedImage.value!,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.asset(
-                                'assets/images/auth/default_profile.png',
-                                width: 90,
-                                height: 90,
+                      () => Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: _authController.selectedImage.value != null
+                                ? Image.file(
+                                    _authController.selectedImage.value!,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'assets/images/auth/default_profile.png',
+                                    width: 90,
+                                    height: 90,
+                                  ),
+                          ),
+                          if (_authController.selectedImage.value == null)
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: CircleAvatar(
+                                radius: 12,
+                                backgroundColor: Color(0xFF1EA6FC),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
                               ),
+                            ),
+                        ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
+
               SizedBox(height: 60),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,

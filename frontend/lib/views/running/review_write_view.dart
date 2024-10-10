@@ -73,26 +73,46 @@ class ReviewWriteView extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
                             GestureDetector(
-                                onTap: controller.pickImage,
-                                child: Container(
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth,
-                                  child: controller.selectedImage.value != null
-                                      ? Image.file(
-                                          controller.selectedImage.value!,
-                                          fit: BoxFit.cover,
-                                          height: 200,
-                                          width: double.infinity,
-                                        )
-                                      : Center(
-                                          child: Image.asset(
-                                            'assets/images/main/course_default.png',
-                                            width: 80,
-                                            height: 80,
-                                            fit: BoxFit.cover,
-                                          ),
+                              onTap: controller.pickImage,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: screenHeight * 0.3,
+                                    width: screenWidth,
+                                    child:
+                                        controller.selectedImage.value != null
+                                            ? Image.file(
+                                                controller.selectedImage.value!,
+                                                fit: BoxFit.cover,
+                                                height: 200,
+                                                width: double.infinity,
+                                              )
+                                            : Center(
+                                                child: Image.asset(
+                                                  'assets/images/main/course_default.png',
+                                                  width: 80,
+                                                  height: 80,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                  ),
+                                  if (controller.selectedImage.value == null)
+                                    Positioned(
+                                      bottom: screenHeight * 0.1,
+                                      right: screenWidth / 2 - 83,
+                                      child: CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: Color(0xFF1EA6FC),
+                                        child: Icon(
+                                          Icons.add,
+                                          size: 16,
+                                          color: Colors.white,
                                         ),
-                                )),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
                             const SizedBox(height: 28),
                             const Text(
                               '러닝 리뷰',
