@@ -24,6 +24,7 @@ class RegisterView extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
     final int recordId = int.tryParse(Get.parameters['id'] ?? '0') ?? 0;
     final RxBool isButtonDisabled = false.obs;
+    final RxBool isLoading = false.obs;
 
     return PopScope(
         onPopInvokedWithResult: (popType, result) async {
@@ -243,6 +244,24 @@ class RegisterView extends StatelessWidget {
                   onTap: null,
                 ),
               );
+            } else if (isLoading.value) {
+              // 유저 코스 등록 중
+              return const Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '유저 코스 등록 중',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 20),
+                      CircularProgressIndicator(),
+                    ],
+                  ),
+                ),
+              );
             } else {
               // 이미지 업로드가 완료된 후 버튼 활성화
               return Padding(
@@ -253,13 +272,15 @@ class RegisterView extends StatelessWidget {
                       recordController.recordDetail.value != null,
                   onTap: userCourseController.isButtonActive.value &&
                           recordController.recordDetail.value != null &&
-                          !isButtonDisabled.value
+                          !isButtonDisabled.value &&
+                          !isLoading.value
                       ? () async {
                           isButtonDisabled.value = true;
+                          isLoading.value = true;
 
                           final record = recordController.recordDetail.value!;
 
-                          userCourseController.addUserCourse({
+                          await userCourseController.addUserCourse({
                             'name': courseNameController.text,
                             'recordId': record.recordId ?? 0,
                             'address': record.address ?? 0,
@@ -297,6 +318,8 @@ class RegisterView extends StatelessWidget {
                                   'path/to/image',
                             },
                           });
+
+                          isLoading.value = false;
                           Get.offNamed('/record');
                         }
                       : null,
