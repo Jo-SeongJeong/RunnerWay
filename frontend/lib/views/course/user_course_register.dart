@@ -235,9 +235,12 @@ class RegisterView extends StatelessWidget {
           bottomNavigationBar: Obx(() {
             if (userCourseController.isImageUploading.value) {
               // 이미지 업로드 중일 때
-              return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: WideButton(
+                  text: '이미지 업로드 중',
+                  isActive: false,
+                  onTap: null,
                 ),
               );
             } else {
