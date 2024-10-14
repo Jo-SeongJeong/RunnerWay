@@ -130,14 +130,14 @@ class RecordController extends GetxController {
         courseDetail.value = course;
 
         // 기존 Polyline을 업데이트하는 로직
-        var loadedPolyline = await _recordService.loadPresetPath(recordId);
+        // var loadedPolyline = await _recordService.loadPresetPath(recordId);
         var loadedPolyline2 = await _recordService.loadPresetPath2(recordId);
         coursePoints.value = loadedPolyline2;
-        if (loadedPolyline != null) {
-          polyline.clear(); // 기존 폴리라인 삭제 (필요한 경우)
-          polyline.addAll({loadedPolyline}); // 새 폴리라인 추가
-          log('Preset path loaded for recordId $recordId');
-        }
+        // if (loadedPolyline != null) {
+        //   polyline.clear(); // 기존 폴리라인 삭제 (필요한 경우)
+        //   polyline.addAll({loadedPolyline}); // 새 폴리라인 추가
+        //   log('Preset path loaded for recordId $recordId');
+        // }
       }
     } catch (e) {
       log('상세정보조회실패: $e');
